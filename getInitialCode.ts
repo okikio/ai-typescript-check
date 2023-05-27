@@ -1,4 +1,6 @@
-import { decompressFromEncodedURIComponent } from "npm:@amoutonbrady/lz-string"
+import { lzstring } from "./deps.ts"
+
+const decompressFromURL = "decompressFromEncodedURIComponent" in lzstring ? lzstring.decompressFromEncodedURIComponent as typeof lzstring.decompressFromURL : lzstring.decompressFromURL;
 
 /**
  * Grabs the sourcecode for an example from the query hash or local storage
@@ -15,16 +17,11 @@ export const getInitialCode = (fallback: string, location: URL | Location) => {
   // New school support
   if (location.hash.startsWith("#code")) {
     const code = location.hash.replace("#code/", "").trim()
-    let userCode = decompressFromEncodedURIComponent(code)
+    let userCode = decompressFromURL(code)
     // Fallback incase there is an extra level of decoding:
     // https://gitter.im/Microsoft/TypeScript?at=5dc478ab9c39821509ff189a
-    if (!userCode) userCode = decompressFromEncodedURIComponent(decodeURIComponent(code))
+    if (!userCode) userCode = decompressFromURL(decodeURIComponent(code))
     return userCode
-  }
-
-  // Local copy fallback
-  if (localStorage.getItem("sandbox-history")) {
-    return localStorage.getItem("sandbox-history")!
   }
 
   return fallback

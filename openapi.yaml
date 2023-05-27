@@ -1,0 +1,311 @@
+openapi: 3.0.0
+info:
+  title: TypeScript Twoslash API
+  description: A REST API for transforming TypeScript code using twoslash.
+  version: 1.0.0
+paths:
+  /twoslash:
+    post:
+      summary: Run Twoslash on a given code
+      description: |
+        This endpoint accepts a `TwoSlashOptions` object either as JSON or FormData,
+        and returns the resulting `TwoSlashReturn` JSON object. It's used to transform
+        TypeScript code based on the provided twoslash options. 
+        Supports typescript/ts, javascript/js, and tsx/jsx.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TwoSlashOptions'
+            example: 
+              code: '...'
+              extension: 'ts'
+              defaultOptions: 
+                noErrors: false
+                errors: [1016, 2307]
+                showEmit: true
+                showEmittedFile: 'index.js'
+                noStaticSemanticInfo: false
+                emit: false
+                noErrorValidation: false
+              defaultCompilerOptions: 
+                target: 'es5'
+                module: 'commonjs'
+              tsVersion: '4.1.2'
+              fsMap: 
+                'index.ts': '...'
+              customTags: ['tag1', 'tag2']
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TwoSlashOptions'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TwoSlashReturn'
+              example: 
+                code: '...'
+                extension: '.js'
+                highlights: []
+                staticQuickInfos: []
+                queries: []
+                tags: []
+                errors: []
+                playgroundURL: 'https://www.typescriptlang.org/play#code/...'
+        '400':
+          description: Invalid input, errors were found in the sample but not included in an errors tag
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TwoslashError'
+components:
+  schemas:
+    TwoSlashOptions:
+      type: object
+      properties:
+        code:
+          type: string
+          description: | 
+            The TypeScript, JavaScript, TSX, or JSX code to run twoslash over. Twoslash comments can be used for various features like:
+            - Compiler flag comments: `// @noImplicitAny: false`, `// @target: ES2015`, etc.
+            - Error comments: `// @noErrors`, `// @errors`
+            - Emitted file comments: `// @showEmit`, `// @showEmittedFile: index.d.ts`
+            - Static semantic info comments: `// @noStaticSemanticInfo`
+            - Emit comments: `// @emit`
+            - Error validation comments: `// @noErrorValidation`
+            - Filename comments: `// @filename`
+            - Target comments: `// @target`
+            - Declaration comments: `// @declaration: true`
+            - Cut comments: `// ---cut---` to cut out unnecessary code
+            - Type queries: `// ^?` to query types of variables, objects, functions, arrays, maps, symbols, parameters and/or values
+            - Auto-Completions: `// ^|`
+            - Highlighting: `// ^^^^^^^^^^` for highlighting
+            - Import files: `// @filename: import_files.ts` for importing files
+          example: |
+            // @module: esnext
+            // @filename: maths.ts 
+            export function absolute(num: number) {
+              if (num < 0) return num * -1;
+              return num;
+            }
+            // @filename: index.ts 
+            import {absolute} from "./maths"
+            const value = absolute(-1)
+
+            // @filename: maths2.ts 
+            export function absolute(num: number) {
+              if (num < 0) return num * -1;
+              return num;
+            }
+
+            // @filename: index2.ts 
+            import {absolute} from "./maths2"
+            const value = absolute(-1)
+            // ---cut---
+            const value2 = absolute(-2)
+            //     ^?      
+            // ^^^^^^^^
+
+            console.
+            //      ^| 
+
+            // @noImplicitAny: false
+            // @target: ES2022
+            // @declaration: true
+            // @filename: maths3.ts 
+            export function absolute(num: number) {
+              if (num < 0) return num * -1;
+              return num;
+            }
+
+            // @filename: index3.ts 
+            import {absolute} from "./maths3"
+            const value = absolute(-1)
+            // ^?
+            // ^^^^^^^^^^
+            // ---cut---
+            const value2 = absolute(-2)
+            // ^?
+            // ^^^^^^^^^^
+
+            // @showEmit
+            // @errors: 7006
+            function fn(s) {
+              console.log(s.substr(3))
+            }
+        extension:
+          type: string
+          description: The extension of the code file. Can be 'ts', 'js', 'tsx', or 'jsx'.
+          example: "ts"
+        defaultOptions:
+          $ref: '#/components/schemas/ExampleOptions'
+        defaultCompilerOptions:
+          type: object
+          additionalProperties: true
+        tsVersion:
+          type: string
+        fsMap:
+          type: object
+          additionalProperties: true
+        customTags:
+          type: array
+          items:
+            type: string
+      required:
+        - code
+        - extension
+    ExampleOptions:
+      type: object
+      properties:
+        noErrors:
+          type: boolean
+        errors:
+          type: array
+          items:
+            type: integer
+        showEmit:
+          type: boolean
+        showEmittedFile:
+          type: string
+        noStaticSemanticInfo:
+          type: boolean
+        emit:
+          type: boolean
+        noErrorValidation:
+          type: boolean
+    TwoSlashReturn:
+      type: object
+      properties:
+        code:
+          type: string
+          description: The resulting code after twoslash.
+        extension:
+          type: string
+        highlights:
+          type: array
+          items:
+            $ref: '#/components/schemas/Highlight'
+        staticQuickInfos:
+          type: array
+          items:
+            $ref: '#/components/schemas/StaticQuickInfo'
+        queries:
+          type: array
+          items:
+            $ref: '#/components/schemas/Query'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+          description: Any error that occurred during twoslash.
+        playgroundURL:
+          type: string
+    Highlight:
+      type: object
+      properties:
+        kind:
+          type: string
+        start:
+          type: integer
+        line:
+          type: integer
+        offset:
+          type: integer
+        text:
+          type: string
+        length:
+          type: integer
+    StaticQuickInfo:
+      type: object
+      properties:
+        targetString:
+          type: string
+        text:
+          type: string
+        docs:
+          type: string
+        start:
+          type: integer
+        length:
+          type: integer
+        line:
+          type: integer
+        character:
+          type: integer
+    Query:
+      type: object
+      properties:
+        kind:
+          type: string
+        line:
+          type: integer
+        offset:
+          type: integer
+        text:
+          type: string
+        docs:
+          type: string
+        start:
+          type: integer
+        length:
+          type: integer
+        completions:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        completionsPrefix:
+          type: string
+    Tag:
+      type: object
+      properties:
+        name:
+          type: string
+        line:
+          type: integer
+        annotation:
+          type: string
+    Error:
+      type: object
+      properties:
+        renderedMessage:
+          type: string
+        id:
+          type: string
+        category:
+          type: integer
+        code:
+          type: integer
+        start:
+          type: integer
+        length:
+          type: integer
+        line:
+          type: integer
+        character:
+          type: integer
+    TwoslashError:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        errors:
+          type: array
+          items:
+            type: integer
+        compilerErrors:
+          type: string
+      example:
+        error: "Uncaught Error"
+        message: "Errors were thrown in the sample, but not included in an errors tag"
+        errors: [7006]
+        compilerErrors: "index.ts [7006] 76 - Parameter 's' implicitly has an 'any' type."

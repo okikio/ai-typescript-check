@@ -1,6 +1,8 @@
 
-import { tsvfs, Typescript } from "./deps.ts"
+import { Typescript } from "./deps.ts"
 import type { CompilerOptions } from "./types.ts"
+
+import * as tsvfs from "./vendor/ts-vfs.ts";
 
 const {
   createDefaultMapFromCDN,
@@ -19,14 +21,14 @@ const compilerOpts: CompilerOptions = {
   "esModuleInterop": true,
 };
 const ENTRY_POINT = "index.ts";
+const FS_Map = await createDefaultMapFromCDN(
+  compilerOpts,
+  Typescript.version,
+  false,
+  Typescript,
+);
 
-export async function createTypescriptLanguageService(initialText = "const hello = 'hi'") {
-  const fsMap = await createDefaultMapFromCDN(
-    compilerOpts,
-    Typescript.version,
-    false,
-    Typescript,
-  );
+export function createTypescriptLanguageService(initialText = "const hello = 'hi'", fsMap = FS_Map) {
   fsMap.set(ENTRY_POINT, initialText);
 
   const system = createSystem(fsMap);
@@ -62,7 +64,7 @@ export function createAutoComplete(env: tsvfs.VirtualTypeScriptEnvironment, path
   return Object.assign({}, result, { entries: details })
 }
 
-export function createTooltip(env: tsvfs.VirtualTypeScriptEnvironment, path = ENTRY_POINT, pos: number, ) {
+export function createTooltip(env: tsvfs.VirtualTypeScriptEnvironment, path = ENTRY_POINT, pos: number) {
   const result = env.languageService.getQuickInfoAtPosition(path, pos);
   return result ? 
     {
@@ -121,6 +123,24 @@ export function createReferences(env: tsvfs.VirtualTypeScriptEnvironment, path =
   return result
 }
 
+export function createFindReferences(env: tsvfs.VirtualTypeScriptEnvironment, path = ENTRY_POINT, pos: number) {
+  const result = env.languageService.findReferences(path, pos);
+  return result?.map(x => {
+    return Object.assign({}, x, {
+      definitionText: Typescript.displayPartsToString(x.definition.displayParts)
+    })
+  })
+}
+
+export function createOrganizeImports(env: tsvfs.VirtualTypeScriptEnvironment, args: Typescript.OrganizeImportsArgs, formatOptions: Typescript.FormatCodeSettings = {}, preferences: Typescript.UserPreferences = {}) {
+  const result = env.languageService.organizeImports(args, formatOptions, preferences);
+  return result
+}
+
 export function updateFile(env: tsvfs.VirtualTypeScriptEnvironment, path = ENTRY_POINT, value = "const hello = 'hi'") {
   return env.updateFile(path, value);
+}
+
+export function createFile(env: tsvfs.VirtualTypeScriptEnvironment, path = ENTRY_POINT, value = "const hello = 'hi'") {
+  return env.createFile(path, value);
 }
