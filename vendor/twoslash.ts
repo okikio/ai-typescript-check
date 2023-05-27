@@ -1,21 +1,31 @@
 import type { CompilerOptions } from "../types.ts"
-import { Typescript, lzstring } from "../deps.ts"
+import { Typescript, lzstring, ata } from "../deps.ts"
 
 import {
   createDefaultMapFromCDN,
   createSystem,
   createVirtualTypeScriptEnvironment,
 } from "./ts-vfs.ts";
+import { resolve } from "https://deno.land/std@0.189.0/path/win32.ts";
+
+const { setupTypeAcquisition } = ata;
 
 const shouldDebug = localStorage.getItem("DEBUG") || (Deno.env.get('DEBUG'))
 const log = shouldDebug ? console.log : (_message?: any, ..._optionalParams: any[]) => ""
 
 type QueryPosition = {
-  kind: "query" | "completion"
+  kind: "query"
   offset: number
   text: string | undefined
   docs: string | undefined
   line: number
+} | {
+  kind: "completion"
+  offset: number
+  text: string | undefined
+  docs: string | undefined
+  line: number
+  triggerCharacter: string | undefined
 }
 
 type PartialQueryResults = {
@@ -70,11 +80,12 @@ ${description}
 /** To ensure that errors are matched up right */
 export function validateCodeForErrors(
   relevantErrors: Typescript.Diagnostic[],
-  handbookOptions: { errors: number[] },
+  handbookOptions: { errors: number[], type?: "warning" | "error" },
   extension: string,
   originalCode: string,
   vfsRoot: string
 ) {
+  const isWarning = handbookOptions.type === "warning";
   const inErrsButNotFoundInTheHeader = relevantErrors.filter(e => !handbookOptions.errors.includes(e.code))
   const errorsFound = Array.from(new Set(inErrsButNotFoundInTheHeader.map(e => e.code))).join(" ")
 
@@ -123,13 +134,14 @@ export function validateCodeForErrors(
     const allMessages = innerDiags.join("\n\n")
 
     const newErr = new TwoslashError(
-      `Errors were thrown in the sample, but not included in an errors tag`,
+      `${isWarning ? "Warning: " : ""}Errors were thrown in the sample, but not included in an errors tag`,
       `These errors were not marked as being expected: ${errorsFound}. ${missing}`,
       `Compiler Errors:\n\n${allMessages}`
     )
 
     newErr.code = `## Code\n\n'''${extension}\n${originalCode}\n'''`
-    throw newErr
+    if (!isWarning) throw newErr
+    else console.warn(newErr.message)
   }
 }
 
@@ -274,7 +286,7 @@ export function getClosestWord(str: string, pos: number) {
   }
 }
 
-function filterHighlightLines(codeLines: string[]): { highlights: HighlightPosition[]; queries: QueryPosition[] } {
+function filterHighlightLines(codeLines: string[]): { highlights: HighlightPosition[]; queries: QueryPosition[], codeLines: string[] } {
   const highlights: HighlightPosition[] = []
   const queries: QueryPosition[] = []
 
@@ -282,8 +294,10 @@ function filterHighlightLines(codeLines: string[]): { highlights: HighlightPosit
   let contentOffset = 0
   let removedLines = 0
 
-  for (let i = 0; i < codeLines.length; i++) {
-    const line = codeLines[i]
+  const codeLinesClone = Array.from(codeLines)
+
+  for (let i = 0; i < codeLinesClone.length; i++) {
+    const line = codeLinesClone[i]
     const moveForward = () => {
       contentOffset = nextContentOffset
       nextContentOffset += line.length + 1
@@ -293,12 +307,12 @@ function filterHighlightLines(codeLines: string[]): { highlights: HighlightPosit
       log(`Removing line ${i} for ${logDesc}`)
 
       removedLines++
-      codeLines.splice(i, 1)
+      codeLinesClone.splice(i, 1)
       i--
     }
 
     // We only need to run regexes over lines with comments
-    if (!line.includes("//")) {
+    if (!/\/\//.test(line)) {
       moveForward()
     } else {
       const highlightMatch = /^\s*\/\/\s*\^+( .+)?$/.exec(line)
@@ -329,15 +343,17 @@ function filterHighlightLines(codeLines: string[]): { highlights: HighlightPosit
         stripLine("being a prettier ignore")
       } else if (completionsQuery !== null) {
         const start = line.indexOf("^")
+        const lineNum = i + removedLines - 1;
         // prettier-ignore
-        queries.push({ kind: "completion", offset: start, text: undefined, docs: undefined, line: i + removedLines - 1 })
+        queries.push({ kind: "completion", offset: start, text: codeLines[lineNum], triggerCharacter: codeLines[lineNum][Math.max(start - 1, 0)], docs: undefined, line: lineNum })
         stripLine("having a completion query")
       } else {
         moveForward()
       }
     }
   }
-  return { highlights, queries }
+
+  return { highlights, queries, codeLines: codeLinesClone }
 }
 
 function getOptionValueFromMap(name: string, key: string, optMap: Map<string, string>) {
@@ -589,6 +605,18 @@ export interface TwoSlashReturn {
     character: number | undefined
   }[]
 
+  /** Diagnostic error messages which came up when creating the program */
+  warnings: {
+    renderedMessage: string
+    id: string
+    category: 0 | 1 | 2 | 3
+    code: number
+    start: number | undefined
+    length: number | undefined
+    line: number | undefined
+    character: number | undefined
+  }[]
+
   /** The URL for this sample in the playground */
   playgroundURL: string
 }
@@ -625,17 +653,6 @@ export interface TwoSlashOptions {
   customTags?: string[]
 }
 
-const defaultCompilerOptions: CompilerOptions = {
-  target: Typescript.ScriptTarget.ES2022,
-  module: Typescript.ModuleKind.ES2022,
-  "lib": [
-    "es2022",
-    "dom",
-    "webworker",
-  ],
-  "esModuleInterop": true,
-};
-
 /**
  * Runs the checker against a TypeScript/JavaScript code sample returning potentially
  * difference code, and a set of annotations around how it works.
@@ -644,9 +661,7 @@ const defaultCompilerOptions: CompilerOptions = {
  * @param extension For example: "ts", "tsx", "typescript", "javascript" or "js".
  * @param options Additional options for twoslash
  */
-export async function twoslasher(code: string, extension: string, options: TwoSlashOptions = {
-  defaultCompilerOptions,
-}): Promise<TwoSlashReturn> {
+export async function twoslasher(code: string, extension: string, options: TwoSlashOptions = {}): Promise<TwoSlashReturn> {
   const ts: typeof Typescript = options.tsModule ?? Typescript
   const lzString: typeof lzstring = options.lzstringModule ?? lzstring
 
@@ -658,7 +673,7 @@ export async function twoslasher(code: string, extension: string, options: TwoSl
 
   const defaultCompilerOptions = {
     strict: true,
-    target: ts.ScriptTarget.ES2016,
+    target: ts.ScriptTarget.ES2022,
     allowJs: true,
     ...(options.defaultCompilerOptions ?? {}),
   }
@@ -694,8 +709,35 @@ export async function twoslasher(code: string, extension: string, options: TwoSl
 
   const env = createVirtualTypeScriptEnvironment(system, [], ts, compilerOptions, options.customTransformers)
   const ls = env.languageService
-
+  
   code = codeLines.join("\n")
+  await new Promise<void>(resolve => {  
+    const ata = setupTypeAcquisition({
+      projectName: "TypeScript Playground",
+      // @ts-ignore
+      typescript: ts,
+      logger: console,
+      delegate: {
+        receivedFile(code, path) {
+          console.log(path)
+          env.createFile(path, code)
+        },
+        progress: (downloaded: number, total: number) => {
+          // console.log({ dl, ttl })
+        },
+        started: () => {
+          console.log("ATA start")
+        },
+        finished: f => {
+          console.log("ATA done")
+          resolve()
+        },
+      },
+    })
+    
+    
+    ata(code)
+  })
 
   let partialQueries = [] as (PartialQueryResults | PartialCompletionResults)[]
   let queries = [] as TwoSlashReturn["queries"]
@@ -706,9 +748,12 @@ export async function twoslasher(code: string, extension: string, options: TwoSl
 
   /** All of the referenced files in the markup */
   const filenames = nameContent.map(nc => nc[0])
+  
+  // Twoslash typescript comments get stripped too early causing errors, so we need to keep a copy of the original
+  const nonModifiedFS = new Map<string, string[]>(nameContent)
 
   for (const file of nameContent) {
-    const [filename, codeLines] = file
+    let [filename, codeLines] = file
     const filetype = filename.split(".").pop() || ""
 
     // Only run the LSP-y things on source files
@@ -723,6 +768,7 @@ export async function twoslasher(code: string, extension: string, options: TwoSl
 
     const updates = filterHighlightLines(codeLines)
     highlights = highlights.concat(updates.highlights)
+    codeLines = updates.codeLines
 
     // ------ Do the LSP lookup for the queries
 
@@ -760,7 +806,7 @@ export async function twoslasher(code: string, extension: string, options: TwoSl
         }
 
         case "completion": {
-          const completions = ls.getCompletionsAtPosition(filename, position - 1, {})
+          const completions = ls.getCompletionsAtPosition(filename, position, {})
           if (!completions && !handbookOptions.noErrorValidation) {
             throw new TwoslashError(
               `Invalid completion query`,
@@ -793,8 +839,8 @@ export async function twoslasher(code: string, extension: string, options: TwoSl
   }
 
   // We need to also strip the highlights + queries from the main file which is shown to people
-  const allCodeLines = code.split(/\r\n?|\n/g)
-  filterHighlightLines(allCodeLines)
+  let allCodeLines = code.split(/\r\n?|\n/g);
+  ({ codeLines: allCodeLines } = filterHighlightLines(allCodeLines));
   code = allCodeLines.join("\n")
 
   // Lets fs changes propagate back up to the fsMap
@@ -812,6 +858,7 @@ export async function twoslasher(code: string, extension: string, options: TwoSl
 
   // Code should now be safe to compile, so we're going to split it into different files
   let errs: Typescript.Diagnostic[] = []
+  let warns: Typescript.Diagnostic[] = []
   // Let because of a filter when cutting
   let staticQuickInfos: TwoSlashReturn["staticQuickInfos"] = []
 
@@ -819,6 +866,14 @@ export async function twoslasher(code: string, extension: string, options: TwoSl
   // const declaredFiles = Object.keys(fileMap)
 
   filenames.forEach(file => {
+    const tempSource = env.sys.readFile(file)!
+    
+    // Adds back the twoslash comments to make sure the compiler can properly grab all the descriptions 
+    // it needs to show the quick info popover
+    if (nonModifiedFS.has(file)) {
+      env.updateFile(file, nonModifiedFS.get(file)!.join("\n"))
+    }
+
     const filetype = file.split(".").pop() || ""
 
     // Only run the LSP-y things on source files
@@ -827,7 +882,14 @@ export async function twoslasher(code: string, extension: string, options: TwoSl
     }
 
     if (!handbookOptions.noErrors) {
-      errs = errs.concat(ls.getSemanticDiagnostics(file), ls.getSyntacticDiagnostics(file))
+      errs = errs.concat(
+        ls.getSemanticDiagnostics(file), 
+        ls.getSyntacticDiagnostics(file)
+      )
+      warns = warns.concat(
+        ls.getCompilerOptionsDiagnostics(), 
+        ls.getSuggestionDiagnostics(file)
+      )
     }
 
     const source = env.sys.readFile(file)!
@@ -852,19 +914,19 @@ export async function twoslasher(code: string, extension: string, options: TwoSl
         const quickInfo = ls.getQuickInfoAtPosition(file, span.start)
 
         if (quickInfo && quickInfo.displayParts) {
-          const text = quickInfo.displayParts.map(dp => dp.text).join("")
+          const text = ts.displayPartsToString(quickInfo.displayParts)
           const targetString = identifier.text
-          const docs = quickInfo.documentation ? quickInfo.documentation.map(d => d.text).join("\n") : undefined
+          const docs = quickInfo.documentation ? ts.displayPartsToString(quickInfo.documentation) : undefined
 
           // Get the position of the
           const position = span.start + fileContentStartIndexInModifiedFile
           // Use TypeScript to pull out line/char from the original code at the position + any previous offset
-          const burnerSourceFile = ts.createSourceFile("_.ts", code, ts.ScriptTarget.ES2015)
+          const burnerSourceFile = ts.createSourceFile("_.ts", code, ts.ScriptTarget.ES2022)
           const { line, character } = ts.getLineAndCharacterOfPosition(burnerSourceFile, position)
 
           staticQuickInfos.push({ text, docs, start: position, length: span.length, line, character, targetString })
         }
-      }
+      }         
 
       // Offset the queries for this file because they are based on the line for that one
       // specific file, and not the global twoslash document. This has to be done here because
@@ -872,46 +934,81 @@ export async function twoslasher(code: string, extension: string, options: TwoSl
       partialQueries
         .filter((q: any) => q.file === file)
         .forEach(q => {
-          const pos =
-            ts.getPositionOfLineAndCharacter(sourceFile, q.line, q.offset) + fileContentStartIndexInModifiedFile
+          try {
+            const pos =
+              ts.getPositionOfLineAndCharacter(sourceFile, q.line, q.offset) + fileContentStartIndexInModifiedFile
 
-          switch (q.kind) {
-            case "query": {
-              queries.push({
-                docs: q.docs,
-                kind: "query",
-                start: pos + fileContentStartIndexInModifiedFile,
-                length: q.text.length,
-                text: q.text,
-                offset: q.offset,
-                line: q.line + linesAbove + 1,
-              })
-              break
+            switch (q.kind) {
+              case "query": {
+                queries.push({
+                  docs: q.docs,
+                  kind: "query",
+                  start: pos + fileContentStartIndexInModifiedFile,
+                  length: q.text.length,
+                  text: q.text,
+                  offset: q.offset,
+                  line: q.line + linesAbove + 1,
+                })
+                break
+              }
+              case "completions": {
+                queries.push({
+                  completions: q.completions,
+                  kind: "completions",
+                  start: pos + fileContentStartIndexInModifiedFile,
+                  completionsPrefix: q.completionPrefix,
+                  length: 1,
+                  offset: q.offset,
+                  line: q.line + linesAbove + 1,
+                })
+              }
             }
-            case "completions": {
-              queries.push({
-                completions: q.completions,
-                kind: "completions",
-                start: pos + fileContentStartIndexInModifiedFile,
-                completionsPrefix: q.completionPrefix,
-                length: 1,
-                offset: q.offset,
-                line: q.line + linesAbove + 1,
-              })
-            }
+          } catch (e) {
+            const str = sourceFile.getText().split(/\n/);
+            console.log({ e: e.message, file, line: q.line, offset: q.offset, sourceFile: str, len: str.length, fileContentStartIndexInModifiedFile })
           }
+
         })
+    }
+      
+    // Reset the file to the edited version without the twoslash comments
+    if (nonModifiedFS.has(file)) {
+      env.updateFile(file, tempSource)
     }
   })
 
-  const relevantErrors = errs.filter(e => e.file && filenames.includes(e.file.fileName))
+  function getCodeFixes(e: Typescript.Diagnostic) {
+    if (
+      typeof e.start !== "number" || 
+      typeof e.length !== "number"
+    ) return e;
+    if (!e.file) return e;
+
+    try {
+      const codeActions = env.languageService.getCodeFixesAtPosition(e.file.fileName, e.start, e.start + e.length, [e.category], {}, {});
+
+      return Object.assign({}, e, { codeActions });
+    } catch (err) {
+      console.error(err);
+      return e;
+    }
+  }
+
+  const relevantErrors = errs.filter(e => e.file && filenames.includes(e.file.fileName)).map(getCodeFixes)
+  const relevantWarnings = warns.filter(e => e.file && filenames.includes(e.file.fileName)).map(getCodeFixes)
 
   // A validator that error codes are mentioned, so we can know if something has broken in the future
   if (!handbookOptions.noErrorValidation && relevantErrors.length) {
-    validateCodeForErrors(relevantErrors, handbookOptions, extension, originalCode, fsRoot)
+    validateCodeForErrors(relevantErrors, { errors: handbookOptions.errors, type: "error" }, extension, originalCode, fsRoot)
+  }
+  
+  // A validator that error codes are mentioned, so we can know if something has broken in the future
+  if (!handbookOptions.noErrorValidation && relevantWarnings.length) {
+    validateCodeForErrors(relevantWarnings, { errors: handbookOptions.errors, type: "warning" }, extension, originalCode, fsRoot)
   }
 
   let errors: TwoSlashReturn["errors"] = []
+  let warnings: TwoSlashReturn["warnings"] = []
 
   // We can't pass the ts.DiagnosticResult out directly (it can't be JSON.stringified)
   for (const err of relevantErrors) {
@@ -926,6 +1023,26 @@ export async function twoslasher(code: string, extension: string, options: TwoSl
       code: err.code,
       length: err.length,
       start: err.start ? err.start + fileContentStartIndexInModifiedFile : undefined,
+      line,
+      character,
+      renderedMessage,
+      id,
+    })
+  }
+
+  // We can't pass the ts.DiagnosticResult out directly (it can't be JSON.stringified)
+  for (const warn of relevantWarnings) {
+    const codeWhereErrorLives = env.sys.readFile(warn.file!.fileName)!
+    const fileContentStartIndexInModifiedFile = code.indexOf(codeWhereErrorLives)
+    const renderedMessage = ts.flattenDiagnosticMessageText(warn.messageText, "\n")
+    const id = `warn-${warn.code}-${warn.start}-${warn.length}`
+    const { line, character } = ts.getLineAndCharacterOfPosition(warn.file!, warn.start!)
+
+    warnings.push({
+      category: warn.category,
+      code: warn.code,
+      length: warn.length,
+      start: warn.start ? warn.start + fileContentStartIndexInModifiedFile : undefined,
       line,
       character,
       renderedMessage,
@@ -1011,12 +1128,19 @@ export async function twoslasher(code: string, extension: string, options: TwoSl
     })
     errors = errors.filter(e => e.start && e.start > -1)
 
+    warnings.forEach(err => {
+      if (err.start) err.start -= cutIndex
+      if (err.line) err.line -= lineOffset
+    })
+    warnings = warnings.filter(e => e.start && e.start > -1)
+
     highlights.forEach(highlight => {
       highlight.start -= cutIndex
       highlight.line -= lineOffset
     })
 
     highlights = highlights.filter(e => e.start > -1)
+    console.log({ highlights })
 
     queries.forEach(q => (q.line -= lineOffset))
     queries = queries.filter(q => q.line > -1)
@@ -1039,6 +1163,7 @@ export async function twoslasher(code: string, extension: string, options: TwoSl
     // Cut any metadata after the cutAfterString
     staticQuickInfos = staticQuickInfos.filter(s => s.line < lineOffset)
     errors = errors.filter(e => e.line && e.line < lineOffset)
+    warnings = warnings.filter(e => e.line && e.line < lineOffset)
     highlights = highlights.filter(e => e.line < lineOffset)
     queries = queries.filter(q => q.line < lineOffset)
     tags = tags.filter(q => q.line < lineOffset)
@@ -1051,6 +1176,7 @@ export async function twoslasher(code: string, extension: string, options: TwoSl
     queries,
     staticQuickInfos,
     errors,
+    warnings,
     playgroundURL,
     tags,
   }

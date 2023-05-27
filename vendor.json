@@ -1,0 +1,705 @@
+{
+  "code": "// @filename: maths.ts \n/**\n * Gets the length of a string\n * @param value a string\n */\nfunction fnx2(s: string) {\n  console.log(s.substr(3))\n}\nexport function absolute(num: number) {\n  if (num < 0) return num * -1;\n  return num;\n}\n\nimport {SpringEasing} from \"spring-easing\"\nSpringEasing\n\n/**\n * Gets the length of a string\n * @param value a string\n */\nfunction fnx(s: string) {\n  console.log(s.substr(3))\n}\n\nexport const slash = [] as string[]\n  fnx(\"42\")\n\nfunction greet(person: string, date: Date) {\n  console.log(`Hello ${person}, today is ${date.toDateString()}!`)\n}\n\n   greet(\"Maddison\", new Date())\nconsole.g \n\n// @filename: index.ts \nimport {absolute} from \"./maths\"\nconst value = absolute(-1)\nconst value2 = absolute(-2)\n\nfunction fn(s) {\n  console.log(s.substr(3))\n}\n",
+  "extension": "ts",
+  "highlights": [
+    {
+      "kind": "highlight",
+      "offset": 370,
+      "length": 11,
+      "text": "",
+      "line": 21,
+      "start": 14
+    },
+    {
+      "kind": "highlight",
+      "offset": 425,
+      "length": 5,
+      "text": "",
+      "line": 27,
+      "start": 3
+    },
+    {
+      "kind": "highlight",
+      "offset": 553,
+      "length": 5,
+      "text": "A Quick explanation",
+      "line": 34,
+      "start": 3
+    },
+    {
+      "kind": "highlight",
+      "offset": 36,
+      "length": 10,
+      "text": "",
+      "line": 2,
+      "start": 3
+    },
+    {
+      "kind": "highlight",
+      "offset": 63,
+      "length": 8,
+      "text": "",
+      "line": 5,
+      "start": 3
+    }
+  ],
+  "queries": [
+    {
+      "docs": "Generates an Array of values using frame functions which in turn create the effect of spring easing.\nTo use this properly make sure to set the easing animation option to \"linear\".\nCheck out a demo of SpringEasing at <https://codepen.io/okikio/pen/MWEdzNg>\n\nSpringEasing has 3 properties they are `easing` (all the easings from <br/>{@link <br/>EasingFunctions<br/>}<br/> are supported on top of frame functions like SpringFrame, SpringFrameOut, etc..), `numPoints` (the size of the Array the frame function should create), and `decimal` (the number of decimal places of the values within said Array).\n\n| Properties  | Default Value           |\n| ----------- | ----------------------- |\n| `easing`    | `spring(1, 100, 10, 0)` |\n| `numPoints` | `50`                    |\n| `decimal`   | `3`                     |\n\nBy default, Spring Easing support easings in the form,\n\n| constant   | accelerate         | decelerate     | accelerate-decelerate | decelerate-accelerate |\n| :--------- | :----------------- | :------------- | :-------------------- | :-------------------- |\n|            | spring / spring-in | spring-out     | spring-in-out         | spring-out-in         |\n\nAll **Spring** easing's can be configured using theses parameters,\n\n`spring-*(mass, stiffness, damping, velocity)`\n\nEach parameter comes with these defaults\n\n| Parameter | Default Value |\n| --------- | ------------- |\n| mass      | `1`           |\n| stiffness | `100`         |\n| damping   | `10`          |\n| velocity  | `0`           |\n\n e.g.\n ```ts\n import { SpringEasing, SpringOutFrame } from \"spring-easing\";\n import anime from \"animejs\";\n\n // Note: this is the return value of <br/>{@link <br/>SpringEasing<br/>}<br/> and <br/>{@link <br/>GenerateSpringFrames<br/>}<br/>, you don't need the object to get this format\n let [translateX, duration] = SpringEasing([0, 250], {\n     easing: \"spring-out-in(1, 100, 10, 0)\",\n\n     // You can change the size of Array for the SpringEasing function to generate\n     numPoints: 200,\n\n     // The number of decimal places to round, final values in the generated Array\n     // This option doesn't exist on <br/>{@link <br/>GenerateSpringFrames<br/>}<br/>\n     decimal: 5,\n });\n\n anime({\n   targets: \"div\",\n\n   // Using spring easing animate from [0 to 250] using `spring-out-in`\n   translateX,\n\n   // You can set the easing without an object\n   rotate: SpringEasing([\"0turn\", 1, 0, 0.5], [SpringOutFrame, 1, 100, 10, 0])[0],\n\n   // TIP... Use linear easing for the proper effect\n   easing: \"linear\",\n\n   // The optimal duration for this specific spring\n   duration\n })\n ```",
+      "kind": "query",
+      "start": 255,
+      "length": 197,
+      "text": "(alias) function SpringEasing<T>(values: T[], options?: TypeEasingOptions | TypeEasingOptions[\"easing\"], customInterpolate?: TypeInterpolationFunction): readonly [any[], number]\nimport SpringEasing",
+      "offset": 3,
+      "line": 14
+    },
+    {
+      "docs": "Gets the length of a string",
+      "kind": "query",
+      "start": 423,
+      "length": 29,
+      "text": "function fnx(s: string): void",
+      "offset": 2,
+      "line": 26
+    },
+    {
+      "completions": [
+        {
+          "name": "assert",
+          "kind": "method",
+          "kindModifiers": "declare",
+          "sortText": "11"
+        },
+        {
+          "name": "clear",
+          "kind": "method",
+          "kindModifiers": "declare",
+          "sortText": "11"
+        },
+        {
+          "name": "count",
+          "kind": "method",
+          "kindModifiers": "declare",
+          "sortText": "11"
+        },
+        {
+          "name": "countReset",
+          "kind": "method",
+          "kindModifiers": "declare",
+          "sortText": "11"
+        },
+        {
+          "name": "debug",
+          "kind": "method",
+          "kindModifiers": "declare",
+          "sortText": "11"
+        },
+        {
+          "name": "dir",
+          "kind": "method",
+          "kindModifiers": "declare",
+          "sortText": "11"
+        },
+        {
+          "name": "dirxml",
+          "kind": "method",
+          "kindModifiers": "declare",
+          "sortText": "11"
+        },
+        {
+          "name": "error",
+          "kind": "method",
+          "kindModifiers": "declare",
+          "sortText": "11"
+        },
+        {
+          "name": "group",
+          "kind": "method",
+          "kindModifiers": "declare",
+          "sortText": "11"
+        },
+        {
+          "name": "groupCollapsed",
+          "kind": "method",
+          "kindModifiers": "declare",
+          "sortText": "11"
+        },
+        {
+          "name": "groupEnd",
+          "kind": "method",
+          "kindModifiers": "declare",
+          "sortText": "11"
+        },
+        {
+          "name": "info",
+          "kind": "method",
+          "kindModifiers": "declare",
+          "sortText": "11"
+        },
+        {
+          "name": "log",
+          "kind": "method",
+          "kindModifiers": "declare",
+          "sortText": "11"
+        },
+        {
+          "name": "table",
+          "kind": "method",
+          "kindModifiers": "declare",
+          "sortText": "11"
+        },
+        {
+          "name": "time",
+          "kind": "method",
+          "kindModifiers": "declare",
+          "sortText": "11"
+        },
+        {
+          "name": "timeEnd",
+          "kind": "method",
+          "kindModifiers": "declare",
+          "sortText": "11"
+        },
+        {
+          "name": "timeLog",
+          "kind": "method",
+          "kindModifiers": "declare",
+          "sortText": "11"
+        },
+        {
+          "name": "timeStamp",
+          "kind": "method",
+          "kindModifiers": "declare",
+          "sortText": "11"
+        },
+        {
+          "name": "trace",
+          "kind": "method",
+          "kindModifiers": "declare",
+          "sortText": "11"
+        },
+        {
+          "name": "warn",
+          "kind": "method",
+          "kindModifiers": "declare",
+          "sortText": "11"
+        }
+      ],
+      "kind": "completions",
+      "start": 608,
+      "completionsPrefix": "g",
+      "length": 1,
+      "offset": 9,
+      "line": 35
+    },
+    {
+      "docs": "",
+      "kind": "query",
+      "start": 40,
+      "length": 19,
+      "text": "const value: number",
+      "offset": 7,
+      "line": 2
+    },
+    {
+      "docs": "",
+      "kind": "query",
+      "start": 77,
+      "length": 20,
+      "text": "const value2: number",
+      "offset": 7,
+      "line": 4
+    }
+  ],
+  "staticQuickInfos": [
+    {
+      "text": "function fnx2(s: string): void",
+      "docs": "Gets the length of a string",
+      "start": 73,
+      "length": 4,
+      "line": 3,
+      "character": 14,
+      "targetString": "fnx2"
+    },
+    {
+      "text": "(parameter) s: string",
+      "docs": "",
+      "start": 78,
+      "length": 1,
+      "line": 3,
+      "character": 19,
+      "targetString": "s"
+    },
+    {
+      "text": "var console: Console",
+      "docs": "",
+      "start": 93,
+      "length": 7,
+      "line": 5,
+      "character": 5,
+      "targetString": "console"
+    },
+    {
+      "text": "(method) Console.log(...data: any[]): void",
+      "docs": "",
+      "start": 101,
+      "length": 3,
+      "line": 5,
+      "character": 13,
+      "targetString": "log"
+    },
+    {
+      "text": "(parameter) s: string",
+      "docs": "",
+      "start": 105,
+      "length": 1,
+      "line": 5,
+      "character": 17,
+      "targetString": "s"
+    },
+    {
+      "text": "(method) String.substr(from: number, length?: number | undefined): string",
+      "docs": "Gets a substring beginning at the specified location and having the specified length.",
+      "start": 107,
+      "length": 6,
+      "line": 5,
+      "character": 19,
+      "targetString": "substr"
+    },
+    {
+      "text": "function absolute(num: number): number",
+      "docs": "",
+      "start": 136,
+      "length": 8,
+      "line": 6,
+      "character": 21,
+      "targetString": "absolute"
+    },
+    {
+      "text": "(parameter) num: number",
+      "docs": "",
+      "start": 145,
+      "length": 3,
+      "line": 8,
+      "character": 1,
+      "targetString": "num"
+    },
+    {
+      "text": "(parameter) num: number",
+      "docs": "",
+      "start": 166,
+      "length": 3,
+      "line": 8,
+      "character": 22,
+      "targetString": "num"
+    },
+    {
+      "text": "(parameter) num: number",
+      "docs": "",
+      "start": 182,
+      "length": 3,
+      "line": 8,
+      "character": 38,
+      "targetString": "num"
+    },
+    {
+      "text": "(parameter) num: number",
+      "docs": "",
+      "start": 201,
+      "length": 3,
+      "line": 9,
+      "character": 17,
+      "targetString": "num"
+    },
+    {
+      "text": "(alias) function SpringEasing<T>(values: T[], options?: TypeEasingOptions | TypeEasingOptions[\"easing\"], customInterpolate?: TypeInterpolationFunction): readonly [any[], number]\nimport SpringEasing",
+      "docs": "Generates an Array of values using frame functions which in turn create the effect of spring easing.\nTo use this properly make sure to set the easing animation option to \"linear\".\nCheck out a demo of SpringEasing at <https://codepen.io/okikio/pen/MWEdzNg>\n\nSpringEasing has 3 properties they are `easing` (all the easings from {@link EasingFunctions} are supported on top of frame functions like SpringFrame, SpringFrameOut, etc..), `numPoints` (the size of the Array the frame function should create), and `decimal` (the number of decimal places of the values within said Array).\n\n| Properties  | Default Value           |\n| ----------- | ----------------------- |\n| `easing`    | `spring(1, 100, 10, 0)` |\n| `numPoints` | `50`                    |\n| `decimal`   | `3`                     |\n\nBy default, Spring Easing support easings in the form,\n\n| constant   | accelerate         | decelerate     | accelerate-decelerate | decelerate-accelerate |\n| :--------- | :----------------- | :------------- | :-------------------- | :-------------------- |\n|            | spring / spring-in | spring-out     | spring-in-out         | spring-out-in         |\n\nAll **Spring** easing's can be configured using theses parameters,\n\n`spring-*(mass, stiffness, damping, velocity)`\n\nEach parameter comes with these defaults\n\n| Parameter | Default Value |\n| --------- | ------------- |\n| mass      | `1`           |\n| stiffness | `100`         |\n| damping   | `10`          |\n| velocity  | `0`           |\n\n e.g.\n ```ts\n import { SpringEasing, SpringOutFrame } from \"spring-easing\";\n import anime from \"animejs\";\n\n // Note: this is the return value of {@link SpringEasing} and {@link GenerateSpringFrames}, you don't need the object to get this format\n let [translateX, duration] = SpringEasing([0, 250], {\n     easing: \"spring-out-in(1, 100, 10, 0)\",\n\n     // You can change the size of Array for the SpringEasing function to generate\n     numPoints: 200,\n\n     // The number of decimal places to round, final values in the generated Array\n     // This option doesn't exist on {@link GenerateSpringFrames}\n     decimal: 5,\n });\n\n anime({\n   targets: \"div\",\n\n   // Using spring easing animate from [0 to 250] using `spring-out-in`\n   translateX,\n\n   // You can set the easing without an object\n   rotate: SpringEasing([\"0turn\", 1, 0, 0.5], [SpringOutFrame, 1, 100, 10, 0])[0],\n\n   // TIP... Use linear easing for the proper effect\n   easing: \"linear\",\n\n   // The optimal duration for this specific spring\n   duration\n })\n ```",
+      "start": 217,
+      "length": 12,
+      "line": 10,
+      "character": 1,
+      "targetString": "SpringEasing"
+    },
+    {
+      "text": "(alias) function SpringEasing<T>(values: T[], options?: TypeEasingOptions | TypeEasingOptions[\"easing\"], customInterpolate?: TypeInterpolationFunction): readonly [any[], number]\nimport SpringEasing",
+      "docs": "Generates an Array of values using frame functions which in turn create the effect of spring easing.\nTo use this properly make sure to set the easing animation option to \"linear\".\nCheck out a demo of SpringEasing at <https://codepen.io/okikio/pen/MWEdzNg>\n\nSpringEasing has 3 properties they are `easing` (all the easings from {@link EasingFunctions} are supported on top of frame functions like SpringFrame, SpringFrameOut, etc..), `numPoints` (the size of the Array the frame function should create), and `decimal` (the number of decimal places of the values within said Array).\n\n| Properties  | Default Value           |\n| ----------- | ----------------------- |\n| `easing`    | `spring(1, 100, 10, 0)` |\n| `numPoints` | `50`                    |\n| `decimal`   | `3`                     |\n\nBy default, Spring Easing support easings in the form,\n\n| constant   | accelerate         | decelerate     | accelerate-decelerate | decelerate-accelerate |\n| :--------- | :----------------- | :------------- | :-------------------- | :-------------------- |\n|            | spring / spring-in | spring-out     | spring-in-out         | spring-out-in         |\n\nAll **Spring** easing's can be configured using theses parameters,\n\n`spring-*(mass, stiffness, damping, velocity)`\n\nEach parameter comes with these defaults\n\n| Parameter | Default Value |\n| --------- | ------------- |\n| mass      | `1`           |\n| stiffness | `100`         |\n| damping   | `10`          |\n| velocity  | `0`           |\n\n e.g.\n ```ts\n import { SpringEasing, SpringOutFrame } from \"spring-easing\";\n import anime from \"animejs\";\n\n // Note: this is the return value of {@link SpringEasing} and {@link GenerateSpringFrames}, you don't need the object to get this format\n let [translateX, duration] = SpringEasing([0, 250], {\n     easing: \"spring-out-in(1, 100, 10, 0)\",\n\n     // You can change the size of Array for the SpringEasing function to generate\n     numPoints: 200,\n\n     // The number of decimal places to round, final values in the generated Array\n     // This option doesn't exist on {@link GenerateSpringFrames}\n     decimal: 5,\n });\n\n anime({\n   targets: \"div\",\n\n   // Using spring easing animate from [0 to 250] using `spring-out-in`\n   translateX,\n\n   // You can set the easing without an object\n   rotate: SpringEasing([\"0turn\", 1, 0, 0.5], [SpringOutFrame, 1, 100, 10, 0])[0],\n\n   // TIP... Use linear easing for the proper effect\n   easing: \"linear\",\n\n   // The optimal duration for this specific spring\n   duration\n })\n ```",
+      "start": 252,
+      "length": 12,
+      "line": 13,
+      "character": 19,
+      "targetString": "SpringEasing"
+    },
+    {
+      "text": "function fnx(s: string): void",
+      "docs": "Gets the length of a string",
+      "start": 345,
+      "length": 3,
+      "line": 18,
+      "character": 20,
+      "targetString": "fnx"
+    },
+    {
+      "text": "(parameter) s: string",
+      "docs": "",
+      "start": 349,
+      "length": 1,
+      "line": 18,
+      "character": 24,
+      "targetString": "s"
+    },
+    {
+      "text": "var console: Console",
+      "docs": "",
+      "start": 364,
+      "length": 7,
+      "line": 20,
+      "character": 10,
+      "targetString": "console"
+    },
+    {
+      "text": "(method) Console.log(...data: any[]): void",
+      "docs": "",
+      "start": 372,
+      "length": 3,
+      "line": 20,
+      "character": 18,
+      "targetString": "log"
+    },
+    {
+      "text": "(parameter) s: string",
+      "docs": "",
+      "start": 376,
+      "length": 1,
+      "line": 20,
+      "character": 22,
+      "targetString": "s"
+    },
+    {
+      "text": "(method) String.substr(from: number, length?: number | undefined): string",
+      "docs": "Gets a substring beginning at the specified location and having the specified length.",
+      "start": 378,
+      "length": 6,
+      "line": 20,
+      "character": 24,
+      "targetString": "substr"
+    },
+    {
+      "text": "const slash: string[]",
+      "docs": "",
+      "start": 434,
+      "length": 5,
+      "line": 24,
+      "character": 24,
+      "targetString": "slash"
+    },
+    {
+      "text": "function fnx(s: string): void",
+      "docs": "Gets the length of a string",
+      "start": 459,
+      "length": 3,
+      "line": 27,
+      "character": 0,
+      "targetString": "fnx"
+    },
+    {
+      "text": "function greet(person: string, date: Date): void",
+      "docs": "",
+      "start": 493,
+      "length": 5,
+      "line": 27,
+      "character": 34,
+      "targetString": "greet"
+    },
+    {
+      "text": "(parameter) person: string",
+      "docs": "",
+      "start": 499,
+      "length": 6,
+      "line": 27,
+      "character": 40,
+      "targetString": "person"
+    },
+    {
+      "text": "(parameter) date: Date",
+      "docs": "",
+      "start": 515,
+      "length": 4,
+      "line": 28,
+      "character": 11,
+      "targetString": "date"
+    },
+    {
+      "text": "interface Date",
+      "docs": "Enables basic storage and retrieval of dates and times.",
+      "start": 521,
+      "length": 4,
+      "line": 28,
+      "character": 17,
+      "targetString": "Date"
+    },
+    {
+      "text": "var console: Console",
+      "docs": "",
+      "start": 531,
+      "length": 7,
+      "line": 28,
+      "character": 27,
+      "targetString": "console"
+    },
+    {
+      "text": "(method) Console.log(...data: any[]): void",
+      "docs": "",
+      "start": 539,
+      "length": 3,
+      "line": 28,
+      "character": 35,
+      "targetString": "log"
+    },
+    {
+      "text": "(parameter) person: string",
+      "docs": "",
+      "start": 552,
+      "length": 6,
+      "line": 28,
+      "character": 48,
+      "targetString": "person"
+    },
+    {
+      "text": "(parameter) date: Date",
+      "docs": "",
+      "start": 572,
+      "length": 4,
+      "line": 29,
+      "character": 1,
+      "targetString": "date"
+    },
+    {
+      "text": "(method) Date.toDateString(): string",
+      "docs": "Returns a date as a string value.",
+      "start": 577,
+      "length": 12,
+      "line": 31,
+      "character": 3,
+      "targetString": "toDateString"
+    },
+    {
+      "text": "function greet(person: string, date: Date): void",
+      "docs": "",
+      "start": 602,
+      "length": 5,
+      "line": 31,
+      "character": 28,
+      "targetString": "greet"
+    },
+    {
+      "text": "var Date: DateConstructor\nnew () => Date (+4 overloads)",
+      "docs": "",
+      "start": 624,
+      "length": 4,
+      "line": 34,
+      "character": 5,
+      "targetString": "Date"
+    },
+    {
+      "text": "var console: Console",
+      "docs": "",
+      "start": 663,
+      "length": 7,
+      "line": 35,
+      "character": 20,
+      "targetString": "console"
+    },
+    {
+      "text": "any",
+      "start": 671,
+      "length": 1,
+      "line": 35,
+      "character": 28,
+      "targetString": "g"
+    },
+    {
+      "text": "(alias) function absolute(num: number): number\nimport absolute",
+      "docs": "",
+      "start": 8,
+      "length": 8,
+      "line": 0,
+      "character": 8,
+      "targetString": "absolute"
+    },
+    {
+      "text": "const value: number",
+      "docs": "",
+      "start": 39,
+      "length": 5,
+      "line": 2,
+      "character": 11,
+      "targetString": "value"
+    },
+    {
+      "text": "(alias) absolute(num: number): number\nimport absolute",
+      "docs": "",
+      "start": 47,
+      "length": 8,
+      "line": 2,
+      "character": 19,
+      "targetString": "absolute"
+    },
+    {
+      "text": "const value2: number",
+      "docs": "",
+      "start": 90,
+      "length": 6,
+      "line": 5,
+      "character": 2,
+      "targetString": "value2"
+    },
+    {
+      "text": "(alias) absolute(num: number): number\nimport absolute",
+      "docs": "",
+      "start": 99,
+      "length": 8,
+      "line": 5,
+      "character": 11,
+      "targetString": "absolute"
+    },
+    {
+      "text": "function fn(s: any): void",
+      "docs": "",
+      "start": 150,
+      "length": 2,
+      "line": 8,
+      "character": 6,
+      "targetString": "fn"
+    },
+    {
+      "text": "(parameter) s: any",
+      "docs": "",
+      "start": 153,
+      "length": 1,
+      "line": 8,
+      "character": 9,
+      "targetString": "s"
+    },
+    {
+      "text": "var console: Console",
+      "docs": "",
+      "start": 160,
+      "length": 7,
+      "line": 8,
+      "character": 16,
+      "targetString": "console"
+    },
+    {
+      "text": "(method) Console.log(...data: any[]): void",
+      "docs": "",
+      "start": 168,
+      "length": 3,
+      "line": 8,
+      "character": 24,
+      "targetString": "log"
+    },
+    {
+      "text": "(parameter) s: any",
+      "docs": "",
+      "start": 172,
+      "length": 1,
+      "line": 8,
+      "character": 28,
+      "targetString": "s"
+    },
+    {
+      "text": "any",
+      "start": 174,
+      "length": 6,
+      "line": 8,
+      "character": 30,
+      "targetString": "substr"
+    }
+  ],
+  "errors": [
+    {
+      "category": 1,
+      "code": 2339,
+      "length": 1,
+      "start": 695,
+      "line": 36,
+      "character": 8,
+      "renderedMessage": "Property 'g' does not exist on type 'Console'.",
+      "id": "err-2339-671-1"
+    },
+    {
+      "category": 1,
+      "code": 7006,
+      "length": 1,
+      "start": 796,
+      "line": 8,
+      "character": 12,
+      "renderedMessage": "Parameter 's' implicitly has an 'any' type.",
+      "id": "err-7006-153-1"
+    }
+  ],
+  "warnings": [
+    {
+      "category": 2,
+      "code": 6133,
+      "length": 4,
+      "start": 97,
+      "line": 4,
+      "character": 9,
+      "renderedMessage": "'fnx2' is declared but its value is never read.",
+      "id": "warn-6133-73-4"
+    },
+    {
+      "category": 2,
+      "code": 6387,
+      "length": 6,
+      "start": 131,
+      "line": 5,
+      "character": 16,
+      "renderedMessage": "The signature '(from: number, length?: number | undefined): string' of 's.substr' is deprecated.",
+      "id": "warn-6387-107-6"
+    },
+    {
+      "category": 2,
+      "code": 6387,
+      "length": 6,
+      "start": 402,
+      "line": 21,
+      "character": 16,
+      "renderedMessage": "The signature '(from: number, length?: number | undefined): string' of 's.substr' is deprecated.",
+      "id": "warn-6387-378-6"
+    },
+    {
+      "category": 2,
+      "code": 6133,
+      "length": 5,
+      "start": 682,
+      "line": 1,
+      "character": 6,
+      "renderedMessage": "'value' is declared but its value is never read.",
+      "id": "warn-6133-39-5"
+    },
+    {
+      "category": 2,
+      "code": 6133,
+      "length": 6,
+      "start": 733,
+      "line": 4,
+      "character": 6,
+      "renderedMessage": "'value2' is declared but its value is never read.",
+      "id": "warn-6133-90-6"
+    },
+    {
+      "category": 2,
+      "code": 6133,
+      "length": 2,
+      "start": 793,
+      "line": 8,
+      "character": 9,
+      "renderedMessage": "'fn' is declared but its value is never read.",
+      "id": "warn-6133-150-2"
+    }
+  ],
+  "playgroundURL": "https://www.typescriptlang.org/play/#code/PTAEAEFsHsBMFcA2BTAXKZBnAdsgHgC4BQIEBAhgE4DmyB6AogMoBMADCyyWOMpZdEqZ0ARjZsAzKBYS2AFlAB2cQDZpEiQE5uEWMgDGiKuQIBLaNnQFK8ZDt6RTxUuABmplNnKQ0oSCYALTAA6AkxQEgAqSKJQSNAAcTpwggDkUE9qVNBoV1ByUExrU2xqWPjwAAdjSFAAN3JEW3zC4tLy4CJXeGx9MwtQV2w8FgAKYVbKEuoASlAAb1jQfQtMaBRgxGhqceDMeAAjIspRiRmZogBfInxKwQJBnr7zbHyj9fgCZFHseEh0X6QA58OaLUCgUx5H5-UAAHlAbDmlDo8Eor0BcVAAFoRABuJbIgio9F-fHXIimSB3SgPeZMSpTUoMciYaaXQYCWoAIkwDOmWOQLOmXKI9MZ1GZrPapAAegB+IhRGKYpJhUCpdKZbK5FrHablCDVSjeeqNZoFPXtOKdbq9fqvIZ4cboS2zBZLFbYNYbLY7EL7I7WU7nHTgsPh8EyqPRmMysNXRW3e7LVYPTBGTABUAAXlAAG0ALr5cKuwtLR2jLlyFhci4geU6WOK23PAbUZF0UaVPhrSyTaYAGlAsBMvgAIqPQR7VutkJttqMAAYACWQiC2oAAJPNu0ILJchwQ4OQAJ4Q8LbkdfULQCdfJhtHYzS4AQkXF3JYfbyE7XIAsuQsCwKYvZckOuAAO6gHe3whrKMagAAgqAACK8CmPoADWGB4JURhePa4JEJ63pztQESkBGoAygAPoqLjuJ43i+CUeh4KE4QUlSybzOQ7xNF87KuJyoBcsEwD+KkmAiiRDwNE06S5nx3qfN8OJ1mA4YNvBsbRsRqamgpLA5m8KlfKMWIsBpEbylRja6TKzZPIRQzjFO4IkbO85+nshzHMGH5EEAA",
+  "tags": []
+}

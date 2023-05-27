@@ -1,7 +1,6 @@
-import type { SandboxConfig, CompilerOptions } from "./types.ts"
+import type { SandboxConfig, CompilerOptions } from "../types.ts"
 import type { Sandbox } from "./index.ts"
-
-import Typescript from "https://esm.sh/typescript@5.0.4";
+import { Typescript } from "../deps.ts"
 
 /**
  * These are the defaults, but they also act as the list of all compiler options

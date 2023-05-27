@@ -1,8 +1,8 @@
 
-import { Typescript } from "./deps.ts"
-import type { CompilerOptions } from "./types.ts"
+import { Typescript } from "../deps.ts"
+import type { CompilerOptions } from "../types.ts"
 
-import * as tsvfs from "./vendor/ts-vfs.ts";
+import * as tsvfs from "../vendor/ts-vfs.ts";
 
 const {
   createDefaultMapFromCDN,

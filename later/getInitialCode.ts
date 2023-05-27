@@ -1,4 +1,4 @@
-import { lzstring } from "./deps.ts"
+import { lzstring } from "../deps.ts"
 
 const decompressFromURL = "decompressFromEncodedURIComponent" in lzstring ? lzstring.decompressFromEncodedURIComponent as typeof lzstring.decompressFromURL : lzstring.decompressFromURL;
 

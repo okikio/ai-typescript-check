@@ -1,6 +1,6 @@
-import type { SandboxConfig,  CompilerOptions } from "./types.ts";
+import type { SandboxConfig,  CompilerOptions } from "../types.ts";
 
-import { tsvfs, ata, Typescript } from "./deps.ts";
+import { tsvfs, ata, Typescript } from "../deps.ts";
 
 import { getDefaultSandboxCompilerOptions,getCompilerOptionsFromParams,createURLQueryWithCompilerOptions } from "./compilerOptions.ts";
 import { getInitialCode } from "./getInitialCode.ts";

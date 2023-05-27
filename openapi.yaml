@@ -1,41 +1,25 @@
-openapi: 3.0.0
+openapi: 3.1.5
 info:
   title: TypeScript Twoslash API
   description: A REST API for transforming TypeScript code using twoslash.
   version: 1.0.0
+servers:
+  - url: http://localhost:3000
 paths:
   /twoslash:
     post:
-      summary: Run Twoslash on a given code
+      operationId: postToTypescriptTwoslash
+      summary: Run Typescript Twoslash on a given code
       description: |
-        This endpoint accepts a `TwoSlashOptions` object either as JSON or FormData,
-        and returns the resulting `TwoSlashReturn` JSON object. It's used to transform
-        TypeScript code based on the provided twoslash options. 
-        Supports typescript/ts, javascript/js, and tsx/jsx.
+        This endpoint accepts TwoSlashOptions as JSON/FormData and returns TwoSlashReturn JSON. 
+        Used for transforming TypeScript code with twoslash options. 
+        Supports ts, js, tsx, jsx.
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/TwoSlashOptions'
-            example: 
-              code: '...'
-              extension: 'ts'
-              defaultOptions: 
-                noErrors: false
-                errors: [1016, 2307]
-                showEmit: true
-                showEmittedFile: 'index.js'
-                noStaticSemanticInfo: false
-                emit: false
-                noErrorValidation: false
-              defaultCompilerOptions: 
-                target: 'es5'
-                module: 'commonjs'
-              tsVersion: '4.1.2'
-              fsMap: 
-                'index.ts': '...'
-              customTags: ['tag1', 'tag2']
           multipart/form-data:
             schema:
               $ref: '#/components/schemas/TwoSlashOptions'
@@ -46,15 +30,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TwoSlashReturn'
-              example: 
-                code: '...'
-                extension: '.js'
-                highlights: []
-                staticQuickInfos: []
-                queries: []
-                tags: []
-                errors: []
-                playgroundURL: 'https://www.typescriptlang.org/play#code/...'
         '400':
           description: Invalid input, errors were found in the sample but not included in an errors tag
           content:
@@ -82,71 +57,130 @@ components:
             - Cut comments: `// ---cut---` to cut out unnecessary code
             - Type queries: `// ^?` to query types of variables, objects, functions, arrays, maps, symbols, parameters and/or values
             - Auto-Completions: `// ^|`
-            - Highlighting: `// ^^^^^^^^^^` for highlighting
+            - Highlighting: `// ^^^ ` for highlighting
             - Import files: `// @filename: import_files.ts` for importing files
+            - Full Compile Options List: 
+              - `// @module: esnext`, `// @jsx: preserve`, `// @lib: esnext`, `// @strict: true`, `// @noImplicitAny: false`, `// @target: ES2022`, `// @declaration: true`,
+              - `// @noUnusedLocals: true`, `// @noUnusedParameters: true`, `// @noImplicitReturns: true`, `// @noFallthroughCasesInSwitch: true`, `// @allowUnreachableCode: false`,
+              - `// @allowUnusedLabels: false`, `// @noImplicitOverride: true`, `// @exactOptionalPropertyTypes: true`, `// @noPropertyAccessFromIndexSignature: true`,
+              - `// @noUncheckedIndexedAccess: true`, `// @noImplicitThis: true`, `// @strictBindCallApply: true`, `// @strictFunctionTypes: true`, `// @strictNullChecks: true`,
+              - `// @strictPropertyInitialization: true`, `// @useUnknownInCatchVariables: true`, `// @allowArbitraryExtensions: true`, `// @allowImportingTsExtensions: true`,
+              - `// @alwaysStrict: true`, `// @noEmit: true`, `// @noEmitOnError: true`, `// @preserveConstEnums: true`, `// @removeComments: true`, `// @skipLibCheck: true`,
+              - `// @sourceMap: true`, `// @inlineSourceMap: true`, `// @inlineSources: true`, `// @emitDeclarationOnly: true`, `// @declarationMap: true`, `// @declarationDir: ./`,
+              - `// @listEmittedFiles: true`, `// @listFiles: true`, `// @pretty: true`, `// @downlevelIteration: true`, `// @isolatedModules: true`, `// @importHelpers: true`,
+              - `// @experimentalDecorators: true`, `// @emitDecoratorMetadata: true`, `// @importsNotUsedAsValues: true`, `// @noEmitHelpers: true`, `// @noImplicitUseStrict: true`, 
+              - `// @noLib: true`, `// @noResolve: true`, `// @noStrictGenericChecks: true`, `// @noUncheckedIndexedAccess: true`, `// @noUnusedLocals: true`, `// @noUnusedParameters: true`,
+              - `// @strictBindCallApply: true`, `// @strictFunctionTypes: true`, `// @strictNullChecks: true`, `// @strictPropertyInitialization: true`, `// @useUnknownInCatchVariables: true`,
+              - `// @allowJs: true`, `// @checkJs: true`, `// @jsx: preserve`, `// @jsxFactory: React`, `// @jsxFragmentFactory: React`, `// @jsxImportSource: React`, 
+              - `// @allowUnreachableCode`: Do not report errors on unreachable code.
+              - `// @allowUnusedLabels`: Do not report errors on unused labels.
+              - `// @alwaysStrict`: Parse in strict mode and emit "use strict" for each source file.
+              - `// @exactOptionalPropertyTypes`: Differentiate between optional property and undefined property in the type system.
+              - `// @noFallthroughCasesInSwitch`: Report errors for fallthrough cases in switch statements.
+              - `// @noImplicitAny`: Raise error on expressions and declarations with an implied 'any' type.
+              - `// @noImplicitOverride`: Ensure overriding members in derived classes are marked with an 'override' modifier.
+              - `// @noImplicitReturns`: Report error when not all code paths in function return a value.
+              - `// @noImplicitThis`: Raise error on 'this' expressions with an implied 'any' type.
+              - `// @noPropertyAccessFromIndexSignature`: Require undeclared properties from index signatures to be accessed with an index.
+              - `// @noUncheckedIndexedAccess`: Add a 'undefined' type to elements accessed via an index signature.
+              - `// @noUnusedLocals`: Report errors on unused locals.
+              - `// @noUnusedParameters`: Report errors on unused parameters.
+              - `// @strict`: Enable all strict type checking options.
+              - `// @strictBindCallApply`: Enable stricter checking of bind, call, and apply.
+              - `// @strictFunctionTypes`: Enable stricter checking of function types.
+              - `// @strictNullChecks`: Enable strict null checks.
+              - `// @strictPropertyInitialization`: Enable strict checking of property initialization.
+              - `// @useUnknownInCatchVariables`: Type catch clause variables as 'unknown' instead of 'any'.
+              - `// @allowArbitraryExtensions`: Allow arbitrary file extensions to be included in the program.
+              - `// @allowImportingTsExtensions`: Allow '.ts' and '.tsx' extensions to be imported.
+              - `// @allowUmdGlobalAccess`: Allow accessing UMD globals from modules.
+              - `// @baseUrl`: Base directory to resolve non-relative module names.
+              - `// @customConditions`: List of custom conditions to apply to module resolution.
+              - `// @module`: Specify module code generation.
+              - `// @moduleResolution`: Specify module resolution strategy.
+              - `// @moduleSuffixes`: List of file extensions to consider when resolving modules.
+              - `// @noResolve`: Do not add triple-slash references or module import targets to the list of compiled files.
+              - `// @paths`: A series of entries which re-map imports to lookup locations relative to the 'baseUrl'.
+              - `// @resolveJsonModule`: Include modules imported with '.json' extension.
+              - `// @resolvePackageJsonExports`: Resolve the 'exports' field in 'package.json'.
+              - `// @resolvePackageJsonImports`: Resolve the 'imports' field in 'package.json'.
+              - `// @rootDir`: Specifies the root directory of input files.
+              - `// @rootDirs`: List of root folders whose combined content represents the structure of the project at runtime.
+              - `// @typeRoots`: List of folders to include type definitions from.
+              - `// @types`: Type declaration files to be included in compilation.
+              - `// @declaration`: Generates corresponding '.d.ts' file.
+              - `// @declarationDir`: Output directory for generated declaration files.
+              - `// @declarationMap`: Generates a sourcemap for each corresponding '.d.ts' file.
+              - `// @downlevelIteration`: Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'.
+              - `// @emitBOM`: Emit a UTF-8 Bytequote("Compiler Options\n\n##### Top Level", "assumeChangesOnlyAffectDirectDependencies")
           example: |
             // @module: esnext
+            // @target: ES2022
+            // @errors: 1003 2304 7006 2339
+            // @declaration: true
+            // @emit
             // @filename: maths.ts 
+            /**
+            * Gets the length of a string
+            * @param value a string
+            */
+            function fnx2(s: string) {
+              console.log(s.substr(3))
+            }
             export function absolute(num: number) {
               if (num < 0) return num * -1;
               return num;
             }
+
+            import {SpringEasing} from "spring-easing"
+            SpringEasing
+            // ^?
+
+            /**
+            * Gets the length of a string
+            * @param value a string
+            */
+            function fnx(s: string) {
+              console.log(s.substr(3))
+            }
+
+            export const slash = [] as string[]
+              fnx("42")
+            //^?
+            // ^^^^^
+
+            function greet(person: string, date: Date) {
+              console.log(\`Hello \${person}, today is \${date.toDateString()}!\`)
+            }
+
+              greet("Maddison", new Date())
+            // ^^^^^ A Quick explanation  
+            console.g 
+            //       ^|
+
             // @filename: index.ts 
             import {absolute} from "./maths"
             const value = absolute(-1)
-
-            // @filename: maths2.ts 
-            export function absolute(num: number) {
-              if (num < 0) return num * -1;
-              return num;
-            }
-
-            // @filename: index2.ts 
-            import {absolute} from "./maths2"
-            const value = absolute(-1)
-            // ---cut---
+            //     ^?
+            // ^^^^^^^^^^
             const value2 = absolute(-2)
             //     ^?      
             // ^^^^^^^^
 
-            console.
-            //      ^| 
-
-            // @noImplicitAny: false
-            // @target: ES2022
-            // @declaration: true
-            // @filename: maths3.ts 
-            export function absolute(num: number) {
-              if (num < 0) return num * -1;
-              return num;
-            }
-
-            // @filename: index3.ts 
-            import {absolute} from "./maths3"
-            const value = absolute(-1)
-            // ^?
-            // ^^^^^^^^^^
-            // ---cut---
-            const value2 = absolute(-2)
-            // ^?
-            // ^^^^^^^^^^
-
-            // @showEmit
-            // @errors: 7006
             function fn(s) {
               console.log(s.substr(3))
             }
         extension:
           type: string
-          description: The extension of the code file. Can be 'ts', 'js', 'tsx', or 'jsx'.
+          description: The extension of the code file. Can be 'typescript', 'javascript', 'json', 'jsn', 'ts', 'js', 'tsx', or 'jsx'.
           example: "ts"
         defaultOptions:
           $ref: '#/components/schemas/ExampleOptions'
         defaultCompilerOptions:
           type: object
+          items:
+            $ref: '#/components/schemas/CompilerOptions'
           additionalProperties: true
-        tsVersion:
-          type: string
         fsMap:
           type: object
           additionalProperties: true
@@ -154,6 +188,25 @@ components:
           type: array
           items:
             type: string
+      example: 
+        code: |
+          const abolute = (num: number) => num < 0 ? num * -1 : num
+          //      ^?                 
+        extension: 'ts'
+        defaultOptions: 
+          noErrors: false
+          errors: [1016, 2307]
+          showEmit: true
+          showEmittedFile: 'index.js'
+          noStaticSemanticInfo: false
+          emit: false
+          noErrorValidation: false
+        defaultCompilerOptions: 
+          target: 'es5'
+          module: 'commonjs'
+        fsMap: 
+          'index.ts': 'export const x = 10'
+        customTags: ['tag1', 'tag2']
       required:
         - code
         - extension
@@ -204,9 +257,907 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Error'
-          description: Any error that occurred during twoslash.
+          description: Any error that occurred in twoslash or typescript.
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+          description: Any non breaking error that occurred in twoslash or typescript.
         playgroundURL:
           type: string
+      example: 
+        code: |
+          // @filename: maths.ts 
+          /**
+          * Gets the length of a string
+          * @param value a string
+          */
+          function fnx2(s: string) {
+            console.log(s.substr(3))
+          }
+          export function absolute(num: number) {
+            if (num < 0) return num * -1;
+            return num;
+          }
+
+          import {SpringEasing} from "spring-easing"
+          SpringEasing
+
+          /**
+          * Gets the length of a string
+          * @param value a string
+          */
+          function fnx(s: string) {
+            console.log(s.substr(3))
+          }
+
+          export const slash = [] as string[]
+            fnx("42")
+
+          function greet(person: string, date: Date) {
+            console.log(`Hello ${person}, today is ${date.toDateString()}!`)
+          }
+
+            greet("Maddison", new Date())
+          console.g 
+
+          // @filename: index.ts 
+          import {absolute} from "./maths"
+          const value = absolute(-1)
+          const value2 = absolute(-2)
+
+          function fn(s) {
+            console.log(s.substr(3))
+          }
+        extension: ts
+        highlights:
+          - kind: highlight
+            offset: 370
+            length: 11
+            text: ''
+            line: 21
+            start: 14
+          - kind: highlight
+            offset: 425
+            length: 5
+            text: ''
+            line: 27
+            start: 3
+          - kind: highlight
+            offset: 553
+            length: 5
+            text: A Quick explanation
+            line: 34
+            start: 3
+          - kind: highlight
+            offset: 36
+            length: 10
+            text: ''
+            line: 2
+            start: 3
+          - kind: highlight
+            offset: 63
+            length: 8
+            text: ''
+            line: 5
+            start: 3
+        queries:
+          - docs: >-
+              Generates an Array of values using frame functions which in turn create
+              the effect of spring easing.
+
+              To use this properly make sure to set the easing animation option to
+              "linear".
+
+              Check out a demo of SpringEasing at
+              <https://codepen.io/okikio/pen/MWEdzNg>
+
+
+              SpringEasing has 3 properties they are `easing` (all the easings from
+              <br/>{@link <br/>EasingFunctions<br/>}<br/> are supported on top of frame
+              functions like SpringFrame, SpringFrameOut, etc..), `numPoints` (the size
+              of the Array the frame function should create), and `decimal` (the number
+              of decimal places of the values within said Array).
+
+
+              | Properties  | Default Value           |
+
+              | ----------- | ----------------------- |
+
+              | `easing`    | `spring(1, 100, 10, 0)` |
+
+              | `numPoints` | `50`                    |
+
+              | `decimal`   | `3`                     |
+
+
+              By default, Spring Easing support easings in the form,
+
+
+              | constant   | accelerate         | decelerate     | accelerate-decelerate
+              | decelerate-accelerate |
+
+              | :--------- | :----------------- | :------------- | :--------------------
+              | :-------------------- |
+
+              |            | spring / spring-in | spring-out     | spring-in-out        
+              | spring-out-in         |
+
+
+              All **Spring** easing's can be configured using theses parameters,
+
+
+              `spring-*(mass, stiffness, damping, velocity)`
+
+
+              Each parameter comes with these defaults
+
+
+              | Parameter | Default Value |
+
+              | --------- | ------------- |
+
+              | mass      | `1`           |
+
+              | stiffness | `100`         |
+
+              | damping   | `10`          |
+
+              | velocity  | `0`           |
+
+              e.g.
+              ```ts
+              import { SpringEasing, SpringOutFrame } from "spring-easing";
+              import anime from "animejs";
+
+              // Note: this is the return value of <br/>{@link <br/>SpringEasing<br/>}<br/> and <br/>{@link <br/>GenerateSpringFrames<br/>}<br/>, you don't need the object to get this format
+              let [translateX, duration] = SpringEasing([0, 250], {
+                  easing: "spring-out-in(1, 100, 10, 0)",
+
+                  // You can change the size of Array for the SpringEasing function to generate
+                  numPoints: 200,
+
+                  // The number of decimal places to round, final values in the generated Array
+                  // This option doesn't exist on <br/>{@link <br/>GenerateSpringFrames<br/>}<br/>
+                  decimal: 5,
+              });
+
+              anime({
+                targets: "div",
+
+                // Using spring easing animate from [0 to 250] using `spring-out-in`
+                translateX,
+
+                // You can set the easing without an object
+                rotate: SpringEasing(["0turn", 1, 0, 0.5], [SpringOutFrame, 1, 100, 10, 0])[0],
+
+                // TIP... Use linear easing for the proper effect
+                easing: "linear",
+
+                // The optimal duration for this specific spring
+                duration
+              })
+              ```
+            kind: query
+            start: 255
+            length: 197
+            text: >-
+              (alias) function SpringEasing<T>(values: T[], options?: TypeEasingOptions
+              | TypeEasingOptions["easing"], customInterpolate?:
+              TypeInterpolationFunction): readonly [any[], number]
+
+              import SpringEasing
+            offset: 3
+            line: 14
+          - docs: Gets the length of a string
+            kind: query
+            start: 423
+            length: 29
+            text: 'function fnx(s: string): void'
+            offset: 2
+            line: 26
+          - completions:
+              - name: assert
+                kind: method
+                kindModifiers: declare
+                sortText: '11'
+              - name: clear
+                kind: method
+                kindModifiers: declare
+                sortText: '11'
+              - name: count
+                kind: method
+                kindModifiers: declare
+                sortText: '11'
+              - name: countReset
+                kind: method
+                kindModifiers: declare
+                sortText: '11'
+              - name: debug
+                kind: method
+                kindModifiers: declare
+                sortText: '11'
+              - name: dir
+                kind: method
+                kindModifiers: declare
+                sortText: '11'
+              - name: dirxml
+                kind: method
+                kindModifiers: declare
+                sortText: '11'
+              - name: error
+                kind: method
+                kindModifiers: declare
+                sortText: '11'
+              - name: group
+                kind: method
+                kindModifiers: declare
+                sortText: '11'
+              - name: groupCollapsed
+                kind: method
+                kindModifiers: declare
+                sortText: '11'
+              - name: groupEnd
+                kind: method
+                kindModifiers: declare
+                sortText: '11'
+              - name: info
+                kind: method
+                kindModifiers: declare
+                sortText: '11'
+              - name: log
+                kind: method
+                kindModifiers: declare
+                sortText: '11'
+              - name: table
+                kind: method
+                kindModifiers: declare
+                sortText: '11'
+              - name: time
+                kind: method
+                kindModifiers: declare
+                sortText: '11'
+              - name: timeEnd
+                kind: method
+                kindModifiers: declare
+                sortText: '11'
+              - name: timeLog
+                kind: method
+                kindModifiers: declare
+                sortText: '11'
+              - name: timeStamp
+                kind: method
+                kindModifiers: declare
+                sortText: '11'
+              - name: trace
+                kind: method
+                kindModifiers: declare
+                sortText: '11'
+              - name: warn
+                kind: method
+                kindModifiers: declare
+                sortText: '11'
+            kind: completions
+            start: 608
+            completionsPrefix: g
+            length: 1
+            offset: 9
+            line: 35
+          - docs: ''
+            kind: query
+            start: 40
+            length: 19
+            text: 'const value: number'
+            offset: 7
+            line: 2
+          - docs: ''
+            kind: query
+            start: 77
+            length: 20
+            text: 'const value2: number'
+            offset: 7
+            line: 4
+        staticQuickInfos:
+          - text: 'function fnx2(s: string): void'
+            docs: Gets the length of a string
+            start: 73
+            length: 4
+            line: 3
+            character: 14
+            targetString: fnx2
+          - text: '(parameter) s: string'
+            docs: ''
+            start: 78
+            length: 1
+            line: 3
+            character: 19
+            targetString: s
+          - text: 'var console: Console'
+            docs: ''
+            start: 93
+            length: 7
+            line: 5
+            character: 5
+            targetString: console
+          - text: '(method) Console.log(...data: any[]): void'
+            docs: ''
+            start: 101
+            length: 3
+            line: 5
+            character: 13
+            targetString: log
+          - text: '(parameter) s: string'
+            docs: ''
+            start: 105
+            length: 1
+            line: 5
+            character: 17
+            targetString: s
+          - text: '(method) String.substr(from: number, length?: number | undefined): string'
+            docs: >-
+              Gets a substring beginning at the specified location and having the
+              specified length.
+            start: 107
+            length: 6
+            line: 5
+            character: 19
+            targetString: substr
+          - text: 'function absolute(num: number): number'
+            docs: ''
+            start: 136
+            length: 8
+            line: 6
+            character: 21
+            targetString: absolute
+          - text: '(parameter) num: number'
+            docs: ''
+            start: 145
+            length: 3
+            line: 8
+            character: 1
+            targetString: num
+          - text: '(parameter) num: number'
+            docs: ''
+            start: 166
+            length: 3
+            line: 8
+            character: 22
+            targetString: num
+          - text: '(parameter) num: number'
+            docs: ''
+            start: 182
+            length: 3
+            line: 8
+            character: 38
+            targetString: num
+          - text: '(parameter) num: number'
+            docs: ''
+            start: 201
+            length: 3
+            line: 9
+            character: 17
+            targetString: num
+          - text: >-
+              (alias) function SpringEasing<T>(values: T[], options?: TypeEasingOptions
+              | TypeEasingOptions["easing"], customInterpolate?:
+              TypeInterpolationFunction): readonly [any[], number]
+
+              import SpringEasing
+            docs: >-
+              Generates an Array of values using frame functions which in turn create
+              the effect of spring easing.
+
+              To use this properly make sure to set the easing animation option to
+              "linear".
+
+              Check out a demo of SpringEasing at
+              <https://codepen.io/okikio/pen/MWEdzNg>
+
+
+              SpringEasing has 3 properties they are `easing` (all the easings from
+              {@link EasingFunctions} are supported on top of frame functions like
+              SpringFrame, SpringFrameOut, etc..), `numPoints` (the size of the Array
+              the frame function should create), and `decimal` (the number of decimal
+              places of the values within said Array).
+
+
+              | Properties  | Default Value           |
+
+              | ----------- | ----------------------- |
+
+              | `easing`    | `spring(1, 100, 10, 0)` |
+
+              | `numPoints` | `50`                    |
+
+              | `decimal`   | `3`                     |
+
+
+              By default, Spring Easing support easings in the form,
+
+
+              | constant   | accelerate         | decelerate     | accelerate-decelerate
+              | decelerate-accelerate |
+
+              | :--------- | :----------------- | :------------- | :--------------------
+              | :-------------------- |
+
+              |            | spring / spring-in | spring-out     | spring-in-out        
+              | spring-out-in         |
+
+
+              All **Spring** easing's can be configured using theses parameters,
+
+
+              `spring-*(mass, stiffness, damping, velocity)`
+
+
+              Each parameter comes with these defaults
+
+
+              | Parameter | Default Value |
+
+              | --------- | ------------- |
+
+              | mass      | `1`           |
+
+              | stiffness | `100`         |
+
+              | damping   | `10`          |
+
+              | velocity  | `0`           |
+
+              e.g.
+              ```ts
+              import { SpringEasing, SpringOutFrame } from "spring-easing";
+              import anime from "animejs";
+
+              // Note: this is the return value of {@link SpringEasing} and {@link GenerateSpringFrames}, you don't need the object to get this format
+              let [translateX, duration] = SpringEasing([0, 250], {
+                  easing: "spring-out-in(1, 100, 10, 0)",
+
+                  // You can change the size of Array for the SpringEasing function to generate
+                  numPoints: 200,
+
+                  // The number of decimal places to round, final values in the generated Array
+                  // This option doesn't exist on {@link GenerateSpringFrames}
+                  decimal: 5,
+              });
+
+              anime({
+                targets: "div",
+
+                // Using spring easing animate from [0 to 250] using `spring-out-in`
+                translateX,
+
+                // You can set the easing without an object
+                rotate: SpringEasing(["0turn", 1, 0, 0.5], [SpringOutFrame, 1, 100, 10, 0])[0],
+
+                // TIP... Use linear easing for the proper effect
+                easing: "linear",
+
+                // The optimal duration for this specific spring
+                duration
+              })
+              ```
+            start: 217
+            length: 12
+            line: 10
+            character: 1
+            targetString: SpringEasing
+          - text: >-
+              (alias) function SpringEasing<T>(values: T[], options?: TypeEasingOptions
+              | TypeEasingOptions["easing"], customInterpolate?:
+              TypeInterpolationFunction): readonly [any[], number]
+
+              import SpringEasing
+            docs: >-
+              Generates an Array of values using frame functions which in turn create
+              the effect of spring easing.
+
+              To use this properly make sure to set the easing animation option to
+              "linear".
+
+              Check out a demo of SpringEasing at
+              <https://codepen.io/okikio/pen/MWEdzNg>
+
+
+              SpringEasing has 3 properties they are `easing` (all the easings from
+              {@link EasingFunctions} are supported on top of frame functions like
+              SpringFrame, SpringFrameOut, etc..), `numPoints` (the size of the Array
+              the frame function should create), and `decimal` (the number of decimal
+              places of the values within said Array).
+
+
+              | Properties  | Default Value           |
+
+              | ----------- | ----------------------- |
+
+              | `easing`    | `spring(1, 100, 10, 0)` |
+
+              | `numPoints` | `50`                    |
+
+              | `decimal`   | `3`                     |
+
+
+              By default, Spring Easing support easings in the form,
+
+
+              | constant   | accelerate         | decelerate     | accelerate-decelerate
+              | decelerate-accelerate |
+
+              | :--------- | :----------------- | :------------- | :--------------------
+              | :-------------------- |
+
+              |            | spring / spring-in | spring-out     | spring-in-out        
+              | spring-out-in         |
+
+
+              All **Spring** easing's can be configured using theses parameters,
+
+
+              `spring-*(mass, stiffness, damping, velocity)`
+
+
+              Each parameter comes with these defaults
+
+
+              | Parameter | Default Value |
+
+              | --------- | ------------- |
+
+              | mass      | `1`           |
+
+              | stiffness | `100`         |
+
+              | damping   | `10`          |
+
+              | velocity  | `0`           |
+
+              e.g.
+              ```ts
+              import { SpringEasing, SpringOutFrame } from "spring-easing";
+              import anime from "animejs";
+
+              // Note: this is the return value of {@link SpringEasing} and {@link GenerateSpringFrames}, you don't need the object to get this format
+              let [translateX, duration] = SpringEasing([0, 250], {
+                  easing: "spring-out-in(1, 100, 10, 0)",
+
+                  // You can change the size of Array for the SpringEasing function to generate
+                  numPoints: 200,
+
+                  // The number of decimal places to round, final values in the generated Array
+                  // This option doesn't exist on {@link GenerateSpringFrames}
+                  decimal: 5,
+              });
+
+              anime({
+                targets: "div",
+
+                // Using spring easing animate from [0 to 250] using `spring-out-in`
+                translateX,
+
+                // You can set the easing without an object
+                rotate: SpringEasing(["0turn", 1, 0, 0.5], [SpringOutFrame, 1, 100, 10, 0])[0],
+
+                // TIP... Use linear easing for the proper effect
+                easing: "linear",
+
+                // The optimal duration for this specific spring
+                duration
+              })
+              ```
+            start: 252
+            length: 12
+            line: 13
+            character: 19
+            targetString: SpringEasing
+          - text: 'function fnx(s: string): void'
+            docs: Gets the length of a string
+            start: 345
+            length: 3
+            line: 18
+            character: 20
+            targetString: fnx
+          - text: '(parameter) s: string'
+            docs: ''
+            start: 349
+            length: 1
+            line: 18
+            character: 24
+            targetString: s
+          - text: 'var console: Console'
+            docs: ''
+            start: 364
+            length: 7
+            line: 20
+            character: 10
+            targetString: console
+          - text: '(method) Console.log(...data: any[]): void'
+            docs: ''
+            start: 372
+            length: 3
+            line: 20
+            character: 18
+            targetString: log
+          - text: '(parameter) s: string'
+            docs: ''
+            start: 376
+            length: 1
+            line: 20
+            character: 22
+            targetString: s
+          - text: '(method) String.substr(from: number, length?: number | undefined): string'
+            docs: >-
+              Gets a substring beginning at the specified location and having the
+              specified length.
+            start: 378
+            length: 6
+            line: 20
+            character: 24
+            targetString: substr
+          - text: 'const slash: string[]'
+            docs: ''
+            start: 434
+            length: 5
+            line: 24
+            character: 24
+            targetString: slash
+          - text: 'function fnx(s: string): void'
+            docs: Gets the length of a string
+            start: 459
+            length: 3
+            line: 27
+            character: 0
+            targetString: fnx
+          - text: 'function greet(person: string, date: Date): void'
+            docs: ''
+            start: 493
+            length: 5
+            line: 27
+            character: 34
+            targetString: greet
+          - text: '(parameter) person: string'
+            docs: ''
+            start: 499
+            length: 6
+            line: 27
+            character: 40
+            targetString: person
+          - text: '(parameter) date: Date'
+            docs: ''
+            start: 515
+            length: 4
+            line: 28
+            character: 11
+            targetString: date
+          - text: interface Date
+            docs: Enables basic storage and retrieval of dates and times.
+            start: 521
+            length: 4
+            line: 28
+            character: 17
+            targetString: Date
+          - text: 'var console: Console'
+            docs: ''
+            start: 531
+            length: 7
+            line: 28
+            character: 27
+            targetString: console
+          - text: '(method) Console.log(...data: any[]): void'
+            docs: ''
+            start: 539
+            length: 3
+            line: 28
+            character: 35
+            targetString: log
+          - text: '(parameter) person: string'
+            docs: ''
+            start: 552
+            length: 6
+            line: 28
+            character: 48
+            targetString: person
+          - text: '(parameter) date: Date'
+            docs: ''
+            start: 572
+            length: 4
+            line: 29
+            character: 1
+            targetString: date
+          - text: '(method) Date.toDateString(): string'
+            docs: Returns a date as a string value.
+            start: 577
+            length: 12
+            line: 31
+            character: 3
+            targetString: toDateString
+          - text: 'function greet(person: string, date: Date): void'
+            docs: ''
+            start: 602
+            length: 5
+            line: 31
+            character: 28
+            targetString: greet
+          - text: |-
+              var Date: DateConstructor
+              new () => Date (+4 overloads)
+            docs: ''
+            start: 624
+            length: 4
+            line: 34
+            character: 5
+            targetString: Date
+          - text: 'var console: Console'
+            docs: ''
+            start: 663
+            length: 7
+            line: 35
+            character: 20
+            targetString: console
+          - text: any
+            start: 671
+            length: 1
+            line: 35
+            character: 28
+            targetString: g
+          - text: |-
+              (alias) function absolute(num: number): number
+              import absolute
+            docs: ''
+            start: 8
+            length: 8
+            line: 0
+            character: 8
+            targetString: absolute
+          - text: 'const value: number'
+            docs: ''
+            start: 39
+            length: 5
+            line: 2
+            character: 11
+            targetString: value
+          - text: |-
+              (alias) absolute(num: number): number
+              import absolute
+            docs: ''
+            start: 47
+            length: 8
+            line: 2
+            character: 19
+            targetString: absolute
+          - text: 'const value2: number'
+            docs: ''
+            start: 90
+            length: 6
+            line: 5
+            character: 2
+            targetString: value2
+          - text: |-
+              (alias) absolute(num: number): number
+              import absolute
+            docs: ''
+            start: 99
+            length: 8
+            line: 5
+            character: 11
+            targetString: absolute
+          - text: 'function fn(s: any): void'
+            docs: ''
+            start: 150
+            length: 2
+            line: 8
+            character: 6
+            targetString: fn
+          - text: '(parameter) s: any'
+            docs: ''
+            start: 153
+            length: 1
+            line: 8
+            character: 9
+            targetString: s
+          - text: 'var console: Console'
+            docs: ''
+            start: 160
+            length: 7
+            line: 8
+            character: 16
+            targetString: console
+          - text: '(method) Console.log(...data: any[]): void'
+            docs: ''
+            start: 168
+            length: 3
+            line: 8
+            character: 24
+            targetString: log
+          - text: '(parameter) s: any'
+            docs: ''
+            start: 172
+            length: 1
+            line: 8
+            character: 28
+            targetString: s
+          - text: any
+            start: 174
+            length: 6
+            line: 8
+            character: 30
+            targetString: substr
+        errors:
+          - category: 1
+            code: 2339
+            length: 1
+            start: 695
+            line: 36
+            character: 8
+            renderedMessage: Property 'g' does not exist on type 'Console'.
+            id: err-2339-671-1
+          - category: 1
+            code: 7006
+            length: 1
+            start: 796
+            line: 8
+            character: 12
+            renderedMessage: Parameter 's' implicitly has an 'any' type.
+            id: err-7006-153-1
+        warnings:
+          - category: 2
+            code: 6133
+            length: 4
+            start: 97
+            line: 4
+            character: 9
+            renderedMessage: '''fnx2'' is declared but its value is never read.'
+            id: warn-6133-73-4
+          - category: 2
+            code: 6387
+            length: 6
+            start: 131
+            line: 5
+            character: 16
+            renderedMessage: >-
+              The signature '(from: number, length?: number | undefined): string' of
+              's.substr' is deprecated.
+            id: warn-6387-107-6
+          - category: 2
+            code: 6387
+            length: 6
+            start: 402
+            line: 21
+            character: 16
+            renderedMessage: >-
+              The signature '(from: number, length?: number | undefined): string' of
+              's.substr' is deprecated.
+            id: warn-6387-378-6
+          - category: 2
+            code: 6133
+            length: 5
+            start: 682
+            line: 1
+            character: 6
+            renderedMessage: '''value'' is declared but its value is never read.'
+            id: warn-6133-39-5
+          - category: 2
+            code: 6133
+            length: 6
+            start: 733
+            line: 4
+            character: 6
+            renderedMessage: '''value2'' is declared but its value is never read.'
+            id: warn-6133-90-6
+          - category: 2
+            code: 6133
+            length: 2
+            start: 793
+            line: 8
+            character: 9
+            renderedMessage: '''fn'' is declared but its value is never read.'
+            id: warn-6133-150-2
+        playgroundURL: >-
+          https://www.typescriptlang.org/play/#code/PTAEAEFsHsBMFcA2BTAXKZBnAdsgHgC4BQIEBAhgE4DmyB6AogMoBMADCyyWOMpZdEqZ0ARjZsAzKBYS2AFlAB2cQDZpEiQE5uEWMgDGiKuQIBLaNnQFK8ZDt6RTxUuABmplNnKQ0oSCYALTAA6AkxQEgAqSKJQSNAAcTpwggDkUE9qVNBoV1ByUExrU2xqWPjwAAdjSFAAN3JEW3zC4tLy4CJXeGx9MwtQV2w8FgAKYVbKEuoASlAAb1jQfQtMaBRgxGhqceDMeAAjIspRiRmZogBfInxKwQJBnr7zbHyj9fgCZFHseEh0X6QA58OaLUCgUx5H5-UAAHlAbDmlDo8Eor0BcVAAFoRABuJbIgio9F-fHXIimSB3SgPeZMSpTUoMciYaaXQYCWoAIkwDOmWOQLOmXKI9MZ1GZrPapAAegB+IhRGKYpJhUCpdKZbK5FrHablCDVSjeeqNZoFPXtOKdbq9fqvIZ4cboS2zBZLFbYNYbLY7EL7I7WU7nHTgsPh8EyqPRmMysNXRW3e7LVYPTBGTABUAAXlAAG0ALr5cKuwtLR2jLlyFhci4geU6WOK23PAbUZF0UaVPhrSyTaYAGlAsBMvgAIqPQR7VutkJttqMAAYACWQiC2oAAJPNu0ILJchwQ4OQAJ4Q8LbkdfULQCdfJhtHYzS4AQkXF3JYfbyE7XIAsuQsCwKYvZckOuAAO6gHe3whrKMagAAgqAACK8CmPoADWGB4JURhePa4JEJ63pztQESkBGoAygAPoqLjuJ43i+CUeh4KE4QUlSybzOQ7xNF87KuJyoBcsEwD+KkmAiiRDwNE06S5nx3qfN8OJ1mA4YNvBsbRsRqamgpLA5m8KlfKMWIsBpEbylRja6TKzZPIRQzjFO4IkbO85+nshzHMGH5EEAA
+        tags: []
+
+
     Highlight:
       type: object
       properties:
@@ -291,6 +1242,53 @@ components:
           type: integer
         character:
           type: integer
+        codeAction:
+          type: array
+          properties:
+            $ref: "#/components/schemas/CodeAction"
+      
+
+    TextChange:
+      type: object
+      properties:
+        span:
+          $ref: "#/components/schemas/TextSpan"
+          description: The text span to be changed.
+        newText:
+          type: string
+          description: The new text to replace the span.
+          example: "Hello, world!"
+
+    FileTextChanges:
+      type: object
+      properties:
+        fileName:
+          type: string
+          description: The name of the file to be changed.
+          example: "example.ts"
+        textChanges:
+          type: array
+          items:
+            $ref: "#/components/schemas/TextChange"
+          description: The array of text changes to be applied.
+        isNewFile:
+          type: boolean
+          description: Indicates if the file is a new file.
+          example: true
+
+    CodeAction:
+      type: object
+      properties:
+        description:
+          type: string
+          description: Description of the code action to display in the UI of the editor.
+          example: "Fix formatting issues"
+        changes:
+          type: array
+          items:
+            $ref: "#/components/schemas/FileTextChanges"
+          description: Text changes to apply to each file as part of the code action.
+
     TwoslashError:
       type: object
       properties:
@@ -309,3 +1307,685 @@ components:
         message: "Errors were thrown in the sample, but not included in an errors tag"
         errors: [7006]
         compilerErrors: "index.ts [7006] 76 - Parameter 's' implicitly has an 'any' type."
+
+    CompilerOptions:
+      type: object
+      properties:
+        allowImportingTsExtensions:
+          type: boolean
+          description: Allows importing TypeScript files with .ts extension.
+          example: true
+          additionalDetails: |
+            By enabling this option, TypeScript files with the `.ts` extension can be imported in the TypeScript project. By default, only files with the `.tsx` and `.d.ts` extensions are allowed to be imported.
+        allowJs:
+          type: boolean
+          description: Allows JavaScript files to be included in the TypeScript project.
+          example: true
+          additionalDetails: |
+            When this option is enabled, JavaScript files (`.js`) can be included and compiled within the TypeScript project. This is useful for mixed JavaScript and TypeScript projects.
+        allowArbitraryExtensions:
+          type: boolean
+          description: Allows importing files with arbitrary extensions.
+          example: false
+          additionalDetails: |
+            Enabling this option allows importing files with extensions that are not commonly associated with TypeScript or JavaScript, such as `.txt`, `.css`, or custom file extensions. It can be useful for special scenarios but should be used with caution.
+        allowSyntheticDefaultImports:
+          type: boolean
+          description: Allows synthetic default imports for modules.
+          example: true
+          additionalDetails: |
+            Synthetic default imports enable importing modules that have a default export, even if the module itself doesn't explicitly define a default export. When enabled, TypeScript will attempt to generate an appropriate default import. This is useful when working with modules that don't provide a default export but are commonly consumed with default imports.
+        allowUmdGlobalAccess:
+          type: boolean
+          description: Allows accessing UMD globals from modules.
+          example: true
+          additionalDetails: |
+            When using UMD modules, this option allows TypeScript to access global variables defined by UMD modules directly. UMD modules typically expose their functionality via global variables, and enabling this option makes those globals accessible from TypeScript code.
+        allowUnreachableCode:
+          type: boolean
+          description: Allows unreachable code in the TypeScript project.
+          example: false
+          additionalDetails: |
+            By default, TypeScript flags unreachable code as an error. However, in certain cases, such as during development or debugging, it may be necessary to have unreachable code that is intentionally not executed. Enabling this option allows the presence of unreachable code without raising an error.
+        allowUnusedLabels:
+          type: boolean
+          description: Allows unused labels in the TypeScript project.
+          example: false
+          additionalDetails: |
+            Labels in TypeScript are used to mark specific locations in the code for control flow purposes. By default, TypeScript raises an error when a label is declared but not used. Enabling this option allows the presence of unused labels without raising an error.
+        alwaysStrict:
+          type: boolean
+          description: Enables strict mode for all files in the TypeScript project.
+          example: true
+          additionalDetails: |
+            Strict mode enforces stricter rules and more rigorous type checking in TypeScript. Enabling this option ensures that strict mode is applied to all files in the TypeScript project, regardless of whether they include a `"use strict"` directive or not.
+        baseUrl:
+          type: string
+          description: Specifies the base directory for resolving non-relative module names.
+          example: "./src"
+          additionalDetails: |
+            The `baseUrl` option is used to specify the base directory that TypeScript uses for resolving non-relative module names. When a module name is encountered that does not start with `./` or `../`, TypeScript will resolve the module path relative to the `baseUrl` directory.
+        charset:
+          type: string
+          description: Specifies the character set of the input files.
+          example: "utf-8"
+          additionalDetails: |
+            The `charset` option allows you to specify the character set encoding used for reading TypeScript source files. It is important to ensure that the specified character set matches the actual encoding of the source files to avoid potential parsing issues.
+        checkJs:
+          type: boolean
+          description: Enables type checking for JavaScript files.
+          example: true
+          additionalDetails: |
+            By enabling the `checkJs` option, TypeScript will perform type checking on JavaScript files (`.js`). This can help catch type-related issues and provide better tooling support for JavaScript code within a TypeScript project.
+        customConditions:
+          type: array
+          items:
+            type: string
+          description: Specifies custom conditions for conditional type inclusion.
+          example: ["A", "B"]
+          additionalDetails: |
+            Custom conditions are used in TypeScript's conditional types to control type inclusion based on specific conditions. This option allows you to specify custom conditions that can be used within your project's conditional types, providing flexibility in type checking and inference.
+        declaration:
+          type: boolean
+          description: Generates corresponding .d.ts files for the TypeScript project.
+          example: true
+          additionalDetails: |
+            Enabling the `declaration` option instructs TypeScript to generate corresponding declaration files (`.d.ts`) alongside the emitted JavaScript files. Declaration files contain type information and enable better tooling support for using TypeScript code from other JavaScript projects.
+        declarationMap:
+          type: boolean
+          description: Generates source maps for .d.ts files.
+          example: true
+          additionalDetails: |
+            When the `declarationMap` option is enabled, TypeScript will generate source maps for the declaration files (`.d.ts`). Source maps provide a mapping between the emitted JavaScript files and their corresponding TypeScript source files, allowing for improved debugging and tooling support.
+        emitDeclarationOnly:
+          type: boolean
+          description: Only emits .d.ts files and not the compiled JavaScript files.
+          example: false
+          additionalDetails: |
+            When `emitDeclarationOnly` is enabled, TypeScript will only emit the declaration files (`.d.ts`) and skip emitting the compiled JavaScript files. This is useful when you only need the type information and don't require the compiled JavaScript output.
+        declarationDir:
+          type: string
+          description: Specifies the output directory for .d.ts files.
+          example: "./dist/types"
+          additionalDetails: |
+            The `declarationDir` option allows you to specify the output directory for the generated declaration files (`.d.ts`). By default, declaration files are emitted alongside the corresponding JavaScript files. Use this option to customize the output directory for the declaration files.
+        disableSizeLimit:
+          type: boolean
+          description: Disables the size limit imposed on JavaScript projects.
+          example: false
+          additionalDetails: |
+            By default, TypeScript imposes a size limit on JavaScript projects, and if the limit is exceeded, it raises an error. Enabling `disableSizeLimit` removes this size limit, allowing the compilation of larger JavaScript projects. However, it's important to ensure that the project's size is manageable and doesn't impact performance.
+        disableSourceOfProjectReferenceRedirect:
+          type: boolean
+          description: Disables source file redirection in composite projects.
+          example: false
+          additionalDetails: |
+            TypeScript's composite projects allow splitting a large project into smaller sub-projects for incremental compilation. By default, composite projects redirect source files to their composite project's output directory. Enabling this option disables the source file redirection, preserving the original source file paths during compilation.
+        disableSolutionSearching:
+          type: boolean
+          description: Disables searching for solutions in sibling directories.
+          example: false
+          additionalDetails: |
+            When resolving dependencies in a TypeScript project, TypeScript automatically searches for solution files (e.g., `tsconfig.json`) in the parent and sibling directories. Enabling `disableSolutionSearching` prevents TypeScript from searching for solutions in sibling directories, limiting the scope of project resolution.
+        disableReferencedProjectLoad:
+          type: boolean
+          description: Disables loading referenced projects in TypeScript project references.
+          example: false
+          additionalDetails: |
+            TypeScript project references allow dividing a project into separate projects that can reference each other. By default, TypeScript loads the referenced projects during compilation. Enabling `disableReferencedProjectLoad` disables the automatic loading of referenced projects, requiring manual management of project dependencies.
+        downlevelIteration:
+          type: boolean
+          description: Enables iteration of ES6 generators for downlevel iteration.
+          example: true
+          additionalDetails: |
+            ES6 generators introduce new iteration functionality. When targeting older ECMAScript versions, such as ES5, enabling `downlevelIteration` allows TypeScript to emit code that supports the iteration of ES6 generators in downlevel targets. This option is useful when targeting environments that don't natively support ES6 generators.
+        emitBOM:
+          type: boolean
+          description: Specifies whether to emit a byte order mark (BOM) in emitted files.
+          example: false
+          additionalDetails: |
+            The byte order mark (BOM) is a Unicode character that serves as an indicator for the encoding of a text file. By default, TypeScript emits files without a BOM. Enabling `emitBOM` instructs TypeScript to include the BOM character at the beginning of emitted files, which can be useful for compatibility with certain tools and environments.
+        emitDecoratorMetadata:
+          type: boolean
+          description: Enables emitting decorator metadata in TypeScript compiled output.
+          example: true
+          additionalDetails: |
+            Decorators are a TypeScript language feature used for adding metadata and modifying the behavior of classes, methods, properties, etc. Enabling `emitDecoratorMetadata` ensures that metadata associated with decorators is emitted in the compiled JavaScript output. This is required for certain frameworks or tools that rely on decorator metadata.
+        exactOptionalPropertyTypes:
+          type: boolean
+          description: Enables strict checking of optional properties.
+          example: true
+          additionalDetails: |
+            By default, TypeScript allows assigning `null` or `undefined` to optional properties regardless of their declared type. Enabling `exactOptionalPropertyTypes` enforces strict checking for optional properties, ensuring that their types must match exactly, including `null` or `undefined`.
+        experimentalDecorators:
+          type: boolean
+          description: Enables experimental support for ES7 decorators.
+          example: true
+          additionalDetails: |
+            Experimental decorators are a proposed feature of the ECMAScript standard (ES7) that TypeScript supports. Enabling `experimentalDecorators` allows you to use and experiment with decorators in your TypeScript code. It's important to note that experimental features may be subject to change or have limited compatibility.
+        forceConsistentCasingInFileNames:
+          type: boolean
+          description: Forces consistent casing of referenced TypeScript files.
+          example: true
+          additionalDetails: |
+            The `forceConsistentCasingInFileNames` option enforces consistent casing for references to TypeScript files. When enabled, TypeScript checks that references to files in the code match the exact casing of the file names on disk. This helps avoid potential issues when working on case-sensitive file systems.
+        ignoreDeprecations:
+          type: string
+          description: Specifies deprecation warnings to be ignored.
+          example: "example-deprecation"
+          additionalDetails: |
+            TypeScript emits deprecation warnings when using deprecated features or APIs. The `ignoreDeprecations` option allows you to specify specific deprecation warnings to be ignored. Provide the deprecation warning message or code to suppress specific deprecation warnings during compilation.
+        importHelpers:
+          type: boolean
+          description: Enables the import of helper functions from tslib.
+          example: true
+          additionalDetails: |
+            When working with certain language features or runtime helpers, TypeScript may emit additional helper functions to support the compilation output. Enabling `importHelpers` instructs TypeScript to import these helper functions from the `tslib` library instead of emitting them directly, resulting in smaller emitted JavaScript files.
+        importsNotUsedAsValues:
+          $ref: "#/components/schemas/ImportsNotUsedAsValues"
+          description: Specifies how imports that are not used as values are handled.
+          example: "remove"
+          additionalDetails: |
+            Imports that are not used as values refer to imports that are solely used for their type information or for side effects (e.g., polyfills or registering decorators). The `importsNotUsedAsValues` option allows you to configure how these imports are handled. The possible values are:
+            - `remove`: Removes unused imports that are not used as values.
+            - `error`: Raises an error for unused imports that are not used as values.
+            - `preserve`: Preserves all imports, even if they are not used as values.
+        inlineSourceMap:
+          type: boolean
+          description: Specifies whether to inline source maps in emitted JavaScript files.
+          example: false
+          additionalDetails: |
+            Source maps provide a mapping between the emitted JavaScript files and their corresponding TypeScript source files, allowing for easier debugging. By default, TypeScript emits separate source map files. Enabling `inlineSourceMap` instructs TypeScript to include the source map content directly within the emitted JavaScript files, resulting in a single combined file.
+        inlineSources:
+          type: boolean
+          description: Specifies whether to inline the original source code in emitted JavaScript files.
+          example: false
+          additionalDetails: |
+            When working with source maps, TypeScript can include the original TypeScript source code within the emitted JavaScript files. Enabling `inlineSources` instructs TypeScript to include the original source code inline, making it accessible within the emitted JavaScript files. This can be useful for debugging purposes.
+        isolatedModules:
+          type: boolean
+          description: Enables each file to be treated as a separate module.
+          example: false
+          additionalDetails: |
+            By default, TypeScript treats all files within a project as part of the same module. Enabling `isolatedModules` instructs TypeScript to treat each file as a separate module, regardless of their dependencies or imports. This can be useful for projects where each file is independently executable or if you want to enforce strict module boundaries.
+        jsx:
+          $ref: "#/components/schemas/JsxEmit"
+          description: Specifies the JSX output mode.
+          example: "react"
+          additionalDetails: |
+            JSX is a syntax extension for JavaScript that allows embedding XML-like syntax within JavaScript code. The `jsx` option specifies the desired JSX output mode for the TypeScript project. Available options are:
+            - `react`: Emit JSX code compatible with React.
+            - `react-jsx`: Emit JSX code with a ".jsx" file extension.
+            - `react-jsxdev`: Emit JSX code with a ".js" file extension (development mode).
+            - `preserve`: Preserve JSX code as part of the emitted JavaScript.
+            - `react-native`: Emit JSX code compatible with React Native.
+        keyofStringsOnly:
+          type: boolean
+          description: Disallows symbols other than string in keyof.
+          example: true
+          additionalDetails: |
+            TypeScript's `keyof` operator allows you to obtain a union type representing the keys of a given object or type. By default, `keyof` includes all symbol types, including number and symbol keys. Enabling `keyofStringsOnly` restricts the keys to only string types, excluding number and symbol keys.
+        lib:
+          type: array
+          items:
+            type: string
+          description: Specifies the libraries to be included in the TypeScript project.
+          example: ["ES2018", "DOM"]
+          additionalDetails: |
+            TypeScript provides a set of pre-defined library files that include type definitions for common JavaScript APIs and runtime environments. The `lib` option allows you to specify the libraries to include in the TypeScript project. Available library options include `ES5`, `ES6`, `ES2015`, `DOM`, `DOM.Iterable`, `WebWorker`, and more.
+        locale:
+          type: string
+          description: Specifies the locale to use for error messages.
+          example: "en-us"
+          additionalDetails: |
+            The `locale` option allows you to specify the locale to use for error messages and diagnostics. This affects the language used in error messages, type checking output, and other compiler diagnostics. Specify the locale using the BCP 47 language tag format, such as `"en-us"` for English (United States).
+        mapRoot:
+          type: string
+          description: Specifies the location where debugger should locate map files.
+          example: "./maps"
+          additionalDetails: |
+            Source maps provide a mapping between the emitted JavaScript files and their corresponding TypeScript source files. The `mapRoot` option allows you to specify the location where the debugger should look for the source map files. Use this option when the source maps are hosted at a different location than the emitted JavaScript files.
+        maxNodeModuleJsDepth:
+          type: number
+          description: Specifies the maximum folder depth for checking JavaScript files in node_modules.
+          example: 0
+          additionalDetails: |
+            When resolving JavaScript files in the `node_modules` directory, TypeScript may encounter deeply nested files. The `maxNodeModuleJsDepth` option allows you to limit the folder depth TypeScript checks when looking for JavaScript files. Setting a value of `0` restricts the search to the top-level folder only.
+        module:
+          $ref: "#/components/schemas/ModuleKind"
+          description: Specifies the module code generation method.
+          example: "commonjs"
+          additionalDetails: |
+            The `module` option specifies the module code generation method for the emitted JavaScript output. Different module formats are suitable for different runtime environments. Available options are: `none`, `commonjs`, `amd`, `system`, `umd`, `es2015`, `es2020`, `esnext`, and more. Choose the appropriate option based on your target environment and module loading system.
+        moduleResolution:
+          $ref: "#/components/schemas/ModuleResolutionKind"
+          description: Specifies the module resolution strategy.
+          example: "node"
+          additionalDetails: |
+            The `moduleResolution` option determines how TypeScript resolves module imports. Different module resolution strategies are suitable for different project structures and module loading systems. Available options are: `classic`, `node`, `node12`, and more. Choose the appropriate option based on your project's configuration and module resolution requirements.
+        moduleSuffixes:
+          type: array
+          items:
+            type: string
+          description: Specifies the file suffixes to consider during module resolution.
+          example: [".ts", ".tsx", ".js"]
+          additionalDetails: |
+            When resolving module imports, TypeScript considers files with specific suffixes. The `moduleSuffixes` option allows you to specify the file suffixes to consider during module resolution. By default, TypeScript considers files with `.ts`, `.tsx`, and `.js` extensions. Customize this option to include additional or different file suffixes as needed.
+        moduleDetection:
+          $ref: "#/components/schemas/ModuleDetectionKind"
+          description: Specifies how modules are detected.
+          example: "node"
+          additionalDetails: |
+            The `moduleDetection` option determines how TypeScript detects and resolves modules. Different module detection methods have different behavior and compatibility. Available options are: `node`, `node12`, `modern`, `classic`, and more. Choose the appropriate option based on your project's configuration and module detection requirements.
+        newLine:
+          $ref: "#/components/schemas/NewLineKind"
+          description: Specifies the end of line sequence to be used.
+          example: "crlf"
+          additionalDetails: |
+            The `newLine` option specifies the desired end-of-line (EOL) sequence to be used in the emitted JavaScript output. Available options are: `crlf` (carriage return + line feed) and `lf` (line feed). The chosen EOL sequence affects how lines are terminated in the emitted files.
+        noEmit:
+          type: boolean
+          description: Disables emitting JavaScript files.
+          example: false
+          additionalDetails: |
+            Enabling the `noEmit` option instructs TypeScript not to emit any JavaScript files as output. This is useful when you only want to perform type checking and validation without generating compiled JavaScript files. Use this option during development or when TypeScript is used solely for static type checking.
+        noEmitHelpers:
+          type: boolean
+          description: Disables generating custom helper functions in emitted JavaScript files.
+          example: false
+          additionalDetails: |
+            When targeting certain ECMAScript versions or using certain language features, TypeScript may emit additional helper functions to support the compiled JavaScript output. Enabling `noEmitHelpers` disables the generation of these custom helper functions, resulting in smaller emitted JavaScript files.
+
+        noEmitOnError:
+          type: boolean
+          description: Disables emitting JavaScript files if any type errors are reported.
+          example: true
+          additionalDetails: |
+            By default, TypeScript emits JavaScript files even if there are type errors in the project. Enabling `noEmitOnError` instructs TypeScript to prevent emitting any JavaScript files if there are any reported type errors. This ensures that only error-free code is compiled and emitted.
+        noErrorTruncation:
+          type: boolean
+          description: Disables truncating error messages.
+          example: false
+          additionalDetails: |
+            Error messages generated by TypeScript are often truncated to fit within a certain length limit. Enabling `noErrorTruncation` disables this truncation, allowing the full error messages to be displayed. This can be useful for detailed error analysis, but keep in mind that very long error messages may be harder to read.
+        noFallthroughCasesInSwitch:
+          type: boolean
+          description: Disallows fallthrough cases in switch statements.
+          example: true
+          additionalDetails: |
+            TypeScript performs analysis on switch statements to detect fallthrough cases where one case does not include a `break` statement and execution continues into the next case. Enabling `noFallthroughCasesInSwitch` flags such cases as errors, ensuring that switch statements are handled correctly and explicitly in the code.
+        noImplicitAny:
+          type: boolean
+          description: Disallows implicit `any` type declarations.
+          example: true
+          additionalDetails: |
+            By default, TypeScript allows implicit `any` types, where a variable or expression's type is automatically inferred as `any` when it is not explicitly annotated. Enabling `noImplicitAny` flags such cases as errors, requiring explicit type annotations to avoid relying on implicit `any` types.
+        noImplicitReturns:
+          type: boolean
+          description: Disallows missing return types on function signatures.
+          example: true
+          additionalDetails: |
+            TypeScript checks for missing return types on function signatures and flags them as errors. Enabling `noImplicitReturns` ensures that all code paths within a function have a return statement or throw an error, avoiding potential logic errors or unintended control flow.
+        noImplicitThis:
+          type: boolean
+          description: Disallows the use of `this` types without an explicit type annotation.
+          example: true
+          additionalDetails: |
+            In TypeScript, the `this` type is used to represent the type of the current object within a class or method. By default, TypeScript allows the use of `this` without an explicit type annotation. Enabling `noImplicitThis` flags such cases as errors, requiring explicit type annotations for `this` usage.
+        noStrictGenericChecks:
+          type: boolean
+          description: Disables strict checking of generic signatures in TypeScript projects.
+          example: false
+          additionalDetails: |
+            Generics in TypeScript allow creating reusable functions or classes that can work with multiple types. Enabling `noStrictGenericChecks` relaxes the strict checking of generic signatures, allowing looser type inference and compatibility. However, it's important to note that stricter generic checks help ensure type safety and correctness.
+        noUnusedLocals:
+          type: boolean
+          description: Disallows unused local variables.
+          example: true
+          additionalDetails: |
+            Unused local variables are variables declared within a function or block scope that are never referenced or used. Enabling `noUnusedLocals` flags such cases as errors, helping to identify and remove unused variables, which can improve code readability and maintainability.
+        noUnusedParameters:
+          type: boolean
+          description: Disallows unused function parameters.
+          example: true
+          additionalDetails: |
+            Unused function parameters are parameters declared in function signatures that are never used or referenced within the function body. Enabling `noUnusedParameters` flags such cases as errors, encouraging the removal of unused parameters to improve code clarity and eliminate potential confusion.
+        noImplicitUseStrict:
+          type: boolean
+          description: Disallows the use of implicit `use strict` directive.
+          example: true
+          additionalDetails: |
+            The `use strict` directive enables strict mode in JavaScript, which enforces stricter rules and eliminates certain language pitfalls. By default, TypeScript automatically adds the `use strict` directive to the emitted JavaScript files. Enabling `noImplicitUseStrict` disables the implicit insertion of `use strict`, allowing you to manually control its usage.
+        noPropertyAccessFromIndexSignature:
+          type: boolean
+          description: Disallows accessing properties using the index signature notation.
+          example: false
+          additionalDetails: |
+            In TypeScript, objects can be accessed using property access notation (`obj.prop`) or index signature notation (`obj['prop']`). By default, TypeScript allows accessing properties using both notations. Enabling `noPropertyAccessFromIndexSignature` flags property access using index signature notation as errors, promoting consistent property access syntax.
+        assumeChangesOnlyAffectDirectDependencies:
+          type: boolean
+          description: Instructs TypeScript to assume that changes only affect direct dependencies.
+          example: true
+          additionalDetails: |
+            The `assumeChangesOnlyAffectDirectDependencies` option is used in TypeScript's incremental compilation feature. When enabled, TypeScript assumes that changes made in the project only affect the directly dependent files, allowing for faster incremental builds. This option should be used with caution, as it may lead to incorrect compilation results if dependencies are not accurately tracked.
+        noLib:
+          type: boolean
+          description: Disables including the default library file (lib.d.ts).
+          example: false
+          additionalDetails: |
+            By default, TypeScript includes the default library file (`lib.d.ts`) that provides type definitions for common JavaScript APIs and runtime environments. Enabling `noLib` instructs TypeScript not to include the default library file. This can be useful in specific scenarios where you want to provide your own custom library definitions.
+        noResolve:
+          type: boolean
+          description: Disables automatic resolution of non-relative module names.
+          example: false
+          additionalDetails: |
+            TypeScript automatically resolves non-relative module names by searching for matching modules in various locations, such as `node_modules`. Enabling `noResolve` disables this automatic resolution, requiring all module names to be explicitly specified with a relative or absolute path. Use this option when you want full control over module resolution.
+        noUncheckedIndexedAccess:
+          type: boolean
+          description: Disallows unchecked indexed access on possibly undefined values.
+          example: true
+          additionalDetails: |
+            By default, TypeScript allows indexing into possibly undefined values without checking for null or undefined. Enabling `noUncheckedIndexedAccess` flags such cases as errors, requiring explicit null or undefined checks before indexing into objects or arrays. This promotes safer coding practices and avoids potential runtime errors.
+        out:
+          type: string
+          description: Specifies the single output file for the TypeScript project.
+          example: "./dist/bundle.js"
+          additionalDetails: |
+            The `out` option allows you to specify a single output file for the TypeScript project. When specified, TypeScript will concatenate and emit all compiled JavaScript files into the specified output file. Note that using `out` disables incremental compilation and should be used with caution for larger projects.
+        outDir:
+          type: string
+          description: Specifies the output directory for emitted JavaScript files.
+          example: "./dist"
+          additionalDetails: |
+            The `outDir` option specifies the directory where TypeScript should emit the compiled JavaScript files. All emitted JavaScript files, including declaration files and source maps, will be placed in this directory. Use this option to control the location of the output files within your project's directory structure.
+        outFile:
+          type: string
+          description: Specifies the single output file for the TypeScript project (alternative to `out`).
+          example: "./dist/bundle.js"
+          additionalDetails: |
+            The `outFile` option is an alternative to the `out` option for specifying a single output file for the TypeScript project. It functions in a similar way as `out`, but allows you to specify the output file directly within the `tsconfig.json` file. Note that using `outFile` disables incremental compilation and should be used with caution for larger projects.
+        paths:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          description: Specifies path mappings for module resolution.
+          example:
+            "@utils/*": ["./src/utils/*"]
+            "@components/*": ["./src/components/*"]
+          additionalDetails: |
+            The `paths` option allows you to specify path mappings for module resolution. This is particularly useful when working with module aliases or custom directory structures. Specify the module name or alias as the key and the corresponding path or pattern as the value in the `paths` object.
+        preserveConstEnums:
+          type: boolean
+          description: Preserves const enums in the emitted JavaScript output.
+          example: true
+          additionalDetails: |
+            Const enums in TypeScript are enums that are fully inlined during compilation, resulting in more efficient JavaScript output. By default, TypeScript removes const enums during compilation to reduce the emitted code size. Enabling `preserveConstEnums` instructs TypeScript to preserve const enums in the emitted JavaScript output.
+        noImplicitOverride:
+          type: boolean
+          description: Disallows explicit overriding of methods or properties.
+          example: true
+          additionalDetails: |
+            TypeScript allows explicit method or property overrides, where a derived class explicitly overrides a method or property from its base class. Enabling `noImplicitOverride` flags explicit overrides as errors, ensuring that methods or properties are properly overridden using the `override` keyword.
+        preserveSymlinks:
+          type: boolean
+          description: Preserves symbolic links when resolving modules.
+          example: false
+          additionalDetails: |
+            By default, TypeScript follows symbolic links when resolving modules. Enabling `preserveSymlinks` instructs TypeScript to preserve symbolic links during module resolution. Use this option when you want TypeScript to treat symbolic links as separate entities and not follow them to their target locations.
+        preserveValueImports:
+          type: boolean
+          description: Preserves unused values imported solely for their types.
+          example: true
+          additionalDetails: |
+            When importing modules in TypeScript, it is common to import certain values solely for their types, without actually using the imported values in the code. Enabling `preserveValueImports` ensures that these unused values are preserved during compilation, allowing TypeScript to retain their type information for better type checking and tooling support.
+        project:
+          type: string
+          description: Specifies the path or file glob patterns for the TypeScript project.
+          example: "./tsconfig.json"
+          additionalDetails: |
+            The `project` option specifies the path or file glob patterns for the TypeScript project configuration. It can be a path to a specific `tsconfig.json` file or a glob pattern matching multiple configuration files. When this option is provided, TypeScript will use the specified project configuration for compilation and other operations.
+        reactNamespace:
+          type: string
+          description: Specifies the namespace for JSX factory and JSX fragment.
+          example: "React"
+          additionalDetails: |
+            When working with JSX in TypeScript, the `reactNamespace` option allows you to specify the namespace for the JSX factory and JSX fragment. By default, TypeScript uses `React` as the namespace. Use this option to customize the namespace based on your specific JSX implementation or library.
+        jsxFactory:
+          type: string
+          description: Specifies the function to use as the JSX factory.
+          example: "h"
+          additionalDetails: |
+            The `jsxFactory` option specifies the function to use as the JSX factory. In JSX syntax, elements are transpiled into function calls, and the `jsxFactory` option determines the function to be used for creating these elements. Specify the function name or expression as the value of `jsxFactory`.
+        jsxFragmentFactory:
+          type: string
+          description: Specifies the function to use as the JSX fragment factory.
+          example: "Fragment"
+          additionalDetails: |
+            JSX fragments allow grouping multiple adjacent JSX elements without an enclosing wrapper element. The `jsxFragmentFactory` option specifies the function to use as the JSX fragment factory. Specify the function name or expression as the value of `jsxFragmentFactory`. This option is applicable when using JSX syntax.
+        jsxImportSource:
+          type: string
+          description: Specifies the module to import JSX-related functions from.
+          example: "preact"
+          additionalDetails: |
+            When using JSX syntax, TypeScript needs to import certain functions, such as the JSX factory or JSX fragment factory. The `jsxImportSource` option allows you to specify the module from which these JSX-related functions should be imported. Specify the module name or path as the value of `jsxImportSource`.
+        composite:
+          type: boolean
+          description: Enables building TypeScript projects in composite mode.
+          example: true
+          additionalDetails: |
+            TypeScript's composite mode allows dividing a large project into separate sub-projects that can be built independently and incrementally. Enabling `composite` mode enables the use of project references and incremental compilation for faster builds. Use this option when working with complex or large-scale TypeScript projects.
+        incremental:
+          type: boolean
+          description: Enables incremental compilation for TypeScript projects.
+          example: true
+          additionalDetails: |
+            Incremental compilation is a feature of TypeScript that allows recompiling only the necessary files when changes are made, resulting in faster builds. Enabling `incremental` mode enables the incremental compilation feature for the TypeScript project. This option is recommended for projects where build speed is a priority.
+        tsBuildInfoFile:
+          type: string
+          description: Specifies the file to store incremental build information.
+          example: "./tsconfig.tsbuildinfo"
+          additionalDetails: |
+            Incremental compilation in TypeScript relies on storing build information for efficient recompilation. The `tsBuildInfoFile` option specifies the file where the incremental build information should be stored. This information is used to determine which files need to be recompiled when changes are made.
+        removeComments:
+          type: boolean
+          description: Removes comments from the emitted JavaScript files.
+          example: true
+          additionalDetails: |
+            By default, TypeScript preserves comments from the source code in the emitted JavaScript files. Enabling `removeComments` instructs TypeScript to remove all comments during the compilation process, resulting in cleaner and more concise JavaScript output.
+        resolvePackageJsonExports:
+          type: boolean
+          description: Enables resolving package.json exports field.
+          example: true
+          additionalDetails: |
+            Starting from ECMAScript modules (ESM) support in Node.js 12, the `exports` field in `package.json` files is used to define the exports of a module. Enabling `resolvePackageJsonExports` allows TypeScript to resolve module imports using the `exports` field in `package.json` files. Use this option when working with ESM and package exports.
+        resolvePackageJsonImports:
+          type: boolean
+          description: Enables resolving imports from `package.json` files.
+          example: true
+          additionalDetails: |
+            TypeScript can resolve module imports directly from `package.json` files, bypassing the need for separate type declaration files (`*.d.ts`). Enabling `resolvePackageJsonImports` allows TypeScript to resolve imports using the `main` or `module` field in `package.json` files. This can simplify the import configuration for certain packages.
+        rootDir:
+          type: string
+          description: Specifies the root directory of input files.
+          example: "./src"
+          additionalDetails: |
+            The `rootDir` option specifies the root directory of input files in the TypeScript project. It is used to determine the relative path of each file within the project. This option is especially useful when working with projects that have a complex file structure or when using tools that rely on the project's root directory.
+        rootDirs:
+          type: array
+          items:
+            type: string
+          description: Specifies multiple root directories for the TypeScript project.
+          example: ["./src", "./tests"]
+          additionalDetails: |
+            The `rootDirs` option allows you to specify multiple root directories for the TypeScript project. When specified, TypeScript will consider all files within the specified root directories as part of the project. This can be useful when working with projects that span multiple directories or when using tools that require multiple root directories.
+        skipLibCheck:
+          type: boolean
+          description: Skips type checking of declaration files in `node_modules`.
+          example: true
+          additionalDetails: |
+            By default, TypeScript performs type checking on declaration files (`*.d.ts`) in the `node_modules` directory. Enabling `skipLibCheck` skips the type checking of declaration files, which can significantly improve build performance, especially for large projects with many dependencies.
+
+        skipDefaultLibCheck:
+          type: boolean
+          description: Skips type checking of default library file (lib.d.ts).
+          example: true
+          additionalDetails: |
+            The default library file (`lib.d.ts`) provides type definitions for common JavaScript APIs and runtime environments. Enabling `skipDefaultLibCheck` skips the type checking of the default library file. Use this option when you want to exclude the default library from type checking or when using alternative library files.
+        sourceMap:
+          type: boolean
+          description: Specifies whether to generate source map files.
+          example: true
+          additionalDetails: |
+            Source maps provide a mapping between the emitted JavaScript files and their corresponding TypeScript source files, allowing for easier debugging. Enabling `sourceMap` instructs TypeScript to generate source map files along with the emitted JavaScript files. These source map files can be used by debuggers and other tools for source-level debugging.
+        sourceRoot:
+          type: string
+          description: Specifies the location of the TypeScript source files.
+          example: "./src"
+          additionalDetails: |
+            The `sourceRoot` option specifies the location of the TypeScript source files relative to the emitted JavaScript files. This option is used in the source maps to provide the correct path information for the TypeScript sources. It is especially useful when the TypeScript sources are located in a different directory from the emitted JavaScript files.
+        strict:
+          type: boolean
+          description: Enables strict type checking options.
+          example: true
+          additionalDetails: |
+            The `strict` option enables a set of strict type checking options in TypeScript. Enabling `strict` is equivalent to enabling several individual strict options, including `strictNullChecks`, `strictFunctionTypes`, `strictBindCallApply`, `strictPropertyInitialization`, `noImplicitThis`, and more. Use this option to enforce strict type checking rules in your project.
+        strictFunctionTypes:
+          type: boolean
+          description: Enables strict checking of function types.
+          example: true
+          additionalDetails: |
+            Function types in TypeScript include parameters and return types. By default, TypeScript allows for certain assignment compatibility between function types. Enabling `strictFunctionTypes` flags stricter checking of function types, ensuring that parameter types and return types must match exactly.
+        strictBindCallApply:
+          type: boolean
+          description: Enables strict checking of `bind`, `call`, and `apply` methods.
+          example: true
+          additionalDetails: |
+            The `bind`, `call`, and `apply` methods in JavaScript allow for dynamic binding of functions and altering their execution context. Enabling `strictBindCallApply` enables strict checking of these methods, ensuring that the number of arguments and the types of arguments passed to these methods match the function's signature.
+        strictNullChecks:
+          type: boolean
+          description: Enables strict null checking.
+          example: true
+          additionalDetails: |
+            Null and undefined are often sources of bugs in JavaScript. Enabling `strictNullChecks` enables strict checking for null and undefined values, preventing variables from being assigned null or undefined unless explicitly allowed. This option helps eliminate many common null-related errors.
+        strictPropertyInitialization:
+          type: boolean
+          description: Enables strict checking of uninitialized class properties.
+          example: true
+          additionalDetails: |
+            Class properties in TypeScript can be initialized during declaration or within the constructor. Enabling `strictPropertyInitialization` flags uninitialized class properties as errors, ensuring that all class properties are explicitly initialized either during declaration or within the constructor.
+        stripInternal:
+          type: boolean
+          description: Removes internal declaration files from the emitted JavaScript files.
+          example: true
+          additionalDetails: |
+            TypeScript includes internal declaration files that provide type information for the TypeScript language and compiler. Enabling `stripInternal` instructs TypeScript to remove these internal declaration files from the emitted JavaScript files. This can help reduce the size of the emitted JavaScript files, especially in production builds.
+        suppressExcessPropertyErrors:
+          type: boolean
+          description: Suppresses excess property errors when assigning object literals.
+          example: true
+          additionalDetails: |
+            When assigning object literals to variables or parameters, TypeScript performs excess property checking to ensure that only known properties are assigned. Enabling `suppressExcessPropertyErrors` suppresses the excess property errors, allowing object literals to be assigned to variables or parameters without strict property checking.
+        suppressImplicitAnyIndexErrors:
+          type: boolean
+          description: Suppresses implicit `any` errors for indexing objects.
+          example: true
+          additionalDetails: |
+            TypeScript performs implicit `any` checks when indexing into objects with arbitrary property names. Enabling `suppressImplicitAnyIndexErrors` suppresses the implicit `any` errors, allowing indexing into objects without strict type checking. Use this option when you need to work with objects that have dynamic or unknown property names.
+        target:
+          $ref: "#/components/schemas/ScriptTarget"
+          description: Specifies the ECMAScript target version.
+          example: "es2020"
+          additionalDetails: |
+            The `target` option specifies the ECMAScript (ES) target version for the emitted JavaScript output. TypeScript provides support for different ECMAScript versions, such as `ES5`, `ES2015`, `ES2016`, `ES2017`, `ES2018`, `ES2019`, `ES2020`, `ESNext`, and more. Choose the appropriate target version based on your project's compatibility requirements.
+        traceResolution:
+          type: boolean
+          description: Outputs detailed trace logs for module resolution.
+          example: true
+          additionalDetails: |
+            Enabling `traceResolution` outputs detailed trace logs during module resolution in TypeScript. These logs provide information about how TypeScript resolves module imports, including the paths searched, module resolutions, and more. Use this option for debugging or diagnosing module resolution issues in your project.
+        useUnknownInCatchVariables:
+          type: boolean
+          description: Enables `unknown` type for catch clause variables.
+          example: true
+          additionalDetails: |
+            The `unknown` type in TypeScript represents values that are of an unknown type. Enabling `useUnknownInCatchVariables` allows catch clause variables to be typed as `unknown`, allowing more flexible handling of unknown error values in catch blocks.
+        resolveJsonModule:
+          type: boolean
+          description: Enables importing JSON files as modules.
+          example: true
+          additionalDetails: |
+            Starting from ECMAScript modules (ESM) support in Node.js 10, JSON files can be imported as modules. Enabling `resolveJsonModule` allows TypeScript to import JSON files as modules, providing type checking and autocompletion for the imported JSON data.
+        types:
+          type: array
+          items:
+            type: string
+          description: Specifies the type declaration files to include.
+          example: ["node", "jest"]
+          additionalDetails: |
+            Type declaration files (`.d.ts`) provide type information for JavaScript libraries and modules. The `types` option allows you to specify the type declaration files to include in the TypeScript project. Specify the names of the desired type declaration files or packages as elements of the `types` array.
+        typeRoots:
+          type: array
+          items:
+            type: string
+          description: Specifies the locations to search for type declaration files.
+          example: ["./typings", "./custom-types"]
+          additionalDetails: |
+            The `typeRoots` option specifies the locations to search for type declaration files (`.d.ts`). TypeScript searches these directories to find type declarations for installed packages and custom type definitions. Use this option to include additional directories containing type declaration files in your project.
+        verbatimModuleSyntax:
+          type: boolean
+          description: Enables verbatim module syntax for CommonJS modules.
+          example: true
+          additionalDetails: |
+            CommonJS modules in TypeScript are transpiled into the CommonJS module format. Enabling `verbatimModuleSyntax` allows the emitted JavaScript output to use verbatim module syntax, preserving the original module import and export statements. This can be useful when interoperating with other tools or libraries that rely on the original CommonJS syntax.
+        esModuleInterop:
+          type: boolean
+          description: Enables interoperability between CommonJS and ECMAScript modules.
+          example: true
+          additionalDetails: |
+            The `esModuleInterop` option enables interoperability between CommonJS modules and ECMAScript modules (ESM). When enabled, TypeScript generates code that allows importing ESM modules into CommonJS modules and vice versa, without the need for additional interop libraries or syntax transformations.
+        useDefineForClassFields:
+          type: boolean
+          description: Uses the `defineProperty` method for class fields initialization.
+          example: true
+          additionalDetails: |
+            When initializing class fields in TypeScript, the default behavior is to assign the values directly to the instance. Enabling `useDefineForClassFields` uses the `defineProperty` method for initializing class fields. This can provide more fine-grained control over the initialization process and ensure consistency with the property accessors.
+
+
+    ImportsNotUsedAsValues:
+      type: string
+      enum: [remove, error, preserve]
+      description: Specifies how imports that are not used as values are handled.
+
+    JsxEmit:
+      type: string
+      enum: [react, react-jsx, react-jsxdev, preserve, react-native]
+      description: Specifies the JSX output mode.
+
+    ModuleKind:
+      type: string
+      enum: [none, commonjs, amd, system, umd, es2015, es2020, es2021, es2022, es2023, esnext]
+      description: Specifies the module code generation method.
+
+    ModuleResolutionKind:
+      type: string
+      enum: [classic, node, node12, node16, nodenext, bundler]
+      description: Specifies the module resolution strategy.
+
+    ModuleDetectionKind:
+      type: string
+      enum: [node, node12, node16, nodenext, bundler, modern, classic]
+      description: Specifies how modules are detected.
+
+    NewLineKind:
+      type: string
+      enum: [crlf, lf]
+      description: Specifies the end of line sequence to be used.
+
+    ScriptTarget:
+      type: string
+      enum: [es3, es5, es2015, es2016, es2017, es2018, es2019, es2020, es2021, es2022, es2023, esnext]
+      description: Specifies the ECMAScript target version for emitted JavaScript files.
+
+    
