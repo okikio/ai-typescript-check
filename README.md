@@ -1,3 +1,6 @@
+
+Partially modified version of @typescript/twoslash, Use an icon from the https://shikijs.github.io/twoslash/ webpage
+
 # deno-github-proxy
 Allows for easy imports of ts files from GitHub while still keeping type inferencing.
 
