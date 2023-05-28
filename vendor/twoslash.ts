@@ -6,11 +6,10 @@ import {
   createSystem,
   createVirtualTypeScriptEnvironment,
 } from "./ts-vfs.ts";
-import { resolve } from "https://deno.land/std@0.189.0/path/win32.ts";
 
 const { setupTypeAcquisition } = ata;
 
-const shouldDebug = localStorage.getItem("DEBUG") || (Deno.env.get('DEBUG'))
+const shouldDebug = (Deno.env.get('DEBUG'))
 const log = shouldDebug ? console.log : (_message?: any, ..._optionalParams: any[]) => ""
 
 type QueryPosition = {

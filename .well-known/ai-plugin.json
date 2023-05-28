@@ -1,9 +1,9 @@
 {
     "schema_version": "v1",
-    "name_for_human": "TypeScript Twoslash API Plugin",
+    "name_for_human": "TypeScript Twoslash API",
     "name_for_model": "typescript_twoslash_api",
     "description_for_human": "Plugin for typescript and javascript which uses a REST API to provide linting, auto-completion, error checking, type checking, tooltip information, and more for ts, jsx/tsx, and js files.",
-    "description_for_model": "Accepts typescript and javascript code then uses typescript twoslash comment commands on said typescript code then pass it to a REST API which then provides linting, auto-completion, error checking, type checking, tooltip information, and more for ts, jsx/tsx, and js files.",
+    "description_for_model": "Accepts typescript and javascript code then uses typescript twoslash comment commands on said typescript code, pass it to a REST API which then provides linting, auto-completion, error checking, type checking, tooltip information, and more for ts, jsx/tsx, and js files.",
     "auth": {
       "type": "none"
     },

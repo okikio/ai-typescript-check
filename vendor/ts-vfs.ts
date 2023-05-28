@@ -9,12 +9,13 @@ type CompilerHost = Typescript.CompilerHost;
 type SourceFile = Typescript.SourceFile;
 type TS = typeof Typescript;
 
-const shouldDebug = localStorage.getItem("DEBUG") || (Deno.env.get("DEBUG"));
+// Open the default database for the script.
+const kv = await Deno.openKv();
+
+const shouldDebug = (Deno.env.get("DEBUG"));
 const debugLog = shouldDebug
   ? console.log
   : (_message?: any, ..._optionalParams: any[]) => "";
-
-if (shouldDebug) localStorage.clear();
 
 export interface VirtualTypeScriptEnvironment {
   sys: System;
@@ -123,7 +124,6 @@ export const knownLibFilesForCompilerOptions = async (
   ts: TS,
   fetcher = fetch,
   version = "latest",
-  storer = localStorage,
 ) => {
   const target = compilerOptions.target || ts.ScriptTarget.ES2022;
   const lib = compilerOptions.lib || [];
@@ -146,10 +146,10 @@ export const knownLibFilesForCompilerOptions = async (
 
   const upToDateLibsList: string[] = [];
   try {
-    const STORED_LIBS_PREFIX = `ts-vfs-${version}`;
-    const storedLibs = storer.getItem(STORED_LIBS_PREFIX);
-    if (storedLibs) {
-      (JSON.parse(storedLibs) as string[]).forEach(lib => {
+    const STORED_LIBS_PREFIX = [`ts-vfs`, version];
+    const storedLibs = await kv.get<string[]>(STORED_LIBS_PREFIX);
+    if (storedLibs.value) {
+      (storedLibs.value).forEach(lib => {
         upToDateLibsList.push(lib)
       });
     } else {
@@ -162,7 +162,9 @@ export const knownLibFilesForCompilerOptions = async (
         }
       })
       if (upToDateLibsList.length > 0) {
-        storer.setItem(STORED_LIBS_PREFIX, JSON.stringify(upToDateLibsList));
+        try {
+          await kv.set(STORED_LIBS_PREFIX, upToDateLibsList);
+        } catch (_e) { /* empty */ }
       }
     }
   } catch (error) {
@@ -292,7 +294,6 @@ export const knownLibFilesForCompilerOptions = async (
  * @param ts a copy of the typescript import
  * @param lzString an optional copy of the lz-string import
  * @param fetcher an optional replacement for the global fetch function (tests mainly)
- * @param storer an optional replacement for the localStorage global (tests mainly)
  */
 export const createDefaultMapFromCDN = async (
   options: CompilerOptions,
@@ -301,11 +302,10 @@ export const createDefaultMapFromCDN = async (
   ts: TS,
   lzString?: typeof lzstring,
   fetcher?: typeof fetch,
-  storer?: typeof localStorage,
 ) => {
   const fetchlike = fetcher || fetch;
   const fsMap = new Map<string, string>();
-  const files = await knownLibFilesForCompilerOptions(options, ts, fetchlike, version, storer || localStorage);
+  const files = await knownLibFilesForCompilerOptions(options, ts, fetchlike, version);
   const prefix =
     `https://typescript.azureedge.net/cdn/${version}/typescript/lib/`;
 
@@ -343,29 +343,29 @@ export const createDefaultMapFromCDN = async (
 
   // A localstorage and lzzip aware version of the lib files
   async function cached() {
-    const storelike = storer || localStorage;
-
-    const keys = Object.keys(localStorage);
-    keys.forEach((key) => {
+    // List out all entries with keys starting with `["ts-lib"]`
+    for await (const entry of kv.list({ prefix: ["ts-lib"] })) {
       // Remove anything which isn't from this version
-      if (key.startsWith("ts-lib-") && !key.startsWith("ts-lib-" + version)) {
-        storelike.removeItem(key);
+      if (!entry.key.includes(version)) {
+        await kv.delete(entry.key);
       }
-    });
+    }
 
     const contents = await Promise.all(
       files.map(async (lib) => {
-        const cacheKey = `ts-lib-${version}-${lib}`;
-        const content = storelike.getItem(cacheKey);
+        const cacheKey = ["ts-lib", version, lib];
+        const content = await kv.get<string>(cacheKey);
 
-        if (!content || content === "null") {
+        if (!content.value || content.value === "null") {
           // Make the API call and store the text concent in the cache
           const resp = await fetchlike(prefix + lib);
           const t = await resp.text();
-          storelike.setItem(cacheKey, zip(t));
+          try {
+            await kv.set(cacheKey, zip(t));
+          } catch (_e) { /* empty */ }
           return t;
         } else {
-          return Promise.resolve(unzip(content));
+          return Promise.resolve(unzip(content.value));
         }
       }),
     );
