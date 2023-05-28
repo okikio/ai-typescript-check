@@ -1,18 +1,18 @@
 {
     "schema_version": "v1",
-    "name_for_human": "Bundlejs API Plugin",
-    "name_for_model": "bundlejs_api",
-    "description_for_human": "Plugin for bundling, treeshaking, transpiling, compressing and minification of JavaScript and TypeScript code",
-    "description_for_model": "Plugin for bundling, treeshaking, transpiling, compressing and minification of JavaScript and TypeScript code.",
+    "name_for_human": "TypeScript Twoslash API Plugin",
+    "name_for_model": "typescript_twoslash_api",
+    "description_for_human": "Plugin for typescript and javascript which uses a REST API to provide linting, auto-completion, error checking, type checking, tooltip information, and more for ts, jsx/tsx, and js files.",
+    "description_for_model": "Accepts typescript and javascript code then uses typescript twoslash comment commands on said typescript code then pass it to a REST API which then provides linting, auto-completion, error checking, type checking, tooltip information, and more for ts, jsx/tsx, and js files.",
     "auth": {
       "type": "none"
     },
     "api": {
       "type": "openapi",
-      "url": "https://deno.bundlejs.com/.well-known/openapi.yaml",
+      "url": "https://ts-check.okikio.dev/.well-known/openapi.yaml",
       "is_user_authenticated": false
     },
-    "logo_url": "https://deno.bundlejs.com/.well-known/logo.png",
+    "logo_url": "https://ts-check.okikio.dev/.well-known/logo.png",
     "contact_email": "hey@okikio.dev",
     "legal_info_url": "https://github.com/okikio/ai-typescript-check/blob/main/LICENSE"
   }

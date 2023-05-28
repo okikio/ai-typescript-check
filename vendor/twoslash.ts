@@ -315,7 +315,7 @@ function filterHighlightLines(codeLines: string[]): { highlights: HighlightPosit
     if (!/\/\//.test(line)) {
       moveForward()
     } else {
-      const highlightMatch = /^\s*\/\/\s*\^+( .+)?$/.exec(line)
+      const highlightMatch = /^\s*\/\/\s*\^+( .*)?$/.exec(line)
       const queryMatch = /^\s*\/\/\s*\^\?\s*$/.exec(line)
       // https://regex101.com/r/2yDsRk/1
       const removePrettierIgnoreMatch = /^\s*\/\/ prettier-ignore$/.exec(line)

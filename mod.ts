@@ -8,12 +8,30 @@ const __dirname = dirname(fromFileUrl(import.meta.url));
 
 const router = new Router();
 router.use(cors());
-router.post("/twoslash", async ({ request }) => {
-  const formData = await request.formData();
+router.get("/twoslash", async ({ request }) => {
+  // const formData = await request.formData();
   // request.
+
+  console.log({ request });
   
   return Response.json({
     message: "Hello World",
+  });
+});
+router.post("/twoslash", async ({ request }) => {
+  const headers = request.headers;
+  const contentType = headers.get("content-type");
+  const json =  contentType && /multipart\/form\-data/.test(contentType) ? 
+    Object.fromEntries((await request.formData()).entries()): 
+    await request.json();
+  
+  console.log({ contentType, json });
+  
+  return Response.json({
+    message: "Hello World",
+    json
+  }, {
+    status: 200,
   });
 });
 
@@ -29,16 +47,35 @@ router.get("/.well-known/*", async ({ request }) => {
   })
 });
 
-router.get("/.well-known/*", async ({ request }) => { 
+router.get("/favicon/*", async ({ request }) => { 
   const url = new URL(request.url);
   const ext = extname(url.pathname);
   const fileName = basename(url.pathname);
-  return new Response(await Deno.readFile(join(__dirname, "./.well-known", fileName)), {
+  return new Response(await Deno.readFile(join(__dirname, "./favicon", fileName)), {
     status: 200,
-    headers: [
-      ['Cache-Control', 'max-age=3600, s-maxage=30, public'],
-      ['Content-Type', contentType(ext) ?? "application/json"]
-    ],
+    headers: new Headers([
+      ['Content-Type', contentType(ext) ?? "text/plain"]
+    ]),
+  })
+});
+
+router.get("/favicon.ico", async () => { 
+  const ext = ".ico";
+  return new Response(await Deno.readFile(join(__dirname, "./favicon/favicon.ico")), {
+    status: 200,
+    headers: new Headers([
+      ['Content-Type', contentType(ext)]
+    ]),
+  })
+});
+
+router.get("/favicon.svg", async ({ request }) => { 
+  const ext = ".svg";
+  return new Response(await Deno.readFile(join(__dirname, "./favicon/favicon.svg")), {
+    status: 200,
+    headers: new Headers([
+      ['Content-Type', contentType(ext)]
+    ]),
   })
 });
 
@@ -48,7 +85,7 @@ router.get("/articles/:id", ({ match }) => {
   });
 });
 
-serve(router.dispatch.bind(router));
+serve(router.dispatch.bind(router), { port: 8080 });
 
 // serve(async (req: Request) => {
 //   let { pathname, searchParams } = new URL(req.url);

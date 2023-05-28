@@ -13,8 +13,8 @@
     {
       "kind": "highlight",
       "offset": 425,
-      "length": 5,
-      "text": "",
+      "length": 7,
+      "text": "You need a description for highlight to work properly",
       "line": 27,
       "start": 3
     },
@@ -28,19 +28,19 @@
     },
     {
       "kind": "highlight",
-      "offset": 36,
-      "length": 10,
-      "text": "",
+      "offset": 39,
+      "length": 6,
+      "text": "Velue",
       "line": 2,
-      "start": 3
+      "start": 6
     },
     {
       "kind": "highlight",
-      "offset": 63,
-      "length": 8,
-      "text": "",
+      "offset": 66,
+      "length": 6,
+      "text": "Value2",
       "line": 5,
-      "start": 3
+      "start": 6
     }
   ],
   "queries": [
@@ -56,7 +56,7 @@
     {
       "docs": "Gets the length of a string",
       "kind": "query",
-      "start": 423,
+      "start": 421,
       "length": 29,
       "text": "function fnx(s: string): void",
       "offset": 2,
@@ -186,7 +186,7 @@
         }
       ],
       "kind": "completions",
-      "start": 608,
+      "start": 662,
       "completionsPrefix": "g",
       "length": 1,
       "offset": 9,
@@ -386,135 +386,135 @@
     {
       "text": "const slash: string[]",
       "docs": "",
-      "start": 434,
+      "start": 432,
       "length": 5,
       "line": 24,
-      "character": 24,
+      "character": 22,
       "targetString": "slash"
     },
     {
       "text": "function fnx(s: string): void",
       "docs": "Gets the length of a string",
-      "start": 459,
+      "start": 457,
       "length": 3,
-      "line": 27,
-      "character": 0,
+      "line": 25,
+      "character": 11,
       "targetString": "fnx"
     },
     {
       "text": "function greet(person: string, date: Date): void",
       "docs": "",
-      "start": 493,
+      "start": 547,
       "length": 5,
-      "line": 27,
-      "character": 34,
+      "line": 28,
+      "character": 43,
       "targetString": "greet"
     },
     {
       "text": "(parameter) person: string",
       "docs": "",
-      "start": 499,
+      "start": 553,
       "length": 6,
-      "line": 27,
-      "character": 40,
+      "line": 28,
+      "character": 49,
       "targetString": "person"
     },
     {
       "text": "(parameter) date: Date",
       "docs": "",
-      "start": 515,
+      "start": 569,
       "length": 4,
       "line": 28,
-      "character": 11,
+      "character": 65,
       "targetString": "date"
     },
     {
       "text": "interface Date",
       "docs": "Enables basic storage and retrieval of dates and times.",
-      "start": 521,
+      "start": 575,
       "length": 4,
-      "line": 28,
-      "character": 17,
+      "line": 31,
+      "character": 1,
       "targetString": "Date"
     },
     {
       "text": "var console: Console",
       "docs": "",
-      "start": 531,
+      "start": 585,
       "length": 7,
-      "line": 28,
-      "character": 27,
+      "line": 31,
+      "character": 11,
       "targetString": "console"
     },
     {
       "text": "(method) Console.log(...data: any[]): void",
       "docs": "",
-      "start": 539,
+      "start": 593,
       "length": 3,
-      "line": 28,
-      "character": 35,
+      "line": 31,
+      "character": 19,
       "targetString": "log"
     },
     {
       "text": "(parameter) person: string",
       "docs": "",
-      "start": 552,
+      "start": 606,
       "length": 6,
-      "line": 28,
-      "character": 48,
+      "line": 31,
+      "character": 32,
       "targetString": "person"
     },
     {
       "text": "(parameter) date: Date",
       "docs": "",
-      "start": 572,
+      "start": 626,
       "length": 4,
-      "line": 29,
-      "character": 1,
+      "line": 34,
+      "character": 7,
       "targetString": "date"
     },
     {
       "text": "(method) Date.toDateString(): string",
       "docs": "Returns a date as a string value.",
-      "start": 577,
+      "start": 631,
       "length": 12,
-      "line": 31,
-      "character": 3,
+      "line": 34,
+      "character": 12,
       "targetString": "toDateString"
     },
     {
       "text": "function greet(person: string, date: Date): void",
       "docs": "",
-      "start": 602,
+      "start": 656,
       "length": 5,
-      "line": 31,
-      "character": 28,
+      "line": 35,
+      "character": 13,
       "targetString": "greet"
     },
     {
       "text": "var Date: DateConstructor\nnew () => Date (+4 overloads)",
       "docs": "",
-      "start": 624,
+      "start": 678,
       "length": 4,
-      "line": 34,
-      "character": 5,
+      "line": 36,
+      "character": 2,
       "targetString": "Date"
     },
     {
       "text": "var console: Console",
       "docs": "",
-      "start": 663,
+      "start": 717,
       "length": 7,
-      "line": 35,
-      "character": 20,
+      "line": 37,
+      "character": 14,
       "targetString": "console"
     },
     {
       "text": "any",
-      "start": 671,
+      "start": 725,
       "length": 1,
-      "line": 35,
-      "character": 28,
+      "line": 37,
+      "character": 22,
       "targetString": "g"
     },
     {
@@ -547,72 +547,72 @@
     {
       "text": "const value2: number",
       "docs": "",
-      "start": 90,
+      "start": 95,
       "length": 6,
       "line": 5,
-      "character": 2,
+      "character": 7,
       "targetString": "value2"
     },
     {
       "text": "(alias) absolute(num: number): number\nimport absolute",
       "docs": "",
-      "start": 99,
+      "start": 104,
       "length": 8,
       "line": 5,
-      "character": 11,
+      "character": 16,
       "targetString": "absolute"
     },
     {
       "text": "function fn(s: any): void",
       "docs": "",
-      "start": 150,
+      "start": 157,
       "length": 2,
       "line": 8,
-      "character": 6,
+      "character": 13,
       "targetString": "fn"
     },
     {
       "text": "(parameter) s: any",
       "docs": "",
-      "start": 153,
+      "start": 160,
       "length": 1,
       "line": 8,
-      "character": 9,
+      "character": 16,
       "targetString": "s"
     },
     {
       "text": "var console: Console",
       "docs": "",
-      "start": 160,
+      "start": 167,
       "length": 7,
       "line": 8,
-      "character": 16,
+      "character": 23,
       "targetString": "console"
     },
     {
       "text": "(method) Console.log(...data: any[]): void",
       "docs": "",
-      "start": 168,
+      "start": 175,
       "length": 3,
       "line": 8,
-      "character": 24,
+      "character": 31,
       "targetString": "log"
     },
     {
       "text": "(parameter) s: any",
       "docs": "",
-      "start": 172,
+      "start": 179,
       "length": 1,
       "line": 8,
-      "character": 28,
+      "character": 35,
       "targetString": "s"
     },
     {
       "text": "any",
-      "start": 174,
+      "start": 181,
       "length": 6,
       "line": 8,
-      "character": 30,
+      "character": 37,
       "targetString": "substr"
     }
   ],
@@ -621,21 +621,21 @@
       "category": 1,
       "code": 2339,
       "length": 1,
-      "start": 695,
+      "start": 749,
       "line": 36,
       "character": 8,
       "renderedMessage": "Property 'g' does not exist on type 'Console'.",
-      "id": "err-2339-671-1"
+      "id": "err-2339-725-1"
     },
     {
       "category": 1,
       "code": 7006,
       "length": 1,
-      "start": 796,
+      "start": 803,
       "line": 8,
       "character": 12,
       "renderedMessage": "Parameter 's' implicitly has an 'any' type.",
-      "id": "err-7006-153-1"
+      "id": "err-7006-160-1"
     }
   ],
   "warnings": [
@@ -683,23 +683,23 @@
       "category": 2,
       "code": 6133,
       "length": 6,
-      "start": 733,
+      "start": 738,
       "line": 4,
       "character": 6,
       "renderedMessage": "'value2' is declared but its value is never read.",
-      "id": "warn-6133-90-6"
+      "id": "warn-6133-95-6"
     },
     {
       "category": 2,
       "code": 6133,
       "length": 2,
-      "start": 793,
+      "start": 800,
       "line": 8,
       "character": 9,
       "renderedMessage": "'fn' is declared but its value is never read.",
-      "id": "warn-6133-150-2"
+      "id": "warn-6133-157-2"
     }
   ],
-  "playgroundURL": "https://www.typescriptlang.org/play/#code/PTAEAEFsHsBMFcA2BTAXKZBnAdsgHgC4BQIEBAhgE4DmyB6AogMoBMADCyyWOMpZdEqZ0ARjZsAzKBYS2AFlAB2cQDZpEiQE5uEWMgDGiKuQIBLaNnQFK8ZDt6RTxUuABmplNnKQ0oSCYALTAA6AkxQEgAqSKJQSNAAcTpwggDkUE9qVNBoV1ByUExrU2xqWPjwAAdjSFAAN3JEW3zC4tLy4CJXeGx9MwtQV2w8FgAKYVbKEuoASlAAb1jQfQtMaBRgxGhqceDMeAAjIspRiRmZogBfInxKwQJBnr7zbHyj9fgCZFHseEh0X6QA58OaLUCgUx5H5-UAAHlAbDmlDo8Eor0BcVAAFoRABuJbIgio9F-fHXIimSB3SgPeZMSpTUoMciYaaXQYCWoAIkwDOmWOQLOmXKI9MZ1GZrPapAAegB+IhRGKYpJhUCpdKZbK5FrHablCDVSjeeqNZoFPXtOKdbq9fqvIZ4cboS2zBZLFbYNYbLY7EL7I7WU7nHTgsPh8EyqPRmMysNXRW3e7LVYPTBGTABUAAXlAAG0ALr5cKuwtLR2jLlyFhci4geU6WOK23PAbUZF0UaVPhrSyTaYAGlAsBMvgAIqPQR7VutkJttqMAAYACWQiC2oAAJPNu0ILJchwQ4OQAJ4Q8LbkdfULQCdfJhtHYzS4AQkXF3JYfbyE7XIAsuQsCwKYvZckOuAAO6gHe3whrKMagAAgqAACK8CmPoADWGB4JURhePa4JEJ63pztQESkBGoAygAPoqLjuJ43i+CUeh4KE4QUlSybzOQ7xNF87KuJyoBcsEwD+KkmAiiRDwNE06S5nx3qfN8OJ1mA4YNvBsbRsRqamgpLA5m8KlfKMWIsBpEbylRja6TKzZPIRQzjFO4IkbO85+nshzHMGH5EEAA",
+  "playgroundURL": "https://www.typescriptlang.org/play/#code/PTAEAEFsHsBMFcA2BTAXKZBnAdsgHgC4BQIEBAhgE4DmyB6AogMoBMADCyyWOMpZdEqZ0ARjZsAzKBYS2AFlAB2cQDZpEiQE5uEWMgDGiKuQIBLaNnQFK8ZDt6RTxUuABmplNnKQ0oSCYALTAA6AkxQEgAqSKJQSNAAcTpwggDkUE9qVNBoV1ByUExrU2xqWPjwAAdjSFAAN3JEW3zC4tLy4CJXeGx9MwtQV2w8FgAKYVbKEuoASlAAb1jQfQtMaBRgxGhqceDMeAAjIspRiRmZogBfInxKwQJBnr7zbHyj9fgCZFHseEh0X6QA58OaLUCgUx5H5-UAAHlAbDmlDo8Eor0BcVAAFoRABuJbIgio9F-fHXIimSB3SgPeZMSpTUoMciYaaXQYCWoAIkwDOmWOQLOmXKI9MZ1GZrPapAAegB+IhRGKYpJhUCpdKZbK5FrHablCDVSjeeqNZoFPXtOKdbq9fqvIZ4cboS2zBZLFbYNYbLY7EL7I7WU7nHTgsPh8EyqPRmMyiLk273ZarB6YIyYAKgAC8oAA2gBdfLhV0FpaO0ZcuQsLkXEDynSxqOgACa0HgoFwyFgLT0mH0U0q9sGglAAVM1ACiHHAQeBGgoAA7oIANagBnQSp8RAAT0VtueA2oyLoo03QgsLra1AANKBYCZfAARB+gj2rdbITbbUYAAwAEsgiBbKAAAk8xnms2CXLec73tuELhGB95fKE0DPl8TBXqMMyXAAhD+FzkmGR7ICeXIALLkLAsCmJBXK3rgC6gOh3whrKMagAAgqAACK8CmPoq63EYXhDhEnrep+1ARKQEagDKAA+iouO4njeL4JR6HgoThBSVJJvM5DvE0Xzsq4nKgFywTAP4qSYCKEkPA0TTpDmRnep83w4rWYDhvWsmRrGoAAGqAbYRCOaaLksNmbweV8oxYiwPkRv5vmBRxwVmsgXBdE8Q5DOMr7ghJH5fn6eyHMcwaEUQQA",
   "tags": []
 }

@@ -30,13 +30,13 @@ SpringEasing
  */
 function fnx(s: string) {
   console.log(s.substr(3))
-//            ^^^^^^^^^^^   
+//            ^^^^^^^^^^^ 
 }
 
 export const slash = [] as string[]
   fnx("42")
 //^?
-// ^^^^^
+// ^^^^^^^ You need a description for highlight to work properly
 
 function greet(person: string, date: Date) {
   console.log(\`Hello \${person}, today is \${date.toDateString()}!\`)
@@ -51,10 +51,10 @@ console.g
 import {absolute} from "./maths"
 const value = absolute(-1)
 //     ^?
-// ^^^^^^^^^^
+//    ^^^^^^ Velue
 const value2 = absolute(-2)
-//     ^?      
-// ^^^^^^^^
+//     ^?
+//    ^^^^^^ Value2
 
 function fn(s) {
   console.log(s.substr(3))
