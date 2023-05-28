@@ -1,5 +1,5 @@
 import type { CompilerOptions } from "../types.ts"
-import { Typescript, lzstring, ata } from "../deps.ts"
+import { Typescript, lzstring } from "../deps.ts"
 
 import {
   createDefaultMapFromCDN,
@@ -7,7 +7,7 @@ import {
   createVirtualTypeScriptEnvironment,
 } from "./ts-vfs.ts";
 
-const { setupTypeAcquisition } = ata;
+import { setupTypeAcquisition } from "./ts-ata.ts";
 
 const shouldDebug = (Deno.env.get('DEBUG'))
 const log = shouldDebug ? console.log : (_message?: any, ..._optionalParams: any[]) => ""
@@ -718,17 +718,21 @@ export async function twoslasher(code: string, extension: string, options: TwoSl
       logger: console,
       delegate: {
         receivedFile(code, path) {
-          console.log(path)
+          log(path)
           env.createFile(path, code)
         },
         progress: (downloaded: number, total: number) => {
-          // console.log({ dl, ttl })
+          log({ downloaded, total })
         },
         started: () => {
-          console.log("ATA start")
+          log("ATA start")
+        },
+        errorMessage(msg, err) {
+          log("ATA error", msg, err)
+          resolve()
         },
         finished: f => {
-          console.log("ATA done")
+          log("ATA done")
           resolve()
         },
       },

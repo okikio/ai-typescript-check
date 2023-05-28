@@ -27,8 +27,19 @@ router.post("/twoslash", async ({ request }) => {
   const { code, extension, ...opts }: TwoslashRequestOptions = contentType && /multipart\/form\-data/.test(contentType) ? 
     Object.fromEntries((await request.formData()).entries()): 
     await request.json();
-  
-  return Response.json(await twoslasher(code, extension, opts));
+
+  try {
+    const twoslash = await twoslasher(code, extension, opts);
+    console.log("twoslash ", twoslash);
+    return Response.json(twoslash);
+  } catch (e) {
+    return new Response(e.toString(), {
+      status: 400,
+      headers: new Headers([
+        ['Content-Type', "text/plain"]
+      ]),
+    });
+  }
 });
 
 router.get("/.well-known/*", async ({ request }) => { 
@@ -65,7 +76,7 @@ router.get("/favicon.ico", async () => {
   })
 });
 
-router.get("/favicon.svg", async ({ request }) => { 
+router.get("/favicon.svg", async () => { 
   const ext = ".svg";
   return new Response(await Deno.readFile(join(__dirname, "./favicon/favicon.svg")), {
     status: 200,
@@ -75,38 +86,4 @@ router.get("/favicon.svg", async ({ request }) => {
   })
 });
 
-router.get("/articles/:id", ({ match }) => {
-  return Response.json({
-    id: match.pathname.groups.id,
-  });
-});
-
 serve(router.dispatch.bind(router));
-
-// serve(async (req: Request) => {
-//   let { pathname, searchParams } = new URL(req.url);
-//   const urlPattern = new URLPattern({ pathname: "/twoslash" });
-  
-//   if (urlPattern.test(pathname)) { 
-//     const url = new URL(pathname.replace(URL_PATH, ""), `https://raw.githubusercontent.com`);
-//     const res = await fetch(url);
-
-//     const headers = Object.fromEntries([...res.headers]);
-//     const typescriptTypes = new URL(URL_PATH + url.pathname, "https://github-ts.okikio.workers.dev");
-//     const finalHeaders = {
-//       ...headers,
-//       ...Object.fromEntries([
-//         ["content-type", searchParams.has("js") ? "text/javascript" : "text/typescript"],
-//         ['accept-ranges', 'bytes'],
-//         ['access-control-allow-origin', '*'],
-//         ['cache-control', 'max-age=30, public'],
-//         ...(!pathname.startsWith(URL_PATH) ? [['x-typescript-types', typescriptTypes.toString()]] : [])
-//       ])
-//     };
-
-//     return new Response(await res.arrayBuffer(), {
-//       headers: finalHeaders,
-//       status: 200,
-//     });
-//   }
-// });

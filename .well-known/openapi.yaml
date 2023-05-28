@@ -43,9 +43,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/TwoSlashReturn'
         '400':
-          description: Invalid input, errors were found in the sample but not included in an errors tag
+          description: Errors were thrown in the sample, but not included in an errors tag
           content:
-            application/json:
+            text/plain:
               schema:
                 $ref: '#/components/schemas/TwoslashError'
 components:
@@ -207,14 +207,12 @@ components:
         defaultOptions: 
           noErrors: false
           errors: [1016, 2307]
-          showEmit: true
-          showEmittedFile: 'index.js'
           noStaticSemanticInfo: false
           emit: false
           noErrorValidation: false
         defaultCompilerOptions: 
-          target: 'es5'
-          module: 'commonjs'
+          target: 'es2022'
+          module: 'es2022'
         fsMap: 
           'index.ts': 'export const x = 10'
         customTags: ['tag1', 'tag2']

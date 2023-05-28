@@ -256,7 +256,8 @@ export const knownLibFilesForCompilerOptions = async (
     ...upToDateLibsList,
   ]));
 
-  const targetToCut = ts.ScriptTarget[target].toLowerCase();
+  // @ts-ignore: This is getting annoying
+  const targetToCut: string = ts.ScriptTarget[typeof target === "string" ? Typescript.ScriptTarget[target.toUpperCase()] : target].toString().toLowerCase();
   const matches = files.filter((f) =>
     f.startsWith(`lib.${targetToCut}`)
   );
@@ -343,14 +344,16 @@ export const createDefaultMapFromCDN = async (
 
   // A localstorage and lzzip aware version of the lib files
   async function cached() {
+    const keysToDelete: Deno.KvKey[] = [];
     // List out all entries with keys starting with `["ts-lib"]`
     for await (const entry of kv.list({ prefix: ["ts-lib"] })) {
       // Remove anything which isn't from this version
       if (!entry.key.includes(version)) {
-        await kv.delete(entry.key);
+        keysToDelete.push(entry.key)
       }
     }
 
+    await Promise.all(keysToDelete.map((key) => kv.delete(key)));
     const contents = await Promise.all(
       files.map(async (lib) => {
         const cacheKey = ["ts-lib", version, lib];
