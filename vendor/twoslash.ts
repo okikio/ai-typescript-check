@@ -696,7 +696,7 @@ export async function twoslasher(code: string, extension: string, options: TwoSl
 
   // In a browser we want to DI everything, in node we can use local infra
   const useFS = !!options.fsMap
-  const vfs = useFS && options.fsMap ? options.fsMap : await createDefaultMapFromCDN(
+  const vfs = useFS && options.fsMap ? (options.fsMap instanceof Map ? options.fsMap : new Map<string, string>(Object.entries(options.fsMap))) : await createDefaultMapFromCDN(
     compilerOptions,
     ts.version,
     true,
