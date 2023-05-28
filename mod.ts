@@ -1,4 +1,6 @@
 import { serve, dewy, cors, path, media_types } from "./deps.ts";
+import { twoslasher } from "./vendor/twoslash.ts";
+import type { TwoSlashOptions } from "./vendor/twoslash.ts";
 
 const { extname, basename, dirname, fromFileUrl, join } = path;
 const { Router } = dewy;
@@ -6,33 +8,21 @@ const { contentType } = media_types
 
 const __dirname = dirname(fromFileUrl(import.meta.url));
 
+interface TwoslashRequestOptions extends TwoSlashOptions {
+  code: string;
+  extension: string;
+}
+
 const router = new Router();
 router.use(cors());
-router.get("/twoslash", async ({ request }) => {
-  // const formData = await request.formData();
-  // request.
-
-  console.log({ request });
-  
-  return Response.json({
-    message: "Hello World",
-  });
-});
 router.post("/twoslash", async ({ request }) => {
   const headers = request.headers;
   const contentType = headers.get("content-type");
-  const json =  contentType && /multipart\/form\-data/.test(contentType) ? 
+  const { code, extension, ...opts }: TwoslashRequestOptions = contentType && /multipart\/form\-data/.test(contentType) ? 
     Object.fromEntries((await request.formData()).entries()): 
     await request.json();
   
-  console.log({ contentType, json });
-  
-  return Response.json({
-    message: "Hello World",
-    json
-  }, {
-    status: 200,
-  });
+  return Response.json(await twoslasher(code, extension, opts));
 });
 
 router.get("/.well-known/*", async ({ request }) => { 
