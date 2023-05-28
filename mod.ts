@@ -81,7 +81,7 @@ router.get("/articles/:id", ({ match }) => {
   });
 });
 
-serve(router.dispatch.bind(router), { port: 8080 });
+serve(router.dispatch.bind(router));
 
 // serve(async (req: Request) => {
 //   let { pathname, searchParams } = new URL(req.url);
