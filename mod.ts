@@ -21,6 +21,26 @@ router.get("/", () => {
     POST: "/twoslash - Accepts a JSON & Form Data body with the following properties: code, extension, and options."
   })
 });
+
+router.get("/twoslash", async ({ request }) => {
+  const url = new URL(request.url);
+  const decodedQuery: TwoslashRequestOptions = JSON.parse(url.searchParams.get("options")!)
+  const { code, extension, ...opts } = decodedQuery;
+
+  try {
+    const twoslash = await twoslasher(code, extension, opts);
+    console.log("twoslash ", twoslash);
+    return Response.json(twoslash);
+  } catch (e) {
+    return new Response(e.toString(), {
+      status: 400,
+      headers: new Headers([
+        ['Content-Type', "text/plain"]
+      ]),
+    });
+  }
+});
+
 router.post("/twoslash", async ({ request }) => {
   const headers = request.headers;
   const contentType = headers.get("content-type");
