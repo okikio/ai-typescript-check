@@ -12,8 +12,10 @@ info:
     url: https://okikio.dev
   termsOfService: https://okikio.dev/terms
 servers:
-  - url: https://okikio-redesigned-fortnight-5gpg5vgrqvxhx5v-8080.preview.app.github.dev/
-    description: Local server
+  - url: https://ts-check.okikio.dev/
+    description: Main server      
+  - url: https://ts-check.deno.dev/
+    description: Fallback server
 externalDocs: 
   description: Shiki Twoslash's documentation, it not quite the same as the full TypeScript Twoslash docs but it should cover all the basics required 
   url: https://shikijs.github.io/twoslash/
