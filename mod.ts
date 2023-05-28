@@ -15,6 +15,12 @@ interface TwoslashRequestOptions extends TwoSlashOptions {
 
 const router = new Router();
 router.use(cors());
+router.get("/", () => {
+  return Response.json({
+    message: "Hello World! The API is working!",
+    POST: "/twoslash - Accepts a JSON & Form Data body with the following properties: code, extension, and options."
+  })
+});
 router.post("/twoslash", async ({ request }) => {
   const headers = request.headers;
   const contentType = headers.get("content-type");
