@@ -1,4 +1,8 @@
 import { twoslasher } from "../vendor/twoslash.ts";
+import { path } from "../deps.ts";
+
+const { dirname, fromFileUrl, join } = path;
+const __dirname = dirname(fromFileUrl(import.meta.url));
 
 const slash = twoslasher(`\
 // @module: esnext
@@ -64,4 +68,4 @@ function fn(s) {
 //   slash: await slash
 // })
 
-await Deno.writeFile("./vendor.json", new TextEncoder().encode(JSON.stringify(await slash, null, 2)))
+await Deno.writeFile(join(__dirname, "./vendor.json"), new TextEncoder().encode(JSON.stringify(await slash, null, 2)))
