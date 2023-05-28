@@ -14,8 +14,6 @@ info:
 servers:
   - url: https://ts-check.okikio.dev/
     description: Main server      
-  - url: https://ts-check.deno.dev/
-    description: Fallback server
 externalDocs: 
   description: Shiki Twoslash's documentation, it not quite the same as the full TypeScript Twoslash docs but it should cover all the basics required 
   url: https://shikijs.github.io/twoslash/
