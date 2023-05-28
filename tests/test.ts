@@ -1,5 +1,4 @@
-import { twoslasher } from "./vendor/twoslash.ts";
-
+import { twoslasher } from "../vendor/twoslash.ts";
 
 const slash = twoslasher(`\
 // @module: esnext
