@@ -12,7 +12,7 @@ info:
     url: https://okikio.dev
   termsOfService: https://okikio.dev/terms
 servers:
-  - url: https://ts-check.okikio.dev/
+  - url: https://ts-check.deno.dev/
     description: Main server      
 externalDocs: 
   description: Shiki Twoslash's documentation, it not quite the same as the full TypeScript Twoslash docs but it should cover all the basics required 
