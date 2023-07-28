@@ -23,11 +23,30 @@ router.get("/", () => {
 });
 
 router.get("/twoslash", async ({ request }) => {
-  const url = new URL(request.url);
-  const decodedQuery: TwoslashRequestOptions = JSON.parse(url.searchParams.get("options")!)
-  const { code, extension, ...opts } = decodedQuery;
-
   try {
+    const url = new URL(request.url);
+    if (!url.search) {
+      return Response.json({
+        title: "You can send requests in these formats",
+        requests: [
+          `GET: /twoslash?options={"code":"import { hasTransferables } from \"transferables\"","extension":"ts"}`,
+          `GET: /twoslash?code=import { hasTransferables } from \"transferables\"&extension=ts&options={"defaultOptions":{"noErrors":true}}`,
+          `POST: /twoslash --> JSON Body={"code":"import { hasTransferables } from \"transferables\"","extension":"ts"}`,
+          `POST: /twoslash --> FormData Body={"code":"import { hasTransferables } from \"transferables\"","extension":"ts"}`
+        ]
+      })
+    }
+
+    const codeParam = url.searchParams.get("code")! || undefined;
+    const extensionParam = url.searchParams.get("extension")! || url.searchParams.get("ext")! || undefined;
+    const optionsParam = url.searchParams.get("options")! || url.searchParams.get("option")! || "{}";
+    
+    const decodedQuery: TwoslashRequestOptions = Object.assign(
+      JSON.parse(optionsParam), 
+      { code: codeParam, extension: extensionParam }
+    )
+    const { code, extension = "ts", ...opts } = decodedQuery;
+
     const twoslash = await twoslasher(code, extension, opts);
     console.log("twoslash ", twoslash);
     return Response.json(twoslash);
@@ -42,13 +61,13 @@ router.get("/twoslash", async ({ request }) => {
 });
 
 router.post("/twoslash", async ({ request }) => {
-  const headers = request.headers;
-  const contentType = headers.get("content-type");
-  const { code, extension, ...opts }: TwoslashRequestOptions = contentType && /multipart\/form\-data/.test(contentType) ? 
-    Object.fromEntries((await request.formData()).entries()): 
-    await request.json();
-
   try {
+    const headers = request.headers;
+    const contentType = headers.get("content-type");
+    const { code, extension, ...opts }: TwoslashRequestOptions = contentType && /multipart\/form\-data/.test(contentType) ? 
+      Object.fromEntries((await request.formData()).entries()): 
+      await request.json();
+
     const twoslash = await twoslasher(code, extension, opts);
     console.log("twoslash ", twoslash);
     return Response.json(twoslash);
@@ -107,3 +126,14 @@ router.get("/favicon.svg", async () => {
 });
 
 serve(router.dispatch.bind(router));
+
+function isDecodeableURI(param: string) {
+  let decodeUriFirst = false;
+  try {
+    JSON.parse(decodeURIComponent(param));
+    decodeUriFirst = true;
+  } catch(e) {
+    console.error("Error Decoding URI, Skip Decoding URI", e);
+  }
+  return decodeUriFirst;
+}
