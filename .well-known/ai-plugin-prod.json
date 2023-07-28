@@ -9,10 +9,10 @@
   },
   "api": {
     "type": "openapi",
-    "url": "https://ts-check.deno.dev/.well-known/openapi.yaml",
+    "url": "https://ts-check.okikio.dev/.well-known/openapi.yaml",
     "is_user_authenticated": false
   },
-  "logo_url": "https://ts-check.deno.dev/.well-known/logo.png",
+  "logo_url": "https://ts-check.okikio.dev/.well-known/logo.png",
   "contact_email": "hey@okikio.dev",
   "legal_info_url": "https://okikio.dev/privacy"
 }
