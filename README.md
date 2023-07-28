@@ -11,8 +11,8 @@ formData.append("code", "import { hasTransferables } from \"transferables\"")
 formData.append("extension", "ts");
 
 const res = await fetch("https://ts-check.okikio.dev/twoslash", {
-    method: "POST",
-    body: formData
+  method: "POST",
+  body: formData
 })
 
 console.log({
@@ -22,10 +22,11 @@ console.log({
 // OR
 
 const options = JSON.stringify({
-  "code": "import { hasTransferables } from \"transferables\"",
+  "code": `import { hasTransferables } from "transferables"`,
   "extension": "ts"
 });
 
+// 
 const res = await fetch(`https://ts-check.okikio.dev/twoslash?options=${options}`)
 
 console.log({

@@ -1,11 +1,10 @@
-import { cors, dewy, media_types, path, serve } from "./deps.ts";
+import { cors, oak, path } from "./deps.ts";
 import { twoslasher } from "./vendor/twoslash.ts";
 import type { TwoSlashOptions } from "./vendor/twoslash.ts";
 
-const { extname, basename, dirname, fromFileUrl, join } = path;
-const { Router } = dewy;
-const { contentType } = media_types;
+const { Application, Router, send, isHttpError, Status } = oak;
 
+const { dirname, fromFileUrl, join } = path;
 const __dirname = dirname(fromFileUrl(import.meta.url));
 
 interface TwoslashRequestOptions extends TwoSlashOptions {
@@ -14,33 +13,65 @@ interface TwoslashRequestOptions extends TwoSlashOptions {
 }
 
 const router = new Router();
-// router.use(cors());
-router.get("/", () => {
-  try {
-    return Response.json({
+router
+  .get("/", (context) => {
+    context.response.body = ({
       hey: "Hello World! The API is working!",
       message:
         "/twoslash - Accepts a JSON & Form Data body with the following properties: code, extension, and options.",
+    })
+  })
+  .get("/.well-known/(.*)", async (context) => {
+    await send(context, context.request.url.pathname.replace("/.well-known", ""), {
+      root: join(Deno.cwd(), "./.well-known"),
+      index: "ai-plugin.json",
     });
-  } catch (e) {
-    return new Response(e.toString(), {
-      status: 400,
-      headers: new Headers([
-        ["Content-Type", "text/plain"],
-      ]),
+  })
+  .get("/favicon/(.*)", async (context) => {
+    await send(context, context.request.url.pathname.replace("/favicon", ""), {
+      root: join(__dirname, "./favicon"),
+      index: "favicon.svg",
     });
-  }
-});
-
-router.get("/twoslash", async ({ request }) => {
-  try {
+  })
+  .get("/favicon.svg", async (context) => {    
+    await send(context, context.request.url.pathname, {
+      root: join(__dirname, "./favicon"),
+      index: "favicon.svg",
+    });
+  })
+  .get("/favicon.ico", async (context) => {    
+    await send(context, context.request.url.pathname, {
+      root: join(__dirname, "./favicon"),
+      index: "favicon.ico",
+    });
+  })
+  .options("/twoslash", cors()) // enable pre-flight request for OPTIONS request
+  .post("/twoslash", async (context) => {
+    const { request } = context;
+    const contentType = request.headers.get("content-type");
     console.log({
-      method: "get",
+      method: "post",
       url: request.url,
+      contentType,
     });
-    const url = new URL(request.url);
+    
+    const { type, value } = request.body();
+    if (type !== "form-data" && type !== "json") context.throw(Status.UnsupportedMediaType, `${type} isn't a supported content type`);
+    
+    // Max file size to handle
+    const data: TwoslashRequestOptions = type === "form-data" ? (await value.read({ maxSize: 10000000 })).fields : await value; 
+    const { code, extension, ...opts }  = data;
+
+    const twoslash = await twoslasher(code, extension, opts);
+    console.log("twoslash ", twoslash);
+    context.response.body = twoslash;
+  })
+  .get("/twoslash", async (context) => {
+    const { request } = context;
+
+    const url = request.url;
     if (!url.search) {
-      return Response.json({
+      context.response.body = ({
         title: "You can send requests in these formats",
         requests: [
           `GET: /twoslash?options={"code":"import { hasTransferables } from \"transferables\"","extension":"ts"}`,
@@ -49,150 +80,64 @@ router.get("/twoslash", async ({ request }) => {
           `POST: /twoslash --> FormData Body={"code":"import { hasTransferables } from \"transferables\"","extension":"ts"}`,
         ],
       });
-    }
 
-    const codeParam = url.searchParams.get("code")! || undefined;
-    const extensionParam = url.searchParams.get("extension")! ||
-      url.searchParams.get("ext")! || undefined;
-    const optionsParam = url.searchParams.get("options")! ||
-      url.searchParams.get("option")! || "{}";
+      return;
+    } 
+
+    const params = url.searchParams;
+    const codeParam = params.get("code")! || undefined;
+    const extensionParam = 
+      params.get("extension")! ||
+      params.get("ext")! || 
+      undefined;
+    const optionsParam = 
+      params.get("options")! || 
+      params.get("option")! || 
+      "{}";
 
     const decodedQuery: TwoslashRequestOptions = Object.assign(
-      JSON.parse(optionsParam),
       { code: codeParam, extension: extensionParam },
+      JSON.parse(optionsParam),
     );
     const { code, extension = "ts", ...opts } = decodedQuery;
 
     const twoslash = await twoslasher(code, extension, opts);
     console.log("twoslash ", twoslash);
-    return Response.json(twoslash);
-  } catch (e) {
-    return new Response(e.toString(), {
-      status: 400,
-      headers: new Headers([
-        ["Content-Type", "text/plain"],
-      ]),
-    });
-  }
-});
+    context.response.body = twoslash;
+  });
 
-router.post("/twoslash", async ({ request }) => {
+const app = new Application();
+app.use(async (context, next) => {
   try {
-    const headers = request.headers;
-    const contentType = headers.get("content-type");
-    console.log({
-      method: "post",
-      url: request.url,
-      contentType,
-    });
-    const { code, extension, ...opts }: TwoslashRequestOptions =
-      contentType && /multipart\/form\-data/.test(contentType)
-        ? Object.fromEntries((await request.formData()).entries())
-        : await request.json();
-
-    const twoslash = await twoslasher(code, extension, opts);
-    console.log("twoslash ", twoslash);
-    return Response.json(twoslash);
-  } catch (e) {
-    return new Response(e.toString(), {
-      status: 400,
-      headers: new Headers([
-        ["Content-Type", "text/plain"],
-      ]),
-    });
+    await next();
+  } catch (err) {
+    if (isHttpError(err)) {
+      context.response.status = err.status;
+      const { message, status, stack } = err;
+      if (context.request.accepts("json")) {
+        context.response.body = { message, status, stack };
+        context.response.type = "json";
+      } else {
+        context.response.body = `${status} ${message}\n\n${stack ?? ""}`;
+        context.response.type = "text/plain";
+      }
+    } else {
+      // handle all other Errors
+      context.response.status = 500;
+      context.response.body = "Internal server error";
+      console.error(err);
+    }
   }
 });
 
-router.get("/.well-known/*", async ({ request }) => {
-  try {
-    const url = new URL(request.url);
-    const ext = extname(url.pathname);
-    const fileName = basename(url.pathname);
-    return new Response(
-      await Deno.readFile(join(__dirname, "./.well-known", fileName)),
-      {
-        status: 200,
-        headers: new Headers([
-          ["Content-Type", contentType(ext) ?? "application/json"],
-        ]),
-      },
-    );
-  } catch (e) {
-    return new Response(e.toString(), {
-      status: 400,
-      headers: new Headers([
-        ["Content-Type", "text/plain"],
-      ]),
-    });
-  }
+app.use(cors()); // Enable CORS for All Routes
+app.use(router.routes());
+
+// 404 middleware
+app.use((context) => {
+  context.response.status = Status.NotFound;
+  context.response.body = "404 Not Found";
 });
 
-router.get("/favicon/*", async ({ request }) => {
-  try {
-    const url = new URL(request.url);
-    const ext = extname(url.pathname);
-    const fileName = basename(url.pathname);
-    return new Response(
-      await Deno.readFile(join(__dirname, "./favicon", fileName)),
-      {
-        status: 200,
-        headers: new Headers([
-          ["Content-Type", contentType(ext) ?? "text/plain"],
-        ]),
-      },
-    );
-  } catch (e) {
-    return new Response(e.toString(), {
-      status: 400,
-      headers: new Headers([
-        ["Content-Type", "text/plain"],
-      ]),
-    });
-  }
-});
-
-router.get("/favicon.ico", async () => {
-  try {
-    const ext = ".ico";
-    return new Response(
-      await Deno.readFile(join(__dirname, "./favicon/favicon.ico")),
-      {
-        status: 200,
-        headers: new Headers([
-          ["Content-Type", contentType(ext)],
-        ]),
-      },
-    );
-  } catch (e) {
-    return new Response(e.toString(), {
-      status: 400,
-      headers: new Headers([
-        ["Content-Type", "text/plain"],
-      ]),
-    });
-  }
-});
-
-const ext = ".svg";
-router.get("/favicon.svg", async () => {
-  try {
-    return new Response(
-      await Deno.readFile(join(__dirname, "./favicon/favicon.svg")),
-      {
-        status: 200,
-        headers: new Headers([
-          ["Content-Type", contentType(ext)],
-        ]),
-      },
-    );
-  } catch (e) {
-    return new Response(e.toString(), {
-      status: 400,
-      headers: new Headers([
-        ["Content-Type", "text/plain"],
-      ]),
-    });
-  }
-});
-
-serve(router.dispatch.bind(router));
+console.info("CORS-enabled web server listening on port 8000");
+await app.listen({ port: 8000 });

@@ -1,0 +1,18 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "TypeScript Twoslash API",
+  "name_for_model": "typescript_twoslash_api",
+  "description_for_human": "Lint, auto-complete, error check, and type check ts, jsx/tsx, and js files.",
+  "description_for_model": "Processes TypeScript and JavaScript code using twoslash comments, feeds it to an API for linting, autocompletion, error/type checks, tooltips, and more for TS, JSX/TSX, JS files.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://ts-check.deno.dev/.well-known/openapi.yaml",
+    "is_user_authenticated": false
+  },
+  "logo_url": "https://ts-check.deno.dev/.well-known/logo.png",
+  "contact_email": "hey@okikio.dev",
+  "legal_info_url": "https://okikio.dev/privacy"
+}
