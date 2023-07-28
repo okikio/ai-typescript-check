@@ -1,29 +1,70 @@
+# ai-typescript-check
 
-Partially modified version of @typescript/twoslash, Use an icon from the https://shikijs.github.io/twoslash/ webpage
-
-# deno-github-proxy
-Allows for easy imports of ts files from GitHub while still keeping type inferencing.
+Lint, auto-complete, error check, and type check typescript, jsx/tsx, and javascript files using an API.
+Uses a partially modified version of [`@typescript/twoslash`](https://shikijs.github.io/twoslash/).
 
 Example usage in Deno
 
 ```ts
-import * as neo4j from 'https://github-ts.okikio.workers.dev/neo4j/neo4j-javascript-driver/5.0/packages/neo4j-driver-deno/lib/mod.ts';
+const formData = new FormData();
+formData.append("code", "import { hasTransferables } from \"transferables\"")
+formData.append("extension", "ts");
 
-/**
- * Create a new driver instance to connect to Neo4j
- * @type {neo4j.Driver}
- * @see https://neo4j.com/docs/api/javascript-driver/current/class/src/driver.js~Driver.html
- * @see https://neo4j.com/docs/api/javascript-driver/current/global.html#Config
- */
-const driver: neo4j.Driver = neo4j.driver(
-  Deno.env.get('NEO4J_URI') as string,
-  neo4j.auth.basic( 
-    Deno.env.get('NEO4J_USERNAME') as string, 
-    Deno.env.get('NEO4J_PASSWORD') as string 
-  )
-);
+const res = await fetch("https://ts-check.okikio.dev/twoslash", {
+    method: "POST",
+    body: formData
+})
 
-export default driver;
+console.log({
+  json: await res.json()
+})
+
+// OR
+
+const options = JSON.stringify({
+  "code": "import { hasTransferables } from \"transferables\"",
+  "extension": "ts"
+});
+
+const res = await fetch(`https://ts-check.okikio.dev/twoslash?options=${options}`)
+
+console.log({
+  json: await res.json()
+})
 ```
 
-> ^ You can also use this to fetch Javascript files but you'll need to add the `/?js` search query like so, https://github-ts.okikio.workers.dev/okikio/transferables/main/lib/index.mjs?js
+Results
+
+```json
+{
+  "code": "import { hasTransferables } from \"transferables\"",
+  "extension": "ts",
+  "highlights": [],
+  "queries": [],
+  "staticQuickInfos": [
+    {
+      "text": "(alias) function hasTransferables(obj: unknown, streams?: boolean, maxCount?: number): boolean\nimport hasTransferables",
+      "docs": "Quickly checks to see if input contains at least one transferable object, up to a max number of iterations\nThanks @aaorris for the help optimizing perf.",
+      "start": 9,
+      "length": 16,
+      "line": 0,
+      "character": 9,
+      "targetString": "hasTransferables"
+    }
+  ],
+  "errors": [],
+  "warnings": [
+    {
+      "category": 2,
+      "code": 6133,
+      "length": 48,
+      "line": 0,
+      "character": 0,
+      "renderedMessage": "'hasTransferables' is declared but its value is never read.",
+      "id": "warn-6133-0-48"
+    }
+  ],
+  "playgroundURL": "https://www.typescriptlang.org/play/#code/JYWwDg9gTgLgBAbzgCwIYGcAqVUDt0BmApjgEYA2R6cAvnAVBCHAEQw77FmXotA",
+  "tags": []
+}
+```
