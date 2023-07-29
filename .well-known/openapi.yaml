@@ -230,6 +230,14 @@ components:
       description: The extension of the code file. Can be 'typescript', 'javascript', 'json', 'jsn', 'ts', 'js', 'tsx', or 'jsx'.
       examples: 
         - "ts"
+        - "typescript"
+        - "javascript"
+        - "json"
+        - "jsn"
+        - "ts"
+        - "js"
+        - "tsx"
+        - "jsx"
     TwoSlashOptions:
       type: object
       properties:
@@ -295,7 +303,7 @@ components:
       properties:
         code:
           type: string
-          description: The resulting code after twoslash.
+          description: The resulting code after typescript twoslash has analyzed, processed, and transformed the input code.
         extension:
           type: string
         highlights:
@@ -1391,68 +1399,67 @@ components:
         allowImportingTsExtensions:
           type: boolean
           description: | 
-            Allows importing TypeScript files with .ts extension.
-            By enabling this option, TypeScript files with the `.ts` extension can be imported in the TypeScript project. By default, only files with the `.tsx` and `.d.ts` extensions are allowed to be imported.
+            Allows importing TypeScript files with a `.ts` extension.
+            By enabling this option, TypeScript files with the `.ts` extension can be imported in TypeScript projects.
           examples: [true]
         allowJs:
           type: boolean
           description: | 
-            Allows JavaScript files to be included in the TypeScript project.
-            When this option is enabled, JavaScript files (`.js`) can be included and compiled within the TypeScript project. This is useful for mixed JavaScript and TypeScript projects.
+            Allows JavaScript files to be included in TypeScript projects.
+            When this option is enabled, JavaScript files (`.js`) can be included and compiled within TypeScript projects.
           examples: [true]
         allowArbitraryExtensions:
           type: boolean
           description: | 
-            Allows importing files with arbitrary extensions.
-            Enabling this option allows importing files with extensions that are not commonly associated with TypeScript or JavaScript, such as `.txt`, `.css`, or custom file extensions. It can be useful for special scenarios but should be used with caution.
+            Allows importing files with arbitrary extensions, such as `.txt`, `.css`, or custom file extensions.
           examples: [false]
         allowSyntheticDefaultImports:
           type: boolean
           description: | 
             Allows synthetic default imports for modules.
-            Synthetic default imports enable importing modules that have a default export, even if the module itself doesn't explicitly define a default export. When enabled, TypeScript will attempt to generate an appropriate default import. This is useful when working with modules that don't provide a default export but are commonly consumed with default imports.
+            Synthetic default imports enable importing modules that have a default export, even if the module itself doesn't explicitly define a default export.
           examples: [true]
         allowUmdGlobalAccess:
           type: boolean
           description: | 
             Allows accessing UMD globals from modules.
-            When using UMD modules, this option allows TypeScript to access global variables defined by UMD modules directly. UMD modules typically expose their functionality via global variables, and enabling this option makes those globals accessible from TypeScript code.
+            When using UMD modules, this option allows TypeScript to access global variables defined by UMD modules directly.
           examples: [true]
         allowUnreachableCode:
           type: boolean
           description: | 
-            Allows unreachable code in the TypeScript project.
-            By default, TypeScript flags unreachable code as an error. However, in certain cases, such as during development or debugging, it may be necessary to have unreachable code that is intentionally not executed. Enabling this option allows the presence of unreachable code without raising an error.
+            Allows unreachable code in TypeScript projects.
+            By default, TypeScript flags unreachable code as an error. Enabling this option allows the presence of unreachable code without raising an error.
           examples: [false]
         allowUnusedLabels:
           type: boolean
           description: | 
-            Allows unused labels in the TypeScript project.
-            Labels in TypeScript are used to mark specific locations in the code for control flow purposes. By default, TypeScript raises an error when a label is declared but not used. Enabling this option allows the presence of unused labels without raising an error.
+            Allows unused labels in TypeScript projects.
+            By default, TypeScript raises an error when a label is declared but not used. Enabling this option allows the presence of unused labels without raising an error.
           examples: [false]
         alwaysStrict:
           type: boolean
           description: | 
-            Enables strict mode for all files in the TypeScript project.
-            Strict mode enforces stricter rules and more rigorous type checking in TypeScript. Enabling this option ensures that strict mode is applied to all files in the TypeScript project, regardless of whether they include a `"use strict"` directive or not.
+            Enables strict mode for all files in TypeScript projects.
+            Enabling this option ensures that strict mode is applied to all files in TypeScript projects, regardless of whether they include a `"use strict"` directive or not.
           examples: [true]
         baseUrl:
           type: string
           description: | 
             Specifies the base directory for resolving non-relative module names.
-            The `baseUrl` option is used to specify the base directory that TypeScript uses for resolving non-relative module names. When a module name is encountered that does not start with `./` or `../`, TypeScript will resolve the module path relative to the `baseUrl` directory.
+            When a module name is encountered that does not start with `./` or `../`, TypeScript will resolve the module path relative to the `baseUrl` directory.
           examples: ["./src"]
         charset:
           type: string
           description: | 
             Specifies the character set of the input files.
-            The `charset` option allows you to specify the character set encoding used for reading TypeScript source files. It is important to ensure that the specified character set matches the actual encoding of the source files to avoid potential parsing issues.
+            The `charset` option allows you to specify the character set encoding used for reading TypeScript source files.
           examples: ["utf-8"]
         checkJs:
           type: boolean
           description: | 
             Enables type checking for JavaScript files.
-            By enabling the `checkJs` option, TypeScript will perform type checking on JavaScript files (`.js`). This can help catch type-related issues and provide better tooling support for JavaScript code within a TypeScript project.
+            By enabling the `checkJs` option, TypeScript will perform type checking on JavaScript files (`.js`).
           examples: [true]
         customConditions:
           type: array
@@ -1460,103 +1467,103 @@ components:
             type: string
           description: | 
             Specifies custom conditions for conditional type inclusion.
-            Custom conditions are used in TypeScript's conditional types to control type inclusion based on specific conditions. This option allows you to specify custom conditions that can be used within your project's conditional types, providing flexibility in type checking and inference.
+            Custom conditions are used in TypeScript's conditional types to control type inclusion based on specific conditions.
           examples: ["A", "B"]
         declaration:
           type: boolean
           description: | 
-            Generates corresponding .d.ts files for the TypeScript project.
-            Enabling the `declaration` option instructs TypeScript to generate corresponding declaration files (`.d.ts`) alongside the emitted JavaScript files. Declaration files contain type information and enable better tooling support for using TypeScript code from other JavaScript projects.
+            Generates corresponding .d.ts files for TypeScript projects.
+            Enabling the `declaration` option instructs TypeScript to generate corresponding declaration files (`.d.ts`) alongside the emitted JavaScript files.
           examples: [true]
         declarationMap:
           type: boolean
           description: | 
-            Generates source maps for .d.ts files.
-            When the `declarationMap` option is enabled, TypeScript will generate source maps for the declaration files (`.d.ts`). Source maps provide a mapping between the emitted JavaScript files and their corresponding TypeScript source files, allowing for improved debugging and tooling support.
+            Generates source maps for .d.ts files. 
+            Source maps provide a mapping between the emitted JavaScript files and their corresponding TypeScript source files, allowing for improved debugging and tooling support.
           examples: [true]
         emitDeclarationOnly:
           type: boolean
           description: | 
             Only emits .d.ts files and not the compiled JavaScript files.
-            When `emitDeclarationOnly` is enabled, TypeScript will only emit the declaration files (`.d.ts`) and skip emitting the compiled JavaScript files. This is useful when you only need the type information and don't require the compiled JavaScript output.
+            When `emitDeclarationOnly` is enabled, TypeScript will only emit the declaration files (`.d.ts`) and skip emitting the compiled JavaScript files.
           examples: [false]
         declarationDir:
           type: string
           description: | 
             Specifies the output directory for .d.ts files.
-            The `declarationDir` option allows you to specify the output directory for the generated declaration files (`.d.ts`). By default, declaration files are emitted alongside the corresponding JavaScript files. Use this option to customize the output directory for the declaration files.
+            By default, declaration files are emitted alongside the corresponding JavaScript files. Use this option to customize the output directory for the declaration files.
           examples: ["./dist/types"]
         disableSizeLimit:
           type: boolean
           description: | 
             Disables the size limit imposed on JavaScript projects.
-            By default, TypeScript imposes a size limit on JavaScript projects, and if the limit is exceeded, it raises an error. Enabling `disableSizeLimit` removes this size limit, allowing the compilation of larger JavaScript projects. However, it's important to ensure that the project's size is manageable and doesn't impact performance.
+            Enabling `disableSizeLimit` removes this size limit, allowing the compilation of larger JavaScript projects. 
           examples: [false]
         disableSourceOfProjectReferenceRedirect:
           type: boolean
           description: | 
             Disables source file redirection in composite projects.
-            TypeScript's composite projects allow splitting a large project into smaller sub-projects for incremental compilation. By default, composite projects redirect source files to their composite project's output directory. Enabling this option disables the source file redirection, preserving the original source file paths during compilation.
+            TypeScript's composite projects allow splitting a large project into smaller sub-projects for incremental compilation.
           examples: [false]
         disableSolutionSearching:
           type: boolean
           description: | 
             Disables searching for solutions in sibling directories.
-            When resolving dependencies in a TypeScript project, TypeScript automatically searches for solution files (e.g., `tsconfig.json`) in the parent and sibling directories. Enabling `disableSolutionSearching` prevents TypeScript from searching for solutions in sibling directories, limiting the scope of project resolution.
+            When resolving dependencies in a TypeScript project, TypeScript automatically searches for solution files (e.g., `tsconfig.json`) in the parent and sibling directories.
           examples: [false]
         disableReferencedProjectLoad:
           type: boolean
           description: | 
             Disables loading referenced projects in TypeScript project references.
-            TypeScript project references allow dividing a project into separate projects that can reference each other. By default, TypeScript loads the referenced projects during compilation. Enabling `disableReferencedProjectLoad` disables the automatic loading of referenced projects, requiring manual management of project dependencies.
+            TypeScript project references allow dividing a project into separate projects that can reference each other.
           examples: [false]
         downlevelIteration:
           type: boolean
           description: | 
             Enables iteration of ES6 generators for downlevel iteration.
-            ES6 generators introduce new iteration functionality. When targeting older ECMAScript versions, such as ES5, enabling `downlevelIteration` allows TypeScript to emit code that supports the iteration of ES6 generators in downlevel targets. This option is useful when targeting environments that don't natively support ES6 generators.
+            ES6 generators introduce new iteration functionality.
           examples: [true]
         emitBOM:
           type: boolean
           description: | 
             Specifies whether to emit a byte order mark (BOM) in emitted files.
-            The byte order mark (BOM) is a Unicode character that serves as an indicator for the encoding of a text file. By default, TypeScript emits files without a BOM. Enabling `emitBOM` instructs TypeScript to include the BOM character at the beginning of emitted files, which can be useful for compatibility with certain tools and environments.
+            The byte order mark (BOM) is a Unicode character that serves as an indicator for the encoding of a text file. By default, TypeScript emits files without a BOM.
           examples: [false]
         emitDecoratorMetadata:
           type: boolean
           description: | 
             Enables emitting decorator metadata in TypeScript compiled output.
-            Decorators are a TypeScript language feature used for adding metadata and modifying the behavior of classes, methods, properties, etc. Enabling `emitDecoratorMetadata` ensures that metadata associated with decorators is emitted in the compiled JavaScript output. This is required for certain frameworks or tools that rely on decorator metadata.
+            Decorators are a TypeScript language feature used for adding metadata and modifying the behavior of classes, methods, properties, etc.
           examples: [true]
         exactOptionalPropertyTypes:
           type: boolean
           description: | 
             Enables strict checking of optional properties.
-            By default, TypeScript allows assigning `null` or `undefined` to optional properties regardless of their declared type. Enabling `exactOptionalPropertyTypes` enforces strict checking for optional properties, ensuring that their types must match exactly, including `null` or `undefined`.
+            By default, TypeScript allows assigning `null` or `undefined` to optional properties regardless of their declared type.
           examples: [true]
         experimentalDecorators:
           type: boolean
           description: | 
             Enables experimental support for ES7 decorators.
-            Experimental decorators are a proposed feature of the ECMAScript standard (ES7) that TypeScript supports. Enabling `experimentalDecorators` allows you to use and experiment with decorators in your TypeScript code. It's important to note that experimental features may be subject to change or have limited compatibility.
+            Experimental decorators are a proposed feature of the ECMAScript standard (ES7) that TypeScript supports.
           examples: [true]
         forceConsistentCasingInFileNames:
           type: boolean
           description: | 
             Forces consistent casing of referenced TypeScript files.
-            The `forceConsistentCasingInFileNames` option enforces consistent casing for references to TypeScript files. When enabled, TypeScript checks that references to files in the code match the exact casing of the file names on disk. This helps avoid potential issues when working on case-sensitive file systems.
+            The `forceConsistentCasingInFileNames` option enforces consistent casing for references to TypeScript files.
           examples: [true]
         ignoreDeprecations:
           type: string
           description: | 
             Specifies deprecation warnings to be ignored.
-            TypeScript emits deprecation warnings when using deprecated features or APIs. The `ignoreDeprecations` option allows you to specify specific deprecation warnings to be ignored. Provide the deprecation warning message or code to suppress specific deprecation warnings during compilation.
+            TypeScript emits deprecation warnings when using deprecated features or APIs.
           examples: ["example-deprecation"]
         importHelpers:
           type: boolean
           description: | 
             Enables the import of helper functions from tslib.
-            When working with certain language features or runtime helpers, TypeScript may emit additional helper functions to support the compilation output. Enabling `importHelpers` instructs TypeScript to import these helper functions from the `tslib` library instead of emitting them directly, resulting in smaller emitted JavaScript files.
+            When working with certain language features or runtime helpers, TypeScript may emit additional helper functions to support the compilation output.
           examples: [true]
         importsNotUsedAsValues:
           $ref: "#/components/schemas/ImportsNotUsedAsValues"
@@ -1564,19 +1571,19 @@ components:
           type: boolean
           description: | 
             Specifies whether to inline source maps in emitted JavaScript files.
-            Source maps provide a mapping between the emitted JavaScript files and their corresponding TypeScript source files, allowing for easier debugging. By default, TypeScript emits separate source map files. Enabling `inlineSourceMap` instructs TypeScript to include the source map content directly within the emitted JavaScript files, resulting in a single combined file.
+            Source maps provide a mapping between the emitted JavaScript files and their corresponding TypeScript source files, allowing for easier debugging.
           examples: [false]
         inlineSources:
           type: boolean
           description: | 
             Specifies whether to inline the original source code in emitted JavaScript files.
-            When working with source maps, TypeScript can include the original TypeScript source code within the emitted JavaScript files. Enabling `inlineSources` instructs TypeScript to include the original source code inline, making it accessible within the emitted JavaScript files. This can be useful for debugging purposes.
+            When working with source maps, TypeScript can include the original TypeScript source code within the emitted JavaScript files.
           examples: [false]
         isolatedModules:
           type: boolean
           description: | 
             Enables each file to be treated as a separate module.
-            By default, TypeScript treats all files within a project as part of the same module. Enabling `isolatedModules` instructs TypeScript to treat each file as a separate module, regardless of their dependencies or imports. This can be useful for projects where each file is independently executable or if you want to enforce strict module boundaries.
+            By default, TypeScript treats all files within a project as part of the same module.
           examples: [false]
         jsx:
           $ref: "#/components/schemas/JsxEmit"
@@ -1584,33 +1591,33 @@ components:
           type: boolean
           description: | 
             Disallows symbols other than string in keyof.
-            TypeScript's `keyof` operator allows you to obtain a union type representing the keys of a given object or type. By default, `keyof` includes all symbol types, including number and symbol keys. Enabling `keyofStringsOnly` restricts the keys to only string types, excluding number and symbol keys.
+            TypeScript's `keyof` operator allows you to obtain a union type representing the keys of a given object or type.
           examples: [true]
         lib:
           type: array
           items:
             type: string
           description: | 
-            Specifies the libraries to be included in the TypeScript project.
-            TypeScript provides a set of pre-defined library files that include type definitions for common JavaScript APIs and runtime environments. The `lib` option allows you to specify the libraries to include in the TypeScript project. Available library options include `ES5`, `ES6`, `ES2015`, `DOM`, `DOM.Iterable`, `WebWorker`, and more.
+            Specifies the libraries to be included in TypeScript projects.
+            Available library options include `ES5`, `ES6`, `ES2015`, `DOM`, `DOM.Iterable`, `WebWorker`, and more.
           examples: ["ES2018", "DOM"]
         locale:
           type: string
           description: | 
             Specifies the locale to use for error messages.
-            The `locale` option allows you to specify the locale to use for error messages and diagnostics. This affects the language used in error messages, type checking output, and other compiler diagnostics. Specify the locale using the BCP 47 language tag format, such as `"en-us"` for English (United States).
+            The `locale` option allows you to specify the locale to use for error messages and diagnostics.
           examples: ["en-us"]
         mapRoot:
           type: string
           description: | 
             Specifies the location where debugger should locate map files.
-            Source maps provide a mapping between the emitted JavaScript files and their corresponding TypeScript source files. The `mapRoot` option allows you to specify the location where the debugger should look for the source map files. Use this option when the source maps are hosted at a different location than the emitted JavaScript files.
+            Source maps provide a mapping between the emitted JavaScript files and their corresponding TypeScript source files.
           examples: ["./maps"]
         maxNodeModuleJsDepth:
           type: number
           description: | 
             Specifies the maximum folder depth for checking JavaScript files in node_modules.
-            When resolving JavaScript files in the `node_modules` directory, TypeScript may encounter deeply nested files. The `maxNodeModuleJsDepth` option allows you to limit the folder depth TypeScript checks when looking for JavaScript files. Setting a value of `0` restricts the search to the top-level folder only.
+            The `maxNodeModuleJsDepth` option allows you to limit the folder depth TypeScript checks when looking for JavaScript files.
           examples: [0]
         module:
           $ref: "#/components/schemas/ModuleKind"
@@ -1622,7 +1629,7 @@ components:
             type: string
           description: | 
             Specifies the file suffixes to consider during module resolution.
-            When resolving module imports, TypeScript considers files with specific suffixes. The `moduleSuffixes` option allows you to specify the file suffixes to consider during module resolution. By default, TypeScript considers files with `.ts`, `.tsx`, and `.js` extensions. Customize this option to include additional or different file suffixes as needed.
+            The `moduleSuffixes` option allows you to specify the file suffixes to consider during module resolution.
           examples: [".ts", ".tsx", ".js"]
         moduleDetection:
           $ref: "#/components/schemas/ModuleDetectionKind"
@@ -1632,122 +1639,118 @@ components:
           type: boolean
           description: | 
             Disables emitting JavaScript files.
-            Enabling the `noEmit` option instructs TypeScript not to emit any JavaScript files as output. This is useful when you only want to perform type checking and validation without generating compiled JavaScript files. Use this option during development or when TypeScript is used solely for static type checking.
+            Enabling the `noEmit` option instructs TypeScript not to emit any JavaScript files as output.
           examples: [false]
         noEmitHelpers:
           type: boolean
           description: | 
             Disables generating custom helper functions in emitted JavaScript files.
-            When targeting certain ECMAScript versions or using certain language features, TypeScript may emit additional helper functions to support the compiled JavaScript output. Enabling `noEmitHelpers` disables the generation of these custom helper functions, resulting in smaller emitted JavaScript files.
           examples: [false]
 
         noEmitOnError:
           type: boolean
           description: | 
             Disables emitting JavaScript files if any type errors are reported.
-            By default, TypeScript emits JavaScript files even if there are type errors in the project. Enabling `noEmitOnError` instructs TypeScript to prevent emitting any JavaScript files if there are any reported type errors. This ensures that only error-free code is compiled and emitted.
           examples: [true]
         noErrorTruncation:
           type: boolean
           description: | 
             Disables truncating error messages.
-            Error messages generated by TypeScript are often truncated to fit within a certain length limit. Enabling `noErrorTruncation` disables this truncation, allowing the full error messages to be displayed. This can be useful for detailed error analysis, but keep in mind that very long error messages may be harder to read.
+            Error messages generated by TypeScript are often truncated to fit within a certain length limit.
           examples: [false]
         noFallthroughCasesInSwitch:
           type: boolean
           description: | 
             Disallows fallthrough cases in switch statements.
-            TypeScript performs analysis on switch statements to detect fallthrough cases where one case does not include a `break` statement and execution continues into the next case. Enabling `noFallthroughCasesInSwitch` flags such cases as errors, ensuring that switch statements are handled correctly and explicitly in the code.
           examples: [true]
         noImplicitAny:
           type: boolean
           description: | 
             Disallows implicit `any` type declarations.
-            By default, TypeScript allows implicit `any` types, where a variable or expression's type is automatically inferred as `any` when it is not explicitly annotated. Enabling `noImplicitAny` flags such cases as errors, requiring explicit type annotations to avoid relying on implicit `any` types.
           examples: [true]
         noImplicitReturns:
           type: boolean
           description: | 
             Disallows missing return types on function signatures.
-            TypeScript checks for missing return types on function signatures and flags them as errors. Enabling `noImplicitReturns` ensures that all code paths within a function have a return statement or throw an error, avoiding potential logic errors or unintended control flow.
+            TypeScript checks for missing return types on function signatures and flags them as errors.
           examples: [true]
         noImplicitThis:
           type: boolean
           description: | 
             Disallows the use of `this` types without an explicit type annotation.
-            In TypeScript, the `this` type is used to represent the type of the current object within a class or method. By default, TypeScript allows the use of `this` without an explicit type annotation. Enabling `noImplicitThis` flags such cases as errors, requiring explicit type annotations for `this` usage.
+            In TypeScript, the `this` type is used to represent the type of the current object within a class or method.
           examples: [true]
         noStrictGenericChecks:
           type: boolean
           description: | 
             Disables strict checking of generic signatures in TypeScript projects.
-            Generics in TypeScript allow creating reusable functions or classes that can work with multiple types. Enabling `noStrictGenericChecks` relaxes the strict checking of generic signatures, allowing looser type inference and compatibility. However, it's important to note that stricter generic checks help ensure type safety and correctness.
+            Generics in TypeScript allow creating reusable functions or classes that can work with multiple types.
           examples: [false]
         noUnusedLocals:
           type: boolean
           description: | 
             Disallows unused local variables.
-            Unused local variables are variables declared within a function or block scope that are never referenced or used. Enabling `noUnusedLocals` flags such cases as errors, helping to identify and remove unused variables, which can improve code readability and maintainability.
+            Unused local variables are variables declared within a function or block scope that are never referenced or used.
           examples: [true]
         noUnusedParameters:
           type: boolean
           description: | 
             Disallows unused function parameters.
-            Unused function parameters are parameters declared in function signatures that are never used or referenced within the function body. Enabling `noUnusedParameters` flags such cases as errors, encouraging the removal of unused parameters to improve code clarity and eliminate potential confusion.
+            Unused function parameters are parameters declared in function signatures that are never used or referenced within the function body.
           examples: [true]
         noImplicitUseStrict:
           type: boolean
           description: | 
             Disallows the use of implicit `use strict` directive.
-            The `use strict` directive enables strict mode in JavaScript, which enforces stricter rules and eliminates certain language pitfalls. By default, TypeScript automatically adds the `use strict` directive to the emitted JavaScript files. Enabling `noImplicitUseStrict` disables the implicit insertion of `use strict`, allowing you to manually control its usage.
+            The `use strict` directive enables strict mode in JavaScript, which enforces stricter rules and eliminates certain language pitfalls.
           examples: [true]
         noPropertyAccessFromIndexSignature:
           type: boolean
           description: | 
             Disallows accessing properties using the index signature notation.
-            In TypeScript, objects can be accessed using property access notation (`obj.prop`) or index signature notation (`obj['prop']`). By default, TypeScript allows accessing properties using both notations. Enabling `noPropertyAccessFromIndexSignature` flags property access using index signature notation as errors, promoting consistent property access syntax.
+            In TypeScript, objects can be accessed using property access notation (`obj.prop`) or index signature notation (`obj['prop']`).
           examples: [false]
         assumeChangesOnlyAffectDirectDependencies:
           type: boolean
           description: | 
             Instructs TypeScript to assume that changes only affect direct dependencies.
-            The `assumeChangesOnlyAffectDirectDependencies` option is used in TypeScript's incremental compilation feature. When enabled, TypeScript assumes that changes made in the project only affect the directly dependent files, allowing for faster incremental builds. This option should be used with caution, as it may lead to incorrect compilation results if dependencies are not accurately tracked.
+            The `assumeChangesOnlyAffectDirectDependencies` option is used in TypeScript's incremental compilation feature.
           examples: [true]
         noLib:
           type: boolean
           description: | 
             Disables including the default library file (lib.d.ts).
-            By default, TypeScript includes the default library file (`lib.d.ts`) that provides type definitions for common JavaScript APIs and runtime environments. Enabling `noLib` instructs TypeScript not to include the default library file. This can be useful in specific scenarios where you want to provide your own custom library definitions.
+            By default, TypeScript includes the default library file (`lib.d.ts`) that provides type definitions for common JavaScript APIs and runtime environments.
           examples: [false]
         noResolve:
           type: boolean
           description: | 
             Disables automatic resolution of non-relative module names.
-            TypeScript automatically resolves non-relative module names by searching for matching modules in various locations, such as `node_modules`. Enabling `noResolve` disables this automatic resolution, requiring all module names to be explicitly specified with a relative or absolute path. Use this option when you want full control over module resolution.
+            TypeScript automatically resolves non-relative module names by searching for matching modules in various locations, such as `node_modules`.
           examples: [false]
         noUncheckedIndexedAccess:
           type: boolean
           description: | 
             Disallows unchecked indexed access on possibly undefined values.
-            By default, TypeScript allows indexing into possibly undefined values without checking for null or undefined. Enabling `noUncheckedIndexedAccess` flags such cases as errors, requiring explicit null or undefined checks before indexing into objects or arrays. This promotes safer coding practices and avoids potential runtime errors.
+            By default, TypeScript allows indexing into possibly undefined values without checking for null or undefined.
           examples: [true]
         out:
           type: string
           description: | 
-            Specifies the single output file for the TypeScript project.
-            The `out` option allows you to specify a single output file for the TypeScript project. When specified, TypeScript will concatenate and emit all compiled JavaScript files into the specified output file. Note that using `out` disables incremental compilation and should be used with caution for larger projects.
+            Specifies the single output file for TypeScript projects.
+            The `out` option allows you to specify a single output file for TypeScript projects.
           examples: ["./dist/bundle.js"]
         outDir:
           type: string
           description: | 
             Specifies the output directory for emitted JavaScript files.
-            The `outDir` option specifies the directory where TypeScript should emit the compiled JavaScript files. All emitted JavaScript files, including declaration files and source maps, will be placed in this directory. Use this option to control the location of the output files within your project's directory structure.
+            The `outDir` option specifies the directory where TypeScript should emit the compiled JavaScript files.
           examples: ["./dist"]
         outFile:
           type: string
           description: | 
-            Specifies the single output file for the TypeScript project (alternative to `out`).
-            The `outFile` option is an alternative to the `out` option for specifying a single output file for the TypeScript project. It functions in a similar way as `out`, but allows you to specify the output file directly within the `tsconfig.json` file. Note that using `outFile` disables incremental compilation and should be used with caution for larger projects.
+            Specifies the single output file for TypeScript projects (alternative to `out`).
+            The `outFile` option is an alternative to the `out` option for specifying a single output file for TypeScript projects.
           examples: ["./dist/bundle.js"]
         paths:
           type: object
@@ -1757,7 +1760,7 @@ components:
               type: string
           description: | 
             Specifies path mappings for module resolution.
-            The `paths` option allows you to specify path mappings for module resolution. This is particularly useful when working with module aliases or custom directory structures. Specify the module name or alias as the key and the corresponding path or pattern as the value in the `paths` object.
+            The `paths` option allows you to specify path mappings for module resolution.
           examples:
             -
               "@utils/*": ["./src/utils/*"]
@@ -1766,154 +1769,154 @@ components:
           type: boolean
           description: | 
             Preserves const enums in the emitted JavaScript output.
-            Const enums in TypeScript are enums that are fully inlined during compilation, resulting in more efficient JavaScript output. By default, TypeScript removes const enums during compilation to reduce the emitted code size. Enabling `preserveConstEnums` instructs TypeScript to preserve const enums in the emitted JavaScript output.
+            Const enums in TypeScript are enums that are fully inlined during compilation, resulting in more efficient JavaScript output.
           examples: [true]
         noImplicitOverride:
           type: boolean
           description: | 
             Disallows explicit overriding of methods or properties.
-            TypeScript allows explicit method or property overrides, where a derived class explicitly overrides a method or property from its base class. Enabling `noImplicitOverride` flags explicit overrides as errors, ensuring that methods or properties are properly overridden using the `override` keyword.
+            TypeScript allows explicit method or property overrides, where a derived class explicitly overrides a method or property from its base class.
           examples: [true]
         preserveSymlinks:
           type: boolean
           description: | 
             Preserves symbolic links when resolving modules.
-            By default, TypeScript follows symbolic links when resolving modules. Enabling `preserveSymlinks` instructs TypeScript to preserve symbolic links during module resolution. Use this option when you want TypeScript to treat symbolic links as separate entities and not follow them to their target locations.
+            By default, TypeScript follows symbolic links when resolving modules.
           examples: [false]
         preserveValueImports:
           type: boolean
           description: | 
             Preserves unused values imported solely for their types.
-            When importing modules in TypeScript, it is common to import certain values solely for their types, without actually using the imported values in the code. Enabling `preserveValueImports` ensures that these unused values are preserved during compilation, allowing TypeScript to retain their type information for better type checking and tooling support.
+            When importing modules in TypeScript, it is common to import certain values solely for their types, without actually using the imported values in the code.
           examples: [true]
         project:
           type: string
           description: | 
-            Specifies the path or file glob patterns for the TypeScript project.
-            The `project` option specifies the path or file glob patterns for the TypeScript project configuration. It can be a path to a specific `tsconfig.json` file or a glob pattern matching multiple configuration files. When this option is provided, TypeScript will use the specified project configuration for compilation and other operations.
+            Specifies the path or file glob patterns for TypeScript projects.
+            The `project` option specifies the path or file glob patterns for TypeScript projects configuration.
           examples: ["./tsconfig.json"]
         reactNamespace:
           type: string
           description: | 
             Specifies the namespace for JSX factory and JSX fragment.
-            When working with JSX in TypeScript, the `reactNamespace` option allows you to specify the namespace for the JSX factory and JSX fragment. By default, TypeScript uses `React` as the namespace. Use this option to customize the namespace based on your specific JSX implementation or library.
+            When working with JSX in TypeScript, the `reactNamespace` option allows you to specify the namespace for the JSX factory and JSX fragment.
           examples: ["React"]
         jsxFactory:
           type: string
           description: | 
             Specifies the function to use as the JSX factory.
-            The `jsxFactory` option specifies the function to use as the JSX factory. In JSX syntax, elements are transpiled into function calls, and the `jsxFactory` option determines the function to be used for creating these elements. Specify the function name or expression as the value of `jsxFactory`.
+            The `jsxFactory` option specifies the function to use as the JSX factory.
           examples: ["h"]
         jsxFragmentFactory:
           type: string
           description: | 
             Specifies the function to use as the JSX fragment factory.
-            JSX fragments allow grouping multiple adjacent JSX elements without an enclosing wrapper element. The `jsxFragmentFactory` option specifies the function to use as the JSX fragment factory. Specify the function name or expression as the value of `jsxFragmentFactory`. This option is applicable when using JSX syntax.
+            JSX fragments allow grouping multiple adjacent JSX elements without an enclosing wrapper element.
           examples: ["Fragment"]
         jsxImportSource:
           type: string
           description: | 
             Specifies the module to import JSX-related functions from.
-            When using JSX syntax, TypeScript needs to import certain functions, such as the JSX factory or JSX fragment factory. The `jsxImportSource` option allows you to specify the module from which these JSX-related functions should be imported. Specify the module name or path as the value of `jsxImportSource`.
+            When using JSX syntax, TypeScript needs to import certain functions, such as the JSX factory or JSX fragment factory.
           examples: ["preact"]
         composite:
           type: boolean
           description: | 
             Enables building TypeScript projects in composite mode.
-            TypeScript's composite mode allows dividing a large project into separate sub-projects that can be built independently and incrementally. Enabling `composite` mode enables the use of project references and incremental compilation for faster builds. Use this option when working with complex or large-scale TypeScript projects.
+            TypeScript's composite mode allows dividing a large project into separate sub-projects that can be built independently and incrementally.
           examples: [true]
         incremental:
           type: boolean
           description: | 
             Enables incremental compilation for TypeScript projects.
-            Incremental compilation is a feature of TypeScript that allows recompiling only the necessary files when changes are made, resulting in faster builds. Enabling `incremental` mode enables the incremental compilation feature for the TypeScript project. This option is recommended for projects where build speed is a priority.
+            Incremental compilation is a feature of TypeScript that allows recompiling only the necessary files when changes are made, resulting in faster builds.
           examples: [true]
         tsBuildInfoFile:
           type: string
           description: | 
             Specifies the file to store incremental build information.
-            Incremental compilation in TypeScript relies on storing build information for efficient recompilation. The `tsBuildInfoFile` option specifies the file where the incremental build information should be stored. This information is used to determine which files need to be recompiled when changes are made.
+            Incremental compilation in TypeScript relies on storing build information for efficient recompilation.
           examples: ["./tsconfig.tsbuildinfo"]
         removeComments:
           type: boolean
           description: | 
             Removes comments from the emitted JavaScript files.
-            By default, TypeScript preserves comments from the source code in the emitted JavaScript files. Enabling `removeComments` instructs TypeScript to remove all comments during the compilation process, resulting in cleaner and more concise JavaScript output.
+            By default, TypeScript preserves comments from the source code in the emitted JavaScript files.
           examples: [true]
         resolvePackageJsonExports:
           type: boolean
           description: | 
             Enables resolving package.json exports field.
-            Starting from ECMAScript modules (ESM) support in Node.js 12, the `exports` field in `package.json` files is used to define the exports of a module. Enabling `resolvePackageJsonExports` allows TypeScript to resolve module imports using the `exports` field in `package.json` files. Use this option when working with ESM and package exports.
+            Starting from ECMAScript modules (ESM) support in Node.js 12, the `exports` field in `package.json` files is used to define the exports of a module.
           examples: [true]
         resolvePackageJsonImports:
           type: boolean
           description: | 
             Enables resolving imports from `package.json` files.
-            TypeScript can resolve module imports directly from `package.json` files, bypassing the need for separate type declaration files (`*.d.ts`). Enabling `resolvePackageJsonImports` allows TypeScript to resolve imports using the `main` or `module` field in `package.json` files. This can simplify the import configuration for certain packages.
+            TypeScript can resolve module imports directly from `package.json` files, bypassing the need for separate type declaration files (`*.d.ts`).
           examples: [true]
         rootDir:
           type: string
           description: | 
             Specifies the root directory of input files.
-            The `rootDir` option specifies the root directory of input files in the TypeScript project. It is used to determine the relative path of each file within the project. This option is especially useful when working with projects that have a complex file structure or when using tools that rely on the project's root directory.
+            The `rootDir` option specifies the root directory of input files in TypeScript projects.
           examples: ["./src"]
         rootDirs:
           type: array
           items:
             type: string
           description: | 
-            Specifies multiple root directories for the TypeScript project.
-            The `rootDirs` option allows you to specify multiple root directories for the TypeScript project. When specified, TypeScript will consider all files within the specified root directories as part of the project. This can be useful when working with projects that span multiple directories or when using tools that require multiple root directories.
+            Specifies multiple root directories for TypeScript projects.
+            The `rootDirs` option allows you to specify multiple root directories for TypeScript projects.
           examples: ["./src", "./tests"]
         skipLibCheck:
           type: boolean
           description: | 
             Skips type checking of declaration files in `node_modules`.
-            By default, TypeScript performs type checking on declaration files (`*.d.ts`) in the `node_modules` directory. Enabling `skipLibCheck` skips the type checking of declaration files, which can significantly improve build performance, especially for large projects with many dependencies.
+            By default, TypeScript performs type checking on declaration files (`*.d.ts`) in the `node_modules` directory.
           examples: [true]
 
         skipDefaultLibCheck:
           type: boolean
           description: | 
             Skips type checking of default library file (lib.d.ts).
-            The default library file (`lib.d.ts`) provides type definitions for common JavaScript APIs and runtime environments. Enabling `skipDefaultLibCheck` skips the type checking of the default library file. Use this option when you want to exclude the default library from type checking or when using alternative library files.
+            The default library file (`lib.d.ts`) provides type definitions for common JavaScript APIs and runtime environments.
           examples: [true]
         sourceMap:
           type: boolean
           description: | 
             Specifies whether to generate source map files.
-            Source maps provide a mapping between the emitted JavaScript files and their corresponding TypeScript source files, allowing for easier debugging. Enabling `sourceMap` instructs TypeScript to generate source map files along with the emitted JavaScript files. These source map files can be used by debuggers and other tools for source-level debugging.
+            Source maps provide a mapping between the emitted JavaScript files and their corresponding TypeScript source files, allowing for easier debugging.
           examples: [true]
         sourceRoot:
           type: string
           description: | 
             Specifies the location of the TypeScript source files.
-            The `sourceRoot` option specifies the location of the TypeScript source files relative to the emitted JavaScript files. This option is used in the source maps to provide the correct path information for the TypeScript sources. It is especially useful when the TypeScript sources are located in a different directory from the emitted JavaScript files.
+            The `sourceRoot` option specifies the location of the TypeScript source files relative to the emitted JavaScript files.
           examples: ["./src"]
         strict:
           type: boolean
           description: | 
             Enables strict type checking options.
-            The `strict` option enables a set of strict type checking options in TypeScript. Enabling `strict` is equivalent to enabling several individual strict options, including `strictNullChecks`, `strictFunctionTypes`, `strictBindCallApply`, `strictPropertyInitialization`, `noImplicitThis`, and more. Use this option to enforce strict type checking rules in your project.
+            The `strict` option enables a set of strict type checking options in TypeScript.
           examples: [true]
         strictFunctionTypes:
           type: boolean
           description: | 
             Enables strict checking of function types.
-            Function types in TypeScript include parameters and return types. By default, TypeScript allows for certain assignment compatibility between function types. Enabling `strictFunctionTypes` flags stricter checking of function types, ensuring that parameter types and return types must match exactly.
+            Function types in TypeScript include parameters and return types.
           examples: [true]
         strictBindCallApply:
           type: boolean
           description: | 
             Enables strict checking of `bind`, `call`, and `apply` methods.
-            The `bind`, `call`, and `apply` methods in JavaScript allow for dynamic binding of functions and altering their execution context. Enabling `strictBindCallApply` enables strict checking of these methods, ensuring that the number of arguments and the types of arguments passed to these methods match the function's signature.
+            The `bind`, `call`, and `apply` methods in JavaScript allow for dynamic binding of functions and altering their execution context.
           examples: [true]
         strictNullChecks:
           type: boolean
           description: | 
             Enables strict null checking.
-            Null and undefined are often sources of bugs in JavaScript. Enabling `strictNullChecks` enables strict checking for null and undefined values, preventing variables from being assigned null or undefined unless explicitly allowed. This option helps eliminate many common null-related errors.
+            Null and undefined are often sources of bugs in JavaScript.
           examples: [true]
         strictPropertyInitialization:
           type: boolean
@@ -1931,13 +1934,13 @@ components:
           type: boolean
           description: | 
             Suppresses excess property errors when assigning object literals.
-            When assigning object literals to variables or parameters, TypeScript performs excess property checking to ensure that only known properties are assigned. Enabling `suppressExcessPropertyErrors` suppresses the excess property errors, allowing object literals to be assigned to variables or parameters without strict property checking.
+            When assigning object literals to variables or parameters, TypeScript performs excess property checking to ensure that only known properties are assigned.
           examples: [true]
         suppressImplicitAnyIndexErrors:
           type: boolean
           description: | 
             Suppresses implicit `any` errors for indexing objects.
-            TypeScript performs implicit `any` checks when indexing into objects with arbitrary property names. Enabling `suppressImplicitAnyIndexErrors` suppresses the implicit `any` errors, allowing indexing into objects without strict type checking. Use this option when you need to work with objects that have dynamic or unknown property names.
+            TypeScript performs implicit `any` checks when indexing into objects with arbitrary property names.
           examples: [true]
         target:
           $ref: "#/components/schemas/ScriptTarget"
@@ -1945,19 +1948,19 @@ components:
           type: boolean
           description: | 
             Outputs detailed trace logs for module resolution.
-            Enabling `traceResolution` outputs detailed trace logs during module resolution in TypeScript. These logs provide information about how TypeScript resolves module imports, including the paths searched, module resolutions, and more. Use this option for debugging or diagnosing module resolution issues in your project.
+            Enabling `traceResolution` outputs detailed trace logs during module resolution in TypeScript.
           examples: [true]
         useUnknownInCatchVariables:
           type: boolean
           description: | 
             Enables `unknown` type for catch clause variables.
-            The `unknown` type in TypeScript represents values that are of an unknown type. Enabling `useUnknownInCatchVariables` allows catch clause variables to be typed as `unknown`, allowing more flexible handling of unknown error values in catch blocks.
+            The `unknown` type in TypeScript represents values that are of an unknown type.
           examples: [true]
         resolveJsonModule:
           type: boolean
           description: | 
             Enables importing JSON files as modules.
-            Starting from ECMAScript modules (ESM) support in Node.js 10, JSON files can be imported as modules. Enabling `resolveJsonModule` allows TypeScript to import JSON files as modules, providing type checking and autocompletion for the imported JSON data.
+            Starting from ECMAScript modules (ESM) support in Node.js 10, JSON files can be imported as modules.
           examples: [true]
         types:
           type: array
@@ -1965,7 +1968,7 @@ components:
             type: string
           description: | 
             Specifies the type declaration files to include.
-            Type declaration files (`.d.ts`) provide type information for JavaScript libraries and modules. The `types` option allows you to specify the type declaration files to include in the TypeScript project. Specify the names of the desired type declaration files or packages as elements of the `types` array.
+            Type declaration files (`.d.ts`) provide type information for JavaScript libraries and modules.
           examples: ["node", "jest"]
         typeRoots:
           type: array
@@ -1973,25 +1976,24 @@ components:
             type: string
           description: | 
             Specifies the locations to search for type declaration files.
-            The `typeRoots` option specifies the locations to search for type declaration files (`.d.ts`). TypeScript searches these directories to find type declarations for installed packages and custom type definitions. Use this option to include additional directories containing type declaration files in your project.
+            The `typeRoots` option specifies the locations to search for type declaration files (`.d.ts`).
           examples: ["./typings", "./custom-types"]
         verbatimModuleSyntax:
           type: boolean
           description: | 
             Enables verbatim module syntax for CommonJS modules.
-            CommonJS modules in TypeScript are transpiled into the CommonJS module format. Enabling `verbatimModuleSyntax` allows the emitted JavaScript output to use verbatim module syntax, preserving the original module import and export statements. This can be useful when interoperating with other tools or libraries that rely on the original CommonJS syntax.
+            CommonJS modules in TypeScript are transpiled into the CommonJS module format.
           examples: [true]
         esModuleInterop:
           type: boolean
           description: | 
             Enables interoperability between CommonJS and ECMAScript modules.
-            The `esModuleInterop` option enables interoperability between CommonJS modules and ECMAScript modules (ESM). When enabled, TypeScript generates code that allows importing ESM modules into CommonJS modules and vice versa, without the need for additional interop libraries or syntax transformations.
+            The `esModuleInterop` option enables interoperability between CommonJS modules and ECMAScript modules (ESM).
           examples: [true]
         useDefineForClassFields:
           type: boolean
           description: | 
             Uses the `defineProperty` method for class fields initialization.
-            When initializing class fields in TypeScript, the default behavior is to assign the values directly to the instance. Enabling `useDefineForClassFields` uses the `defineProperty` method for initializing class fields. This can provide more fine-grained control over the initialization process and ensure consistency with the property accessors.
           examples: [true]
 
 
@@ -2000,55 +2002,47 @@ components:
       enum: [remove, error, preserve]
       description: |
         Specifies how imports that are not used as values are handled.
-        Imports that are not used as values refer to imports that are solely used for their type information or for side effects (e.g., polyfills or registering decorators). The `importsNotUsedAsValues` option allows you to configure how these imports are handled. The possible values are:
-        - `remove`: Removes unused imports that are not used as values.
-        - `error`: Raises an error for unused imports that are not used as values.
-        - `preserve`: Preserves all imports, even if they are not used as values.
-      examples: ["remove"]
+        Imports that are not used as values refer to imports that are solely used for their type information or for side effects (e.g., polyfills or registering decorators).
+      examples: ["remove", "error", "preserve"]
 
     JsxEmit:
       type: string
       enum: [react, react-jsx, react-jsxdev, preserve, react-native]
       description: | 
         Specifies the JSX output mode.
-        JSX is a syntax extension for JavaScript that allows embedding XML-like syntax within JavaScript code. The `jsx` option specifies the desired JSX output mode for the TypeScript project. Available options are:
-        - `react`: Emit JSX code compatible with React.
-        - `react-jsx`: Emit JSX code with a ".jsx" file extension.
-        - `react-jsxdev`: Emit JSX code with a ".js" file extension (development mode).
-        - `preserve`: Preserve JSX code as part of the emitted JavaScript.
-        - `react-native`: Emit JSX code compatible with React Native.
-      examples: ["react"]
+        JSX is a syntax extension for JavaScript that allows embedding XML-like syntax within JavaScript code.
+      examples: ["react", "react-jsx", "react-jsxdev", "preserve", "react-native"]
 
     ModuleKind:
       type: string
       enum: [none, commonjs, amd, system, umd, es2015, es2020, es2021, es2022, es2023, esnext]
       description: | 
         Specifies the module code generation method.
-        The `module` option specifies the module code generation method for the emitted JavaScript output. Different module formats are suitable for different runtime environments. Available options are: `none`, `commonjs`, `amd`, `system`, `umd`, `es2015`, `es2020`, `esnext`, and more. Choose the appropriate option based on your target environment and module loading system.
-      examples: ["commonjs"]
+        The `module` option specifies the module code generation method for the emitted JavaScript output.
+      examples: ["none", "commonjs", "amd", "system", "umd", "es2015", "es2020", "esnext"]
 
     ModuleResolutionKind:
       type: string
       enum: [classic, node, node12, node16, nodenext, bundler]
       description: | 
         Specifies the module resolution strategy.
-        The `moduleResolution` option determines how TypeScript resolves module imports. Different module resolution strategies are suitable for different project structures and module loading systems. Available options are: `classic`, `node`, `node12`, and more. Choose the appropriate option based on your project's configuration and module resolution requirements.
-      examples: ["node"]
+        The `moduleResolution` option determines how TypeScript resolves module imports.
+      examples: ["classic", "node", "node12", "node16", "nodenext", "bundler"]
 
     ModuleDetectionKind:
       type: string
       enum: [node, node12, node16, nodenext, bundler, modern, classic]
       description: | 
         Specifies how modules are detected.
-        The `moduleDetection` option determines how TypeScript detects and resolves modules. Different module detection methods have different behavior and compatibility. Available options are: `node`, `node12`, `modern`, `classic`, and more. Choose the appropriate option based on your project's configuration and module detection requirements.
-      examples: ["node"]
+        Determines how TypeScript detects and resolves modules. Different module detection methods have different behavior and compatibility.
+      examples: ["node", "node12", "node16", "nodenext", "bundler", "modern", "classic"]
 
     NewLineKind:
       type: string
       enum: [crlf, lf]
       description: | 
         Specifies the end of line sequence to be used.
-        The `newLine` option specifies the desired end-of-line (EOL) sequence to be used in the emitted JavaScript output. Available options are: `crlf` (carriage return + line feed) and `lf` (line feed). The chosen EOL sequence affects how lines are terminated in the emitted files.
+        The `newLine` option specifies the desired end-of-line (EOL) sequence to be used in the emitted JavaScript output.
       examples: ["crlf"]
 
     ScriptTarget:
@@ -2056,7 +2050,5 @@ components:
       enum: [es3, es5, es2015, es2016, es2017, es2018, es2019, es2020, es2021, es2022, es2023, esnext]
       description: | 
         Specifies the ECMAScript target version for emitted JavaScript files.
-        The `target` option specifies the ECMAScript (ES) target version for the emitted JavaScript output. TypeScript provides support for different ECMAScript versions, such as `ES5`, `ES2015`, `ES2016`, `ES2017`, `ES2018`, `ES2019`, `ES2020`, `ESNext`, and more. Choose the appropriate target version based on your project's compatibility requirements.
-      examples: ["es2020"]
-
-    
+        The `target` option specifies the ECMAScript (ES) target version for the emitted JavaScript output.
+      examples: ["ES5", "ES2015", "ES2016", "ES2017", "ES2018", "ES2019", "ES2020", "ESNext", "es2020", "esnext"]
