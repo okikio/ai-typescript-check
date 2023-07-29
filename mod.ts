@@ -1,5 +1,5 @@
 // Import necessary modules from dependencies
-import { cors, oak, path } from "./deps.ts";
+import { cors, oak, path, parse } from "./deps.ts";
 import { twoslasher } from "./vendor/twoslash.ts";
 import type { TwoSlashOptions } from "./vendor/twoslash.ts";
 
@@ -38,6 +38,15 @@ router
     const { ext } = context.params;
     context.response.redirect(`/favicon/favicon.${ext}`);
   })
+  // Route openapi.json for a future swagger ui docs route
+  .get("/.well-known/openapi.json", async (context) => {
+    const uint8arr = await Deno.readFile(
+      join(__dirname, `./.well-known/openapi.yaml`)
+    );
+    context.response.body = await parse(
+      new TextDecoder().decode(uint8arr)
+    ) as Record<string, string>
+  })
   // Route for serving static files
   .get("/:staticPath(.well-known|favicon)/:fileName", async (context) => {
     const { staticPath, fileName } = context.params;
@@ -60,13 +69,13 @@ router
       url: request.url,
       contentType,
     });
-    
+
     const { type, value } = request.body();
     if (type !== "form-data" && type !== "json") context.throw(Status.UnsupportedMediaType, `${type} isn't a supported content type`);
-    
+
     // Max file size to handle
-    const data: TwoslashRequestOptions = type === "form-data" ? (await value.read({ maxSize: 10000000 })).fields : await value; 
-    const { code, extension, ...opts }  = data;
+    const data: TwoslashRequestOptions = type === "form-data" ? (await value.read({ maxSize: 10000000 })).fields : await value;
+    const { code, extension, ...opts } = data;
 
     const twoslash = await twoslasher(code, extension, opts);
     context.response.body = twoslash;
@@ -88,17 +97,17 @@ router
       });
 
       return;
-    } 
+    }
 
     const params = url.searchParams;
     const codeParam = params.get("code")! || undefined;
-    const extensionParam = 
+    const extensionParam =
       params.get("extension")! ||
-      params.get("ext")! || 
+      params.get("ext")! ||
       undefined;
-    const optionsParam = 
-      params.get("options")! || 
-      params.get("option")! || 
+    const optionsParam =
+      params.get("options")! ||
+      params.get("option")! ||
       "{}";
 
     const decodedQuery: TwoslashRequestOptions = Object.assign(
