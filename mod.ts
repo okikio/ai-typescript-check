@@ -1,5 +1,6 @@
 // Import necessary modules from dependencies
-import { cors, oak, path, parse, type Typescript } from "./deps.ts";
+import { cors, oak, parse, path, } from "./deps.ts";
+import { toHTML } from "./docs.tsx";
 import { twoslasher } from "./vendor/twoslash.ts";
 import type { TwoSlashOptions } from "./vendor/twoslash.ts";
 
@@ -26,13 +27,10 @@ const router = new Router();
 // Define routes
 router
   // Root route
-  .get("/", (context) => {
+  .get("/", async (context) => {
     // Respond with a JSON object
-    context.response.body = ({
-      hey: "Hello World! The API is working!",
-      message:
-        "/twoslash - Accepts a JSON & Form Data body with the following properties: code, extension, and options.",
-    })
+    context.response.body = toHTML;
+    context.response.headers.set("Content-Type", "text/html");
   })
   // Route for redirect serving favicon.* files
   .get("/favicon.:ext", (context) => {
@@ -42,11 +40,11 @@ router
   // Route openapi.json for a future swagger ui docs route
   .get("/.well-known/openapi.json", async (context) => {
     const uint8arr = await Deno.readFile(
-      join(__dirname, `./.well-known/openapi.yaml`)
+      join(__dirname, `./.well-known/openapi.yaml`),
     );
     context.response.body = await parse(
-      new TextDecoder().decode(uint8arr)
-    ) as Record<string, string>
+      new TextDecoder().decode(uint8arr),
+    ) as Record<string, string>;
   })
   // Route for serving static files
   .get("/:staticPath(.well-known|favicon)/:fileName", async (context) => {
@@ -72,10 +70,17 @@ router
     });
 
     const { type, value } = request.body();
-    if (type !== "form-data" && type !== "json") context.throw(Status.UnsupportedMediaType, `${type} isn't a supported content type`);
+    if (type !== "form-data" && type !== "json") {
+      context.throw(
+        Status.UnsupportedMediaType,
+        `${type} isn't a supported content type`,
+      );
+    }
 
     // Max file size to handle
-    const data: TwoslashRequestOptions = type === "form-data" ? (await value.read({ maxSize: 10000000 })).fields : await value;
+    const data: TwoslashRequestOptions = type === "form-data"
+      ? (await value.read({ maxSize: 10000000 })).fields
+      : await value;
     const { code, extension, ...opts } = data;
 
     // let tsModule: typeof Typescript;
@@ -92,7 +97,7 @@ router
 
     const url = request.url;
     if (!url.search) {
-      context.response.body = ({
+      context.response.body = {
         title: "You can send requests in these formats",
         requests: [
           `GET: /twoslash?options={"code":"import { hasTransferables } from \"transferables\"","extension":"ts"}`,
@@ -100,19 +105,17 @@ router
           `POST: /twoslash --> JSON Body={"code":"import { hasTransferables } from \"transferables\"","extension":"ts"}`,
           `POST: /twoslash --> FormData Body={"code":"import { hasTransferables } from \"transferables\"","extension":"ts"}`,
         ],
-      });
+      };
 
       return;
     }
 
     const params = url.searchParams;
     const codeParam = params.get("code")! || undefined;
-    const extensionParam =
-      params.get("extension")! ||
+    const extensionParam = params.get("extension")! ||
       params.get("ext")! ||
       undefined;
-    const optionsParam =
-      params.get("options")! ||
+    const optionsParam = params.get("options")! ||
       params.get("option")! ||
       "{}";
 
@@ -138,7 +141,7 @@ app.use(async (context, next) => {
 
   // Create a "normalized" version of the path where all sequences of one or more slashes are replaced with a single slash
   // Example: normalizedPath will be "/about/team"
-  const normalizedPath = originalPath.replace(/\/+/g, '/');
+  const normalizedPath = originalPath.replace(/\/+/g, "/");
 
   // If the original path and the normalized path are different, this means that the original path had double slashes (or more)
   if (originalPath !== normalizedPath) {
