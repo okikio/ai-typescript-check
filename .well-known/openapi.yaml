@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
-  title: TypeScript Twoslash API
-  description: A REST API for transforming TypeScript code using twoslash.
+  title: Typescript Code Analyzer API
+  description: This API provides a REST interface for transforming and analyzing TypeScript and JavaScript code. It supports linting, autocompletion, error checking, type checking, and typescript twoslash features.
   version: '1.0'
   license: 
     name: MIT
@@ -15,17 +15,15 @@ servers:
   - url: https://ts-check.okikio.dev
     description: Main server      
 externalDocs: 
-  description: Shiki Twoslash's documentation, is not quite the same as the full TypeScript Twoslash docs but it should cover all the basics required 
+  description: Shiki Twoslash's documentation, is not quite the same as the full TypeScript Twoslash docs but it should cover all the basics required.
   url: https://shikijs.github.io/twoslash/
 paths:
   /twoslash:
     post:        
-      operationId: postToTypescriptTwoslash
-      summary: Run TypeScript Twoslash on a large amount of code
+      operationId: longTypescriptCodeAnalysis
+      summary: Run TypeScript Twoslash Analysis on a large amount of code ~254 characters or more.
       description: |
-        This endpoint is meant for larger code inputs. It accepts TwoSlashOptions as JSON/FormData and returns TwoSlashReturn JSON. 
-        Used for transforming TypeScript and Javascript code with twoslash options. 
-        Supports ts, js, tsx, jsx.
+        Meant for larger code inputs. Accepts TwoSlashOptions as JSON/FormData in the request body and returns TwoSlashReturn JSON. 
       requestBody:
         required: true
         content:
@@ -37,24 +35,22 @@ paths:
               $ref: '#/components/schemas/TwoSlashOptions'
       responses:
         '200':
-          description: Successful operation
+          description: Successful operation.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/TwoSlashReturn'
         '400':
-          description: Errors were thrown in the sample, but not included in an errors tag
+          description: Errors were thrown in the sample, but not included in an errors tag.
           content:
             text/plain:
               schema:
                 $ref: '#/components/schemas/TwoslashError'
     get:        
-      operationId: getToTypescriptTwoslash
-      summary: Run TypeScript Twoslash on a smaller amount of code that are 254 characters in length or less
+      operationId: shortTypescriptCodeAnalysis
+      summary: Run TypeScript Twoslash Analysis on a smaller amount of code that are 254 characters in length or less.
       description: |
-        This endpoint is meant for smaller amounts of code that are 254 characters in length or less. It accepts TwoSlashOptions as JSON/FormData and returns TwoSlashReturn JSON. 
-        Used for transforming TypeScript and Javascript code with twoslash options. 
-        Supports ts, js, tsx, jsx.
+        Meant for smaller amounts of code that are 254 characters in length or less. Accepts TwoSlashOptions as query parameters and returns TwoSlashReturn JSON. 
       parameters: 
         - name: options
           in: query
@@ -84,13 +80,13 @@ paths:
             $ref: "#/components/schemas/Extension"
       responses:
         '200':
-          description: Successful operation
+          description: Successful operation.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/TwoSlashReturn'
         '400':
-          description: Errors were thrown in the sample, but not included in an errors tag
+          description: Errors were thrown in the sample, but not included in an errors tag.
           content:
             text/plain:
               schema:
@@ -100,76 +96,78 @@ components:
     Code:
       type: string
       description: | 
-        The TypeScript, JavaScript, TSX, or JSX code to run twoslash over. Twoslash comments can be used for various features like:
-        - Compiler flag comments: `// @noImplicitAny: false`, `// @target: ES2015`, etc.
-        - Error comments: `// @noErrors`, `// @errors` Lint the code for syntax errors and best practices.
-        - Emitted file comments: `// @showEmit`, `// @showEmittedFile: index.d.ts`
-        - Static semantic info comments: `// @noStaticSemanticInfo` 
-        - Emit comments: `// @emit`
-        - Error validation comments: `// @noErrorValidation`
-        - Filename comments: `// @filename`
-        - Script Target comments: `// @target`
-        - Declaration comments: `// @declaration: true`
-        - Cut comments: `// ---cut---` to cut out unnecessary code before the comment. `// ---cut-after---` to cut out unnecessary code after the comment.
-        - Type queries: `// ^?` to query types of variables, objects, functions, arrays, maps, symbols, parameters and/or values. Check type information for the line of code above the comment.
-        - Auto-Completions: `// ^|` Auto-complete code suggestions.
-        - Highlighting: `// ^^^ Description` for highlighting the section of code above the comment. Remember to add a space after the `^^^` to avoid syntax errors.
-        - Import files: `// @filename: import_files.ts` for importing files
-        - Full Compile Options List: 
-          - `// @module: esnext`, `// @jsx: preserve`, `// @lib: esnext`, `// @strict: true`, `// @noImplicitAny: false`, `// @target: ES2022`, `// @declaration: true`,
-          - `// @noUnusedLocals: true`, `// @noUnusedParameters: true`, `// @noImplicitReturns: true`, `// @noFallthroughCasesInSwitch: true`, `// @allowUnreachableCode: false`,
-          - `// @allowUnusedLabels: false`, `// @noImplicitOverride: true`, `// @exactOptionalPropertyTypes: true`, `// @noPropertyAccessFromIndexSignature: true`,
-          - `// @noUncheckedIndexedAccess: true`, `// @noImplicitThis: true`, `// @strictBindCallApply: true`, `// @strictFunctionTypes: true`, `// @strictNullChecks: true`,
-          - `// @strictPropertyInitialization: true`, `// @useUnknownInCatchVariables: true`, `// @allowArbitraryExtensions: true`, `// @allowImportingTsExtensions: true`,
-          - `// @alwaysStrict: true`, `// @noEmit: true`, `// @noEmitOnError: true`, `// @preserveConstEnums: true`, `// @removeComments: true`, `// @skipLibCheck: true`,
-          - `// @sourceMap: true`, `// @inlineSourceMap: true`, `// @inlineSources: true`, `// @emitDeclarationOnly: true`, `// @declarationMap: true`, `// @declarationDir: ./`,
-          - `// @listEmittedFiles: true`, `// @listFiles: true`, `// @pretty: true`, `// @downlevelIteration: true`, `// @isolatedModules: true`, `// @importHelpers: true`,
-          - `// @experimentalDecorators: true`, `// @emitDecoratorMetadata: true`, `// @importsNotUsedAsValues: true`, `// @noEmitHelpers: true`, `// @noImplicitUseStrict: true`, 
-          - `// @noLib: true`, `// @noResolve: true`, `// @noStrictGenericChecks: true`, `// @noUncheckedIndexedAccess: true`, `// @noUnusedLocals: true`, `// @noUnusedParameters: true`,
-          - `// @strictBindCallApply: true`, `// @strictFunctionTypes: true`, `// @strictNullChecks: true`, `// @strictPropertyInitialization: true`, `// @useUnknownInCatchVariables: true`,
-          - `// @allowJs: true`, `// @checkJs: true`, `// @jsx: preserve`, `// @jsxFactory: React`, `// @jsxFragmentFactory: React`, `// @jsxImportSource: React`, 
-          - `// @allowUnreachableCode`: Do not report errors on unreachable code.
-          - `// @allowUnusedLabels`: Do not report errors on unused labels.
-          - `// @alwaysStrict`: Parse in strict mode and emit "use strict" for each source file.
-          - `// @exactOptionalPropertyTypes`: Differentiate between optional property and undefined property in the type system.
-          - `// @noFallthroughCasesInSwitch`: Report errors for fallthrough cases in switch statements.
-          - `// @noImplicitAny`: Raise error on expressions and declarations with an implied 'any' type.
-          - `// @noImplicitOverride`: Ensure overriding members in derived classes are marked with an 'override' modifier.
-          - `// @noImplicitReturns`: Report error when not all code paths in function return a value.
-          - `// @noImplicitThis`: Raise error on 'this' expressions with an implied 'any' type.
-          - `// @noPropertyAccessFromIndexSignature`: Require undeclared properties from index signatures to be accessed with an index.
-          - `// @noUncheckedIndexedAccess`: Add a 'undefined' type to elements accessed via an index signature.
-          - `// @noUnusedLocals`: Report errors on unused locals.
-          - `// @noUnusedParameters`: Report errors on unused parameters.
-          - `// @strict`: Enable all strict type checking options.
-          - `// @strictBindCallApply`: Enable stricter checking of bind, call, and apply.
-          - `// @strictFunctionTypes`: Enable stricter checking of function types.
-          - `// @strictNullChecks`: Enable strict null checks.
-          - `// @strictPropertyInitialization`: Enable strict checking of property initialization.
-          - `// @useUnknownInCatchVariables`: Type catch clause variables as 'unknown' instead of 'any'.
-          - `// @allowArbitraryExtensions`: Allow arbitrary file extensions to be included in the program.
-          - `// @allowImportingTsExtensions`: Allow '.ts' and '.tsx' extensions to be imported.
-          - `// @allowUmdGlobalAccess`: Allow accessing UMD globals from modules.
-          - `// @baseUrl`: Base directory to resolve non-relative module names.
-          - `// @customConditions`: List of custom conditions to apply to module resolution.
-          - `// @module`: Specify module code generation.
-          - `// @moduleResolution`: Specify module resolution strategy.
-          - `// @moduleSuffixes`: List of file extensions to consider when resolving modules.
-          - `// @noResolve`: Do not add triple-slash references or module import targets to the list of compiled files.
-          - `// @paths`: A series of entries which re-map imports to lookup locations relative to the 'baseUrl'.
-          - `// @resolveJsonModule`: Include modules imported with '.json' extension.
-          - `// @resolvePackageJsonExports`: Resolve the 'exports' field in 'package.json'.
-          - `// @resolvePackageJsonImports`: Resolve the 'imports' field in 'package.json'.
-          - `// @rootDir`: Specifies the root directory of input files.
-          - `// @rootDirs`: List of root folders whose combined content represents the structure of the project at runtime.
-          - `// @typeRoots`: List of folders to include type definitions from.
-          - `// @types`: Type declaration files to be included in compilation.
-          - `// @declaration`: Generates corresponding '.d.ts' file.
-          - `// @declarationDir`: Output directory for generated declaration files.
-          - `// @declarationMap`: Generates a sourcemap for each corresponding '.d.ts' file.
-          - `// @downlevelIteration`: Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'.
-          - `// @emitBOM`: Specifies whether to emit a byte order mark (BOM) in emitted files. The byte order mark (BOM) is a Unicode character that serves as an indicator for the encoding of a text file. By default, TypeScript emits files without a BOM. Enabling `emitBOM` instructs TypeScript to include the BOM character at the beginning of emitted files, which can be useful for compatibility with certain tools and environments.
+        The TypeScript, JavaScript, TSX, or JSX code to analyze. 
+        Twoslash comments can be used for various features like, compiler flag comments, error comments, and more.
       examples: 
+        - "Compiler flag comments: `// @noImplicitAny: false`, `// @target: ES2015`, etc."
+        - "Error comments: `// @noErrors`, `// @errors` Lint the code for syntax errors and best practices."
+        - "Emitted file comments: `// @showEmit`, `// @showEmittedFile: index.d.ts`"
+        - "Static semantic info comments: `// @noStaticSemanticInfo` "
+        - "Emit comments: `// @emit`"
+        - "Error validation comments: `// @noErrorValidation`"
+        - "Filename comments: `// @filename`"
+        - "Script Target comments: `// @target`"
+        - "Declaration comments: `// @declaration: true`"
+        - "Cut comments: `// ---cut---` to cut out unnecessary code before the comment. `// ---cut-after---` to cut out unnecessary code after the comment."
+        - "Type queries: `// ^?` to query types of variables, objects, functions, arrays, maps, symbols, parameters and/or values. Check type information for the line of code above the comment."
+        - "Auto-Completions: `// ^|` Auto-complete code suggestions."
+        - "Highlighting: `// ^^^ Description` for highlighting the section of code above the comment. Remember to add a space after the `^^^` to avoid syntax errors."
+        - "Import files: `// @filename: import_files.ts` for importing files"
+        - | 
+            Full Compile Options List:
+            - `// @module: esnext`, `// @jsx: preserve`, `// @lib: esnext`, `// @strict: true`, `// @noImplicitAny: false`, `// @target: ES2022`, `// @declaration: true`,
+            - `// @noUnusedLocals: true`, `// @noUnusedParameters: true`, `// @noImplicitReturns: true`, `// @noFallthroughCasesInSwitch: true`, `// @allowUnreachableCode: false`,
+            - `// @allowUnusedLabels: false`, `// @noImplicitOverride: true`, `// @exactOptionalPropertyTypes: true`, `// @noPropertyAccessFromIndexSignature: true`,
+            - `// @noUncheckedIndexedAccess: true`, `// @noImplicitThis: true`, `// @strictBindCallApply: true`, `// @strictFunctionTypes: true`, `// @strictNullChecks: true`,
+            - `// @strictPropertyInitialization: true`, `// @useUnknownInCatchVariables: true`, `// @allowArbitraryExtensions: true`, `// @allowImportingTsExtensions: true`,
+            - `// @alwaysStrict: true`, `// @noEmit: true`, `// @noEmitOnError: true`, `// @preserveConstEnums: true`, `// @removeComments: true`, `// @skipLibCheck: true`,
+            - `// @sourceMap: true`, `// @inlineSourceMap: true`, `// @inlineSources: true`, `// @emitDeclarationOnly: true`, `// @declarationMap: true`, `// @declarationDir: ./`,
+            - `// @listEmittedFiles: true`, `// @listFiles: true`, `// @pretty: true`, `// @downlevelIteration: true`, `// @isolatedModules: true`, `// @importHelpers: true`,
+            - `// @experimentalDecorators: true`, `// @emitDecoratorMetadata: true`, `// @importsNotUsedAsValues: true`, `// @noEmitHelpers: true`, `// @noImplicitUseStrict: true`, 
+            - `// @noLib: true`, `// @noResolve: true`, `// @noStrictGenericChecks: true`, `// @noUncheckedIndexedAccess: true`, `// @noUnusedLocals: true`, `// @noUnusedParameters: true`,
+            - `// @strictBindCallApply: true`, `// @strictFunctionTypes: true`, `// @strictNullChecks: true`, `// @strictPropertyInitialization: true`, `// @useUnknownInCatchVariables: true`,
+            - `// @allowJs: true`, `// @checkJs: true`, `// @jsx: preserve`, `// @jsxFactory: React`, `// @jsxFragmentFactory: React`, `// @jsxImportSource: React`, 
+            - `// @allowUnreachableCode`: Do not report errors on unreachable code.
+            - `// @allowUnusedLabels`: Do not report errors on unused labels.
+            - `// @alwaysStrict`: Parse in strict mode and emit "use strict" for each source file.
+            - `// @exactOptionalPropertyTypes`: Differentiate between optional property and undefined property in the type system.
+            - `// @noFallthroughCasesInSwitch`: Report errors for fallthrough cases in switch statements.
+            - `// @noImplicitAny`: Raise error on expressions and declarations with an implied 'any' type.
+            - `// @noImplicitOverride`: Ensure overriding members in derived classes are marked with an 'override' modifier.
+            - `// @noImplicitReturns`: Report error when not all code paths in function return a value.
+            - `// @noImplicitThis`: Raise error on 'this' expressions with an implied 'any' type.
+            - `// @noPropertyAccessFromIndexSignature`: Require undeclared properties from index signatures to be accessed with an index.
+            - `// @noUncheckedIndexedAccess`: Add a 'undefined' type to elements accessed via an index signature.
+            - `// @noUnusedLocals`: Report errors on unused locals.
+            - `// @noUnusedParameters`: Report errors on unused parameters.
+            - `// @strict`: Enable all strict type checking options.
+            - `// @strictBindCallApply`: Enable stricter checking of bind, call, and apply.
+            - `// @strictFunctionTypes`: Enable stricter checking of function types.
+            - `// @strictNullChecks`: Enable strict null checks.
+            - `// @strictPropertyInitialization`: Enable strict checking of property initialization.
+            - `// @useUnknownInCatchVariables`: Type catch clause variables as 'unknown' instead of 'any'.
+            - `// @allowArbitraryExtensions`: Allow arbitrary file extensions to be included in the program.
+            - `// @allowImportingTsExtensions`: Allow '.ts' and '.tsx' extensions to be imported.
+            - `// @allowUmdGlobalAccess`: Allow accessing UMD globals from modules.
+            - `// @baseUrl`: Base directory to resolve non-relative module names.
+            - `// @customConditions`: List of custom conditions to apply to module resolution.
+            - `// @module`: Specify module code generation.
+            - `// @moduleResolution`: Specify module resolution strategy.
+            - `// @moduleSuffixes`: List of file extensions to consider when resolving modules.
+            - `// @noResolve`: Do not add triple-slash references or module import targets to the list of compiled files.
+            - `// @paths`: A series of entries which re-map imports to lookup locations relative to the 'baseUrl'.
+            - `// @resolveJsonModule`: Include modules imported with '.json' extension.
+            - `// @resolvePackageJsonExports`: Resolve the 'exports' field in 'package.json'.
+            - `// @resolvePackageJsonImports`: Resolve the 'imports' field in 'package.json'.
+            - `// @rootDir`: Specifies the root directory of input files.
+            - `// @rootDirs`: List of root folders whose combined content represents the structure of the project at runtime.
+            - `// @typeRoots`: List of folders to include type definitions from.
+            - `// @types`: Type declaration files to be included in compilation.
+            - `// @declaration`: Generates corresponding '.d.ts' file.
+            - `// @declarationDir`: Output directory for generated declaration files.
+            - `// @declarationMap`: Generates a sourcemap for each corresponding '.d.ts' file.
+            - `// @downlevelIteration`: Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'.
+            - `// @emitBOM`: Specifies whether to emit a byte order mark (BOM) in emitted files. The byte order mark (BOM) is a Unicode character that serves as an indicator for the encoding of a text file. By default, TypeScript emits files without a BOM. Enabling `emitBOM` instructs TypeScript to include the BOM character at the beginning of emitted files, which can be useful for compatibility with certain tools and environments.
         - | 
           // @module: esnext
           // @target: ES2022
