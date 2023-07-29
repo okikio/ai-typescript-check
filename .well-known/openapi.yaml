@@ -255,7 +255,7 @@ components:
       examples: 
         - 
           code: |
-            const abolute = (num: number) => num < 0 ? num * -1 : num
+            const absolute = (num: number) => num < 0 ? num * -1 : num
             //      ^?
           extension: 'ts'
           defaultOptions: 
