@@ -1,55 +1,61 @@
+// Import necessary modules from dependencies
 import { cors, oak, path } from "./deps.ts";
 import { twoslasher } from "./vendor/twoslash.ts";
 import type { TwoSlashOptions } from "./vendor/twoslash.ts";
 
+// Destructure necessary components from oak (similar to Express.js in Node.js)
 const { Application, Router, send, isHttpError, Status } = oak;
 
+// Destructure necessary path utilities from path (similar to path in Node.js)
 const { dirname, fromFileUrl, join } = path;
+
+// Get the directory of the current module file
+// This is similar to __dirname in Node.js, but Deno uses URLs for modules, so we need to convert from a file URL to a path
 const __dirname = dirname(fromFileUrl(import.meta.url));
 
+// Define the shape of the request options for the twoslash route
 interface TwoslashRequestOptions extends TwoSlashOptions {
   code: string;
   extension: string;
 }
 
+// Create a new router (similar to Express.js Router in Node.js)
 const router = new Router();
+
+// Define routes
 router
+  // Root route
   .get("/", (context) => {
+    // Respond with a JSON object
     context.response.body = ({
       hey: "Hello World! The API is working!",
       message:
         "/twoslash - Accepts a JSON & Form Data body with the following properties: code, extension, and options.",
     })
   })
-  .get("/.well-known/(.*)", async (context) => {
-    await send(context, context.request.url.pathname.replace("/.well-known", ""), {
-      root: join(Deno.cwd(), "./.well-known"),
-      index: "ai-plugin.json",
+  // Route for redirect serving favicon.* files
+  .get("/favicon.:ext", (context) => {
+    const { ext } = context.params;
+    context.response.redirect(`/favicon/favicon.${ext}`);
+  })
+  // Route for serving static files
+  .get("/:staticPath(.well-known|favicon)/:fileName", async (context) => {
+    const { staticPath, fileName } = context.params;
+    // Use the send function from oak to serve static files
+    // This is similar to express.static in Express.js
+    await send(context, fileName, {
+      root: join(__dirname, `./${staticPath}`),
     });
   })
-  .get("/favicon/(.*)", async (context) => {
-    await send(context, context.request.url.pathname.replace("/favicon", ""), {
-      root: join(__dirname, "./favicon"),
-      index: "favicon.svg",
-    });
-  })
-  .get("/favicon.svg", async (context) => {    
-    await send(context, context.request.url.pathname, {
-      root: join(__dirname, "./favicon"),
-      index: "favicon.svg",
-    });
-  })
-  .get("/favicon.ico", async (context) => {    
-    await send(context, context.request.url.pathname, {
-      root: join(__dirname, "./favicon"),
-      index: "favicon.ico",
-    });
-  })
+  // Route for handling OPTIONS requests to /twoslash
+  // This is necessary for CORS (Cross-Origin Resource Sharing)
   .options("/twoslash", cors()) // enable pre-flight request for OPTIONS request
+  // Route for handling POST requests to /twoslash
   .post("/twoslash", async (context) => {
     const { request } = context;
     const contentType = request.headers.get("content-type");
     console.log({
+      twoslash: request.url.pathname,
       method: "post",
       url: request.url,
       contentType,
@@ -63,9 +69,9 @@ router
     const { code, extension, ...opts }  = data;
 
     const twoslash = await twoslasher(code, extension, opts);
-    console.log("twoslash ", twoslash);
     context.response.body = twoslash;
   })
+  // Route for handling GET requests to /twoslash
   .get("/twoslash", async (context) => {
     const { request } = context;
 
@@ -106,38 +112,82 @@ router
     context.response.body = twoslash;
   });
 
+// Create a new application (similar to Express.js application in Node.js)
 const app = new Application();
+
+// Middleware to handle double slashes in the pathname
+app.use(async (context, next) => {
+  // Get the original path from the request URL
+  // Example: originalPath might be "/about//team"
+  const originalPath = context.request.url.pathname;
+
+  // Create a "normalized" version of the path where all sequences of one or more slashes are replaced with a single slash
+  // Example: normalizedPath will be "/about/team"
+  const normalizedPath = originalPath.replace(/\/+/g, '/');
+
+  // If the original path and the normalized path are different, this means that the original path had double slashes (or more)
+  if (originalPath !== normalizedPath) {
+    // Construct a new URL with the normalized path
+    // Example: if the original URL was "http://example.com/about//team", the new URL will be "http://example.com/about/team"
+    const { protocol, hostname, search, hash } = context.request.url;
+    const newUrl = `${protocol}//${hostname}${normalizedPath}${search}${hash}`;
+
+    // Redirect to the new URL
+    context.response.redirect(newUrl);
+  } else {
+    // If the original path and the normalized path are the same, this means that the original path did not have any double slashes
+    // So, just pass control to the next middleware function
+    await next();
+  }
+});
+
+// Error handling middleware
 app.use(async (context, next) => {
   try {
+    // Pass control to the next middleware function
+    // If any of them throws an error, it will be caught here
     await next();
   } catch (err) {
+    // Check if the error is an HTTP error (e.g., an error thrown by the oak framework)
     if (isHttpError(err)) {
+      // Set the response status to the error status
       context.response.status = err.status;
       const { message, status, stack } = err;
+      // If the client accepts JSON, send the error details as a JSON object
       if (context.request.accepts("json")) {
         context.response.body = { message, status, stack };
         context.response.type = "json";
       } else {
+        // Otherwise, send the error details as plain text
         context.response.body = `${status} ${message}\n\n${stack ?? ""}`;
         context.response.type = "text/plain";
       }
     } else {
-      // handle all other Errors
+      // If the error is not an HTTP error, it's an unexpected error
+      // In this case, set the response status to 500 and send a generic error message
       context.response.status = 500;
       context.response.body = "Internal server error";
+      // Also log the error to the console for debugging
       console.error(err);
     }
   }
 });
 
-app.use(cors()); // Enable CORS for All Routes
+// Enable CORS for all routes
+// This is necessary for the API to be accessed from different origins
+app.use(cors());
+
+// Use the router's routes in the application
 app.use(router.routes());
 
 // 404 middleware
+// This function will be called if no previous route or middleware function sends a response
 app.use((context) => {
+  // Set the response status to 404 and send a simple error message
   context.response.status = Status.NotFound;
   context.response.body = "404 Not Found";
 });
 
+// Start the application and make it listen on port 8000
 console.info("CORS-enabled web server listening on port 8000");
 await app.listen({ port: 8000 });

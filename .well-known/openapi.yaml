@@ -21,9 +21,9 @@ paths:
   /twoslash:
     post:        
       operationId: postToTypescriptTwoslash
-      summary: Run TypeScript Twoslash on a given code
+      summary: Run TypeScript Twoslash on a large amount of code
       description: |
-        This endpoint accepts TwoSlashOptions as JSON/FormData and returns TwoSlashReturn JSON. 
+        This endpoint is meant for larger code inputs. It accepts TwoSlashOptions as JSON/FormData and returns TwoSlashReturn JSON. 
         Used for transforming TypeScript and Javascript code with twoslash options. 
         Supports ts, js, tsx, jsx.
       requestBody:
@@ -50,9 +50,9 @@ paths:
                 $ref: '#/components/schemas/TwoslashError'
     get:        
       operationId: getToTypescriptTwoslash
-      summary: Run TypeScript Twoslash on a given code
+      summary: Run TypeScript Twoslash on a smaller amount of code that are 254 characters in length or less
       description: |
-        This endpoint accepts TwoSlashOptions as JSON/FormData and returns TwoSlashReturn JSON. 
+        This endpoint is meant for smaller amounts of code that are 254 characters in length or less. It accepts TwoSlashOptions as JSON/FormData and returns TwoSlashReturn JSON. 
         Used for transforming TypeScript and Javascript code with twoslash options. 
         Supports ts, js, tsx, jsx.
       parameters: 
