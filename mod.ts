@@ -1,5 +1,5 @@
 // Import necessary modules from dependencies
-import { cors, oak, path, parse } from "./deps.ts";
+import { cors, oak, path, parse, type Typescript } from "./deps.ts";
 import { twoslasher } from "./vendor/twoslash.ts";
 import type { TwoSlashOptions } from "./vendor/twoslash.ts";
 
@@ -17,6 +17,7 @@ const __dirname = dirname(fromFileUrl(import.meta.url));
 interface TwoslashRequestOptions extends TwoSlashOptions {
   code: string;
   extension: string;
+  // version?: string;
 }
 
 // Create a new router (similar to Express.js Router in Node.js)
@@ -76,6 +77,11 @@ router
     // Max file size to handle
     const data: TwoslashRequestOptions = type === "form-data" ? (await value.read({ maxSize: 10000000 })).fields : await value;
     const { code, extension, ...opts } = data;
+
+    // let tsModule: typeof Typescript;
+    // if (version) {
+    //   tsModule = await import(`https://esm.sh/typescript@${versionNumber}`).default;
+    // }
 
     const twoslash = await twoslasher(code, extension, opts);
     context.response.body = twoslash;
