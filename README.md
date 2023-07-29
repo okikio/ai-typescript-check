@@ -2,9 +2,73 @@
 
 `ai-typescript-check` is a ChatGPT plugin and API that provides linting, auto-completion, error checking, and type checking for TypeScript, JSX/TSX, and JavaScript files. It uses a modified version of [`@typescript/twoslash`](https://shikijs.github.io/twoslash/). Meaning all the typescript twoslash tips and tricks all work out of the box.
 
-While primarily designed as a ChatGPT plugin for type checking TypeScript code, `ai-typescript-check` can also be used as a standalone API for type checking in any coding environment. We welcome your feedback and suggestions. You can check out the OpenAPI Spec to learn more about the API [.well-known/open-api.yaml](./.well-known/open-api.yaml) or using the website at [ts-check.okikio.dev/.well-known/openapi.yaml](https://ts-check.okikio.dev/.well-known/openapi.ya
+While primarily designed as a ChatGPT plugin for type checking TypeScript code, `ai-typescript-check` can also be used as a standalone API for type checking in any coding environment. We welcome your feedback and suggestions. You can check out the OpenAPI Spec to learn more about the API [.well-known/open-api.yaml](./.well-known/open-api.yaml) or using the website at [ts-check.okikio.dev/.well-known/openapi.yaml](https://ts-check.okikio.dev/.well-known/openapi.yaml)
+
+## Install ChatGPT Plugin
+
+### If the plugin is available on the official store:
+
+1. Navigate to the official OpenAI plugin store.
+2. Search for this plugin.
+3. Click on the plugin to view its details.
+4. Click on the "Install" button to add the plugin to your ChatGPT.
+
+### If the plugin is not available on the official store:
+
+1. Navigate to the official OpenAI plugin store.
+2. Click on the "Install an unverified plugin" link. 
+3. Enter the official API URL `ts-check.okikio.dev` and click "Find Plugin".
+4. ChatGPT will then walk you through the steps of installing the plugin, if it's not yet on the store.
+5. Create a new chat using GPT-4 with Plugins.
+6. Enable the "Typescript Twoslash API" plugin and start.
 
 ## Usage
+
+### ChatGPT Plugin
+
+#### Prompt
+
+> ```md
+> Type check transferables
+> 
+> import { hasTransferables } from "transferables" 
+> ```
+
+#### Response
+
+> The TypeScript code:
+> 
+> ```ts
+> import { hasTransferables } from "transferables"
+> ```
+> 
+> imports a function named `hasTransferables` from a module named "transferables". The function `hasTransferables` takes up to three parameters:
+> 
+> 1. `obj: unknown` - The object to check for transferables.
+> 2. `streams?: boolean` - An optional parameter that, if true, includes streams in the check for transferables.
+> 3. `maxCount?: number` - An optional parameter that limits the number of iterations the function will perform when checking for transferables.
+> 
+> The function returns a boolean value indicating whether the input contains at least one transferable object, up to a maximum number of iterations.
+> 
+> Please note that the function `hasTransferables` is imported but not used in your code, which is why the TypeScript compiler is giving a warning.
+> 
+> Here is the type information for `hasTransferables`:
+> 
+> ```ts
+> (alias) function hasTransferables(obj: unknown, streams?: boolean, maxCount?: number): boolean
+> ```
+> 
+> And here is the documentation for the function:
+> 
+> ```ts
+> Quickly checks to see if input contains at least one transferable object, up to a max number of iterations
+> ```
+> 
+> You can see the code in the TypeScript playground [here](https://www.typescriptlang.org/play/#code/JYWwDg9gTgLgBAbzgCwIYGcAqVUDt0BmApjgEYA2R6cAvnAVBCHAEQw77FmXotA).
+
+Here's this exmaple on ChatGPT: https://chat.openai.com/share/a94731fb-b599-4896-b754-e9771c2b1e99
+
+### API
 
 To utilize `ai-typescript-check`, please follow the steps below:
 
