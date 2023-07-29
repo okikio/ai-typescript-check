@@ -1,26 +1,26 @@
 # ai-typescript-check
 
-`ai-typescript-check` is a ChatGPT plugin and API that provides linting, auto-completion, error checking, and type checking for TypeScript, JSX/TSX, and JavaScript files. It uses a modified version of [`@typescript/twoslash`](https://shikijs.github.io/twoslash/).
+`ai-typescript-check` is a ChatGPT plugin and API that provides linting, auto-completion, error checking, and type checking for TypeScript, JSX/TSX, and JavaScript files. It uses a modified version of [`@typescript/twoslash`](https://shikijs.github.io/twoslash/). Meaning all the typescript twoslash tips and tricks all work out of the box.
 
-While primarily designed as a ChatGPT plugin for type checking TypeScript code, `ai-typescript-check` can also be used as a standalone API for type checking in any coding environment. We welcome your feedback and suggestions. You can check out the OpenAPI Spec to learn more about the API [.well-known/open-api.yaml](./.well-known/open-api.yaml) or using the website at [ts-check.okikio.dev/.well-known/openapi.yaml](https://ts-check.okikio.dev/.well-known/openapi.yaml)
+While primarily designed as a ChatGPT plugin for type checking TypeScript code, `ai-typescript-check` can also be used as a standalone API for type checking in any coding environment. We welcome your feedback and suggestions. You can check out the OpenAPI Spec to learn more about the API [.well-known/open-api.yaml](./.well-known/open-api.yaml) or using the website at [ts-check.okikio.dev/.well-known/openapi.yaml](https://ts-check.okikio.dev/.well-known/openapi.ya
 
-## Example Usage in Deno
+## Usage
 
-You can use `ai-typescript-check` in Deno by sending a POST request to the API endpoint. Here's an example:
+To utilize `ai-typescript-check`, please follow the steps below:
 
 ```ts
-// Create a new FormData instance
+// Instantiate a new FormData object
 const formData = new FormData();
 formData.append("code", "import { hasTransferables } from \"transferables\"");
 formData.append("extension", "ts");
 
-// Send a POST request to the API
+// Initiate a POST request to the API
 const res = await fetch("https://ts-check.okikio.dev/twoslash", {
   method: "POST",
   body: formData
 })
 
-// Log the response
+// Output the response
 console.log({
   json: await res.json()
 })
@@ -35,23 +35,23 @@ const options = JSON.stringify({
   "extension": "ts"
 });
 
-// Send a GET request to the API
+// Initiate a GET request to the API
 const res = await fetch(`https://ts-check.okikio.dev/twoslash?options=${options}`)
 
-// Log the response
+// Output the response
 console.log({
   json: await res.json()
 })
 ```
 
-## Response Format
+## Response
 
-The API returns a JSON object with the following properties:
+The API will return a JSON object containing the following information:
 
 - `code`: The original code that was sent to the API.
 - `extension`: The file extension of the code.
 - `highlights`: An array of highlights from the code.
-- `queries`: An array of queries from the code.
+- `queries`: An array of queries from the code. This is particularly useful for understanding how the code interacts with the TypeScript system.
 - `staticQuickInfos`: An array of quick info objects, each containing details about a specific part of the code.
 - `errors`: An array of errors found in the code.
 - `warnings`: An array of warnings about the code.
@@ -93,3 +93,51 @@ Here's an example response:
   "tags": []
 }
 ```
+
+## API Reference
+
+`ai-typescript-check` provides two main API endpoints: `POST /twoslash` and `GET /twoslash`. Both endpoints accept `TwoSlashOptions` as input and return `TwoSlashReturn` as output.
+
+### POST `/twoslash`
+
+This endpoint is designed for processing larger code inputs. It accepts `TwoSlashOptions` as JSON/FormData and returns `TwoSlashReturn` JSON. It supports ts, js, tsx, jsx.
+
+#### Request Body
+
+The request body should be a JSON object or FormData with the following properties:
+
+- `code` (required): The TypeScript, JavaScript, TSX, or JSX code to run twoslash over.
+- `extension` (required): The extension of the code file. Can be 'typescript', 'javascript', 'json', 'jsn', 'ts', 'js', 'tsx', or 'jsx'.
+- `defaultOptions`: Default options for twoslash.
+- `defaultCompilerOptions`: Default compiler options for TypeScript. This can include any valid tsconfig options as per the official [TypeScript documentation](https://www.typescriptlang.org/tsconfig).
+- `fsMap`: A map of filenames to their content for the virtual file system.
+- `customTags`: An array of custom tags.
+
+#### Response
+
+The response is a `TwoSlashReturn` JSON object with details about the code.
+
+### GET `/twoslash`
+
+This endpoint is designed for processing smaller amounts of code that are 254 characters in length or less. It accepts `TwoSlashOptions` as JSON/FormData and returns `TwoSlashReturn` JSON. It supports ts, js, tsx, jsx.
+
+#### Query Parameters
+
+The query parameters should include the `options` parameter with the same properties as the request body for the POST endpoint.
+
+#### Response
+
+The response is a `TwoSlashReturn` JSON object with details about the code.
+
+## Error Handling
+
+In the event of an error during the processing of your code, the API will return a `TwoslashError` JSON object with details about the error. This object includes the following properties:
+
+- `error`: A string describing the error.
+- `message`: A detailed message about the error.
+- `errors`: An array of error codes.
+- `compilerErrors`: A string with the compiler errors.
+
+## License
+
+`ai-typescript-check` is licensed under the [MIT License](https://github.com/okikio/ai-typescript-check/blob/main/LICENSE).
