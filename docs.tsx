@@ -1,8 +1,6 @@
-/** @jsx h */
 import {
   ColorScheme,
   fromMarkdown,
-  h,
   html,
   path,
   shiki,
@@ -24,8 +22,10 @@ const __dirname = dirname(fromFileUrl(import.meta.url));
 // check the color scheme with system settings automatically
 html.use(ColorScheme("dark"));
 
+shiki.setCDN("https://unpkg.com/shiki/");
+const highlighter = await shiki.getHighlighter({ theme: "github-dark" });
+
 export async function getDocs() {
-  const highlighter = await shiki.getHighlighter({ theme: "github-dark" });
   const file = await unified()
     .use(fromMarkdown) // Parse markdown content to a syntax tree
     .use(GithubMarkdownFlavor)

@@ -15,7 +15,11 @@ export { default as withHtmlInMarkdown } from "https://esm.sh/rehype-raw"
 export { default as toHtml } from "https://esm.sh/rehype-stringify"
 export { default as toHast } from "https://esm.sh/remark-rehype"
 export { default as withShiki } from "https://esm.sh/@stefanprobst/remark-shiki"
-export * as shiki from "npm:shiki"
+
+// https://deno.bundlejs.com/file?q=shiki
+
+// @deno-types=https://esm.sh/shiki
+export * as shiki from "https://unpkg.com/shiki/dist/index.browser.mjs"
 
 export { default as GithubMarkdownFlavor } from "https://esm.sh/remark-gfm"
 
