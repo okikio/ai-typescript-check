@@ -22,11 +22,9 @@ While primarily designed as a ChatGPT plugin for type checking TypeScript code, 
 3. Enter the official API URL `ts-check.okikio.dev` and click "Find Plugin".
 4. ChatGPT will then walk you through the steps of installing the plugin, if it's not yet on the store.
 5. Create a new chat using GPT-4 with Plugins.
-6. Enable the "Typescript Twoslash API" plugin and start.
+6. Enable the "Typescript Code Analyzer API" plugin and start.
 
 ## Usage
-
-### ChatGPT Plugin
 
 #### Prompt
 
