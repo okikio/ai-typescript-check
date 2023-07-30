@@ -1,8 +1,9 @@
 // Import necessary modules from dependencies
 import { cors, oak, parse, path, } from "./deps.ts";
-import { getDocs } from "./docs.tsx";
 import { twoslasher } from "./vendor/twoslash.ts";
 import type { TwoSlashOptions } from "./vendor/twoslash.ts";
+
+import "./script/build.ts"
 
 // Destructure necessary components from oak (similar to Express.js in Node.js)
 const { Application, Router, send, isHttpError, Status } = oak;
@@ -27,9 +28,12 @@ const router = new Router();
 // Define routes
 router
   // Root route
-  .get("/", (context) => {
-    // Respond with a JSON object
-    context.response.body = getDocs;
+  .get("/", async (context) => {
+    // Use the send function from oak to serve static files
+    // This is similar to express.static in Express.js
+    await send(context, "/index.html", {
+      root: join(__dirname, `./static`),
+    });
     context.response.headers.set("Content-Type", "text/html");
   })
   // Root static route
@@ -49,7 +53,7 @@ router
   // Route openapi.json for a future swagger ui docs route
   .get("/.well-known/openapi.json", async (context) => {
     const uint8arr = await Deno.readFile(
-      join(__dirname, `./.well-known/openapi.yaml`),
+      join(__dirname, `./static/.well-known/openapi.yaml`),
     );
     context.response.body = await parse(
       new TextDecoder().decode(uint8arr),
@@ -61,7 +65,7 @@ router
     // Use the send function from oak to serve static files
     // This is similar to express.static in Express.js
     await send(context, fileName, {
-      root: join(__dirname, `./${staticPath}`),
+      root: join(__dirname, `./static/${staticPath}`),
     });
   })
   // Route for handling OPTIONS requests to /twoslash

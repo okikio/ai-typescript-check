@@ -1,0 +1,154 @@
+<!DOCTYPE html><html lang="en" class="dark"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Intro. - Typescript Code Analyzer API</title><meta name="description" content="The REST API accepts a JSON &amp; Form Data body with the following properties: code, extension, and options."/><link rel="mask-icon" href="/favicon/favicon.svg" color="#ffffff"/><link rel="stylesheet" href="https://unpkg.com/sakura.css/css/normalize.css " type="text/css"/><link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura-vader.css " type="text/css"/><link rel="stylesheet" href="./static/style.css" type="text/css"/><style>.dark{color-scheme:dark}.dark ::-moz-selection{background:#444}.dark ::selection{background:#444}</style></head><body><h1>ai-typescript-check</h1>
+<p><a href="https://github.com/okikio/ai-typescript-check#readme">GitHub</a> <span style="padding-inline: 1rem">|</span> <a href="https://ts-check.okikio.dev">Docs</a> <span style="padding-inline: 1rem">|</span> <a href="https://github.com/okikio/ai-typescript-check#license">License</a></p>
+<p><code>ai-typescript-check</code> is a ChatGPT plugin and API that provides linting, auto-completion, error checking, and type checking for TypeScript, JSX/TSX, and JavaScript files. It uses a modified version of <a href="https://shikijs.github.io/twoslash/"><code>@typescript/twoslash</code></a>. Meaning all the typescript twoslash tips and tricks all work out of the box.</p>
+<p>While primarily designed as a ChatGPT plugin for type checking TypeScript code, <code>ai-typescript-check</code> can also be used as a standalone API for type checking in any coding environment. We welcome your feedback and suggestions. You can check out the OpenAPI Spec to learn more about the API <a href="./.well-known/open-api.yaml">.well-known/open-api.yaml</a> or using the website at <a href="https://ts-check.okikio.dev/.well-known/openapi.yaml">ts-check.okikio.dev/.well-known/openapi.yaml</a></p>
+<h2>Install ChatGPT Plugin</h2>
+<h3>From Store:</h3>
+<ol>
+<li>Navigate to the official OpenAI plugin store.</li>
+<li>Search for this plugin.</li>
+<li>Click on the plugin to view its details.</li>
+<li>Click on the "Install" button to add the plugin to your ChatGPT.</li>
+</ol>
+<h3>Manually:</h3>
+<ol>
+<li>Navigate to the official OpenAI plugin store.</li>
+<li>Click on the "Install an unverified plugin" link.</li>
+<li>Enter the official API URL <code>ts-check.okikio.dev</code> and click "Find Plugin".</li>
+<li>ChatGPT will then walk you through the steps of installing the plugin, if it's not yet on the store.</li>
+<li>Create a new chat using GPT-4 with Plugins.</li>
+<li>Enable the "Typescript Code Analyzer API" plugin and start.</li>
+</ol>
+<h2>Usage</h2>
+<h4>Prompt</h4>
+<blockquote>
+<p>Type check transferables</p>
+<pre class="shiki github-dark" style="background-color: #24292e" tabindex="0"><code><span class="line"><span style="color: #F97583">import</span><span style="color: #E1E4E8"> { hasTransferables } </span><span style="color: #F97583">from</span><span style="color: #E1E4E8"> </span><span style="color: #9ECBFF">"transferables"</span><span style="color: #E1E4E8"> </span></span></code></pre>
+</blockquote>
+<h4>Response</h4>
+<blockquote>
+<p>The TypeScript code:</p>
+<pre class="shiki github-dark" style="background-color: #24292e" tabindex="0"><code><span class="line"><span style="color: #F97583">import</span><span style="color: #E1E4E8"> { hasTransferables } </span><span style="color: #F97583">from</span><span style="color: #E1E4E8"> </span><span style="color: #9ECBFF">"transferables"</span></span></code></pre>
+<p>imports a function named <code>hasTransferables</code> from a module named "transferables". The function <code>hasTransferables</code> takes up to three parameters:</p>
+<ol>
+<li><code>obj: unknown</code> - The object to check for transferables.</li>
+<li><code>streams?: boolean</code> - An optional parameter that, if true, includes streams in the check for transferables.</li>
+<li><code>maxCount?: number</code> - An optional parameter that limits the number of iterations the function will perform when checking for transferables.</li>
+</ol>
+<p>The function returns a boolean value indicating whether the input contains at least one transferable object, up to a maximum number of iterations.</p>
+<p>Please note that the function <code>hasTransferables</code> is imported but not used in your code, which is why the TypeScript compiler is giving a warning.</p>
+<p>Here is the type information for <code>hasTransferables</code>:</p>
+<pre class="shiki github-dark" style="background-color: #24292e" tabindex="0"><code><span class="line"><span style="color: #E1E4E8">(alias) </span><span style="color: #F97583">function</span><span style="color: #E1E4E8"> </span><span style="color: #B392F0">hasTransferables</span><span style="color: #E1E4E8">(</span><span style="color: #FFAB70">obj</span><span style="color: #F97583">:</span><span style="color: #E1E4E8"> </span><span style="color: #79B8FF">unknown</span><span style="color: #E1E4E8">, </span><span style="color: #FFAB70">streams</span><span style="color: #F97583">?:</span><span style="color: #E1E4E8"> </span><span style="color: #79B8FF">boolean</span><span style="color: #E1E4E8">, </span><span style="color: #FFAB70">maxCount</span><span style="color: #F97583">?:</span><span style="color: #E1E4E8"> </span><span style="color: #79B8FF">number</span><span style="color: #E1E4E8">)</span><span style="color: #F97583">:</span><span style="color: #E1E4E8"> </span><span style="color: #79B8FF">boolean</span></span></code></pre>
+<p>And here is the documentation for the function:</p>
+<pre class="shiki github-dark" style="background-color: #24292e" tabindex="0"><code><span class="line"><span style="color: #E1E4E8">Quickly checks to see </span><span style="color: #F97583">if</span><span style="color: #E1E4E8"> input contains at least one transferable object, up to a max number </span><span style="color: #F97583">of</span><span style="color: #E1E4E8"> iterations</span></span></code></pre>
+<p>You can see the code in the TypeScript playground <a href="https://www.typescriptlang.org/play/#code/JYWwDg9gTgLgBAbzgCwIYGcAqVUDt0BmApjgEYA2R6cAvnAVBCHAEQw77FmXotA">here</a>.</p>
+</blockquote>
+<p>Here's this exmaple on ChatGPT: <a href="https://chat.openai.com/share/a94731fb-b599-4896-b754-e9771c2b1e99">https://chat.openai.com/share/a94731fb-b599-4896-b754-e9771c2b1e99</a></p>
+<h3>API</h3>
+<p>To utilize <code>ai-typescript-check</code>, please follow the steps below:</p>
+<pre class="shiki github-dark" style="background-color: #24292e" tabindex="0"><code><span class="line"><span style="color: #6A737D">// Instantiate a new FormData object</span></span>
+<span class="line"><span style="color: #F97583">const</span><span style="color: #E1E4E8"> </span><span style="color: #79B8FF">formData</span><span style="color: #E1E4E8"> </span><span style="color: #F97583">=</span><span style="color: #E1E4E8"> </span><span style="color: #F97583">new</span><span style="color: #E1E4E8"> </span><span style="color: #B392F0">FormData</span><span style="color: #E1E4E8">();</span></span>
+<span class="line"><span style="color: #E1E4E8">formData.</span><span style="color: #B392F0">append</span><span style="color: #E1E4E8">(</span><span style="color: #9ECBFF">"code"</span><span style="color: #E1E4E8">, </span><span style="color: #9ECBFF">"import { hasTransferables } from </span><span style="color: #79B8FF">\"</span><span style="color: #9ECBFF">transferables</span><span style="color: #79B8FF">\"</span><span style="color: #9ECBFF">"</span><span style="color: #E1E4E8">);</span></span>
+<span class="line"><span style="color: #E1E4E8">formData.</span><span style="color: #B392F0">append</span><span style="color: #E1E4E8">(</span><span style="color: #9ECBFF">"extension"</span><span style="color: #E1E4E8">, </span><span style="color: #9ECBFF">"ts"</span><span style="color: #E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #6A737D">// Initiate a POST request to the API</span></span>
+<span class="line"><span style="color: #F97583">const</span><span style="color: #E1E4E8"> </span><span style="color: #79B8FF">res</span><span style="color: #E1E4E8"> </span><span style="color: #F97583">=</span><span style="color: #E1E4E8"> </span><span style="color: #F97583">await</span><span style="color: #E1E4E8"> </span><span style="color: #B392F0">fetch</span><span style="color: #E1E4E8">(</span><span style="color: #9ECBFF">"https://ts-check.okikio.dev/twoslash"</span><span style="color: #E1E4E8">, {</span></span>
+<span class="line"><span style="color: #E1E4E8">  method: </span><span style="color: #9ECBFF">"POST"</span><span style="color: #E1E4E8">,</span></span>
+<span class="line"><span style="color: #E1E4E8">  body: formData</span></span>
+<span class="line"><span style="color: #E1E4E8">})</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #6A737D">// Output the response</span></span>
+<span class="line"><span style="color: #E1E4E8">console.</span><span style="color: #B392F0">log</span><span style="color: #E1E4E8">({</span></span>
+<span class="line"><span style="color: #E1E4E8">  json: </span><span style="color: #F97583">await</span><span style="color: #E1E4E8"> res.</span><span style="color: #B392F0">json</span><span style="color: #E1E4E8">()</span></span>
+<span class="line"><span style="color: #E1E4E8">})</span></span></code></pre>
+<p>Alternatively, you can pass the options as a query parameter:</p>
+<pre class="shiki github-dark" style="background-color: #24292e" tabindex="0"><code><span class="line"><span style="color: #6A737D">// Define the options</span></span>
+<span class="line"><span style="color: #F97583">const</span><span style="color: #E1E4E8"> </span><span style="color: #79B8FF">options</span><span style="color: #E1E4E8"> </span><span style="color: #F97583">=</span><span style="color: #E1E4E8"> </span><span style="color: #79B8FF">JSON</span><span style="color: #E1E4E8">.</span><span style="color: #B392F0">stringify</span><span style="color: #E1E4E8">({</span></span>
+<span class="line"><span style="color: #E1E4E8">  </span><span style="color: #9ECBFF">"code"</span><span style="color: #E1E4E8">: </span><span style="color: #9ECBFF">`import { hasTransferables } from "transferables"`</span><span style="color: #E1E4E8">,</span></span>
+<span class="line"><span style="color: #E1E4E8">  </span><span style="color: #9ECBFF">"extension"</span><span style="color: #E1E4E8">: </span><span style="color: #9ECBFF">"ts"</span></span>
+<span class="line"><span style="color: #E1E4E8">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #6A737D">// Initiate a GET request to the API</span></span>
+<span class="line"><span style="color: #F97583">const</span><span style="color: #E1E4E8"> </span><span style="color: #79B8FF">res</span><span style="color: #E1E4E8"> </span><span style="color: #F97583">=</span><span style="color: #E1E4E8"> </span><span style="color: #F97583">await</span><span style="color: #E1E4E8"> </span><span style="color: #B392F0">fetch</span><span style="color: #E1E4E8">(</span><span style="color: #9ECBFF">`https://ts-check.okikio.dev/twoslash?options=${</span><span style="color: #E1E4E8">options</span><span style="color: #9ECBFF">}`</span><span style="color: #E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #6A737D">// Output the response</span></span>
+<span class="line"><span style="color: #E1E4E8">console.</span><span style="color: #B392F0">log</span><span style="color: #E1E4E8">({</span></span>
+<span class="line"><span style="color: #E1E4E8">  json: </span><span style="color: #F97583">await</span><span style="color: #E1E4E8"> res.</span><span style="color: #B392F0">json</span><span style="color: #E1E4E8">()</span></span>
+<span class="line"><span style="color: #E1E4E8">})</span></span></code></pre>
+<h2>Response</h2>
+<p>The API will return a JSON object containing the following information:</p>
+<ul>
+<li><code>code</code>: The original code that was sent to the API.</li>
+<li><code>extension</code>: The file extension of the code.</li>
+<li><code>highlights</code>: An array of highlights from the code.</li>
+<li><code>queries</code>: An array of queries from the code. This is particularly useful for understanding how the code interacts with the TypeScript system.</li>
+<li><code>staticQuickInfos</code>: An array of quick info objects, each containing details about a specific part of the code.</li>
+<li><code>errors</code>: An array of errors found in the code.</li>
+<li><code>warnings</code>: An array of warnings about the code.</li>
+<li><code>playgroundURL</code>: A URL to the TypeScript playground with the code pre-loaded.</li>
+<li><code>tags</code>: An array of tags associated with the code.</li>
+</ul>
+<p>Here's an example response:</p>
+<pre class="shiki github-dark" style="background-color: #24292e" tabindex="0"><code><span class="line"><span style="color: #E1E4E8">{</span></span>
+<span class="line"><span style="color: #E1E4E8">  </span><span style="color: #79B8FF">"code"</span><span style="color: #E1E4E8">: </span><span style="color: #9ECBFF">"import { hasTransferables } from </span><span style="color: #79B8FF">\"</span><span style="color: #9ECBFF">transferables</span><span style="color: #79B8FF">\"</span><span style="color: #9ECBFF">"</span><span style="color: #E1E4E8">,</span></span>
+<span class="line"><span style="color: #E1E4E8">  </span><span style="color: #79B8FF">"extension"</span><span style="color: #E1E4E8">: </span><span style="color: #9ECBFF">"ts"</span><span style="color: #E1E4E8">,</span></span>
+<span class="line"><span style="color: #E1E4E8">  </span><span style="color: #79B8FF">"highlights"</span><span style="color: #E1E4E8">: [],</span></span>
+<span class="line"><span style="color: #E1E4E8">  </span><span style="color: #79B8FF">"queries"</span><span style="color: #E1E4E8">: [],</span></span>
+<span class="line"><span style="color: #E1E4E8">  </span><span style="color: #79B8FF">"staticQuickInfos"</span><span style="color: #E1E4E8">: [</span></span>
+<span class="line"><span style="color: #E1E4E8">    {</span></span>
+<span class="line"><span style="color: #E1E4E8">      </span><span style="color: #79B8FF">"text"</span><span style="color: #E1E4E8">: </span><span style="color: #9ECBFF">"(alias) function hasTransferables(obj: unknown, streams?: boolean, maxCount?: number): boolean</span><span style="color: #79B8FF">\n</span><span style="color: #9ECBFF">import hasTransferables"</span><span style="color: #E1E4E8">,</span></span>
+<span class="line"><span style="color: #E1E4E8">      </span><span style="color: #79B8FF">"docs"</span><span style="color: #E1E4E8">: </span><span style="color: #9ECBFF">"Quickly checks to see if input contains at least one transferable object, up to a max number of iterations</span><span style="color: #79B8FF">\n</span><span style="color: #9ECBFF">Thanks @aaorris for the help optimizing perf."</span><span style="color: #E1E4E8">,</span></span>
+<span class="line"><span style="color: #E1E4E8">      </span><span style="color: #79B8FF">"start"</span><span style="color: #E1E4E8">: </span><span style="color: #79B8FF">9</span><span style="color: #E1E4E8">,</span></span>
+<span class="line"><span style="color: #E1E4E8">      </span><span style="color: #79B8FF">"length"</span><span style="color: #E1E4E8">: </span><span style="color: #79B8FF">16</span><span style="color: #E1E4E8">,</span></span>
+<span class="line"><span style="color: #E1E4E8">      </span><span style="color: #79B8FF">"line"</span><span style="color: #E1E4E8">: </span><span style="color: #79B8FF">0</span><span style="color: #E1E4E8">,</span></span>
+<span class="line"><span style="color: #E1E4E8">      </span><span style="color: #79B8FF">"character"</span><span style="color: #E1E4E8">: </span><span style="color: #79B8FF">9</span><span style="color: #E1E4E8">,</span></span>
+<span class="line"><span style="color: #E1E4E8">      </span><span style="color: #79B8FF">"targetString"</span><span style="color: #E1E4E8">: </span><span style="color: #9ECBFF">"hasTransferables"</span></span>
+<span class="line"><span style="color: #E1E4E8">    }</span></span>
+<span class="line"><span style="color: #E1E4E8">  ],</span></span>
+<span class="line"><span style="color: #E1E4E8">  </span><span style="color: #79B8FF">"errors"</span><span style="color: #E1E4E8">: [],</span></span>
+<span class="line"><span style="color: #E1E4E8">  </span><span style="color: #79B8FF">"warnings"</span><span style="color: #E1E4E8">: [</span></span>
+<span class="line"><span style="color: #E1E4E8">    {</span></span>
+<span class="line"><span style="color: #E1E4E8">      </span><span style="color: #79B8FF">"category"</span><span style="color: #E1E4E8">: </span><span style="color: #79B8FF">2</span><span style="color: #E1E4E8">,</span></span>
+<span class="line"><span style="color: #E1E4E8">      </span><span style="color: #79B8FF">"code"</span><span style="color: #E1E4E8">: </span><span style="color: #79B8FF">6133</span><span style="color: #E1E4E8">,</span></span>
+<span class="line"><span style="color: #E1E4E8">      </span><span style="color: #79B8FF">"length"</span><span style="color: #E1E4E8">: </span><span style="color: #79B8FF">48</span><span style="color: #E1E4E8">,</span></span>
+<span class="line"><span style="color: #E1E4E8">      </span><span style="color: #79B8FF">"line"</span><span style="color: #E1E4E8">: </span><span style="color: #79B8FF">0</span><span style="color: #E1E4E8">,</span></span>
+<span class="line"><span style="color: #E1E4E8">      </span><span style="color: #79B8FF">"character"</span><span style="color: #E1E4E8">: </span><span style="color: #79B8FF">0</span><span style="color: #E1E4E8">,</span></span>
+<span class="line"><span style="color: #E1E4E8">      </span><span style="color: #79B8FF">"renderedMessage"</span><span style="color: #E1E4E8">: </span><span style="color: #9ECBFF">"'hasTransferables' is declared but its value is never read."</span><span style="color: #E1E4E8">,</span></span>
+<span class="line"><span style="color: #E1E4E8">      </span><span style="color: #79B8FF">"id"</span><span style="color: #E1E4E8">: </span><span style="color: #9ECBFF">"warn-6133-0-48"</span></span>
+<span class="line"><span style="color: #E1E4E8">    }</span></span>
+<span class="line"><span style="color: #E1E4E8">  ],</span></span>
+<span class="line"><span style="color: #E1E4E8">  </span><span style="color: #79B8FF">"playgroundURL"</span><span style="color: #E1E4E8">: </span><span style="color: #9ECBFF">"https://www.typescriptlang.org/play/#code/JYWwDg9gTgLgBAbzgCwIYGcAqVUDt0BmApjgEYA2R6cAvnAVBCHAEQw77FmXotA"</span><span style="color: #E1E4E8">,</span></span>
+<span class="line"><span style="color: #E1E4E8">  </span><span style="color: #79B8FF">"tags"</span><span style="color: #E1E4E8">: []</span></span>
+<span class="line"><span style="color: #E1E4E8">}</span></span></code></pre>
+<h2>API Reference</h2>
+<p><code>ai-typescript-check</code> provides two main API endpoints: <code>POST /twoslash</code> and <code>GET /twoslash</code>. Both endpoints accept <code>TwoSlashOptions</code> as input and return <code>TwoSlashReturn</code> as output.</p>
+<h3>POST <code>/twoslash</code></h3>
+<p>This endpoint is designed for processing larger code inputs. It accepts <code>TwoSlashOptions</code> as JSON/FormData and returns <code>TwoSlashReturn</code> JSON. It supports ts, js, tsx, jsx.</p>
+<h4>Request Body</h4>
+<p>The request body should be a JSON object or FormData with the following properties:</p>
+<ul>
+<li><code>code</code> (required): The TypeScript, JavaScript, TSX, or JSX code to run twoslash over.</li>
+<li><code>extension</code> (required): The extension of the code file. Can be 'typescript', 'javascript', 'json', 'jsn', 'ts', 'js', 'tsx', or 'jsx'.</li>
+<li><code>defaultOptions</code>: Default options for twoslash.</li>
+<li><code>defaultCompilerOptions</code>: Default compiler options for TypeScript. This can include any valid tsconfig options as per the official <a href="https://www.typescriptlang.org/tsconfig">TypeScript documentation</a>.</li>
+<li><code>fsMap</code>: A map of filenames to their content for the virtual file system.</li>
+<li><code>customTags</code>: An array of custom tags.</li>
+</ul>
+<h4>Response</h4>
+<p>The response is a <code>TwoSlashReturn</code> JSON object with details about the code.</p>
+<h3>GET <code>/twoslash</code></h3>
+<p>This endpoint is designed for processing smaller amounts of code that are 254 characters in length or less. It accepts <code>TwoSlashOptions</code> as JSON/FormData and returns <code>TwoSlashReturn</code> JSON. It supports ts, js, tsx, jsx.</p>
+<h4>Query Parameters</h4>
+<p>The query parameters should include the <code>options</code> parameter with the same properties as the request body for the POST endpoint.</p>
+<h4>Response</h4>
+<p>The response is a <code>TwoSlashReturn</code> JSON object with details about the code.</p>
+<h2>Error Handling</h2>
+<p>In the event of an error during the processing of your code, the API will return a <code>TwoslashError</code> JSON object with details about the error. This object includes the following properties:</p>
+<ul>
+<li><code>error</code>: A string describing the error.</li>
+<li><code>message</code>: A detailed message about the error.</li>
+<li><code>errors</code>: An array of error codes.</li>
+<li><code>compilerErrors</code>: A string with the compiler errors.</li>
+</ul>
+<h2>License</h2>
+<p><code>ai-typescript-check</code> is licensed under the <a href="https://github.com/okikio/ai-typescript-check/blob/main/LICENSE">MIT License</a>.</p></body></html>
