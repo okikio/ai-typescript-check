@@ -8,14 +8,14 @@ While primarily designed as a ChatGPT plugin for type checking TypeScript code, 
 
 ## Install ChatGPT Plugin
 
-### If the plugin is available on the official store:
+### From Store:
 
 1. Navigate to the official OpenAI plugin store.
 2. Search for this plugin.
 3. Click on the plugin to view its details.
 4. Click on the "Install" button to add the plugin to your ChatGPT.
 
-### If the plugin is not available on the official store:
+### Manually:
 
 1. Navigate to the official OpenAI plugin store.
 2. Click on the "Install an unverified plugin" link. 
@@ -30,9 +30,10 @@ While primarily designed as a ChatGPT plugin for type checking TypeScript code, 
 
 #### Prompt
 
-> ```md
+> 
 > Type check transferables
 > 
+> ```ts
 > import { hasTransferables } from "transferables" 
 > ```
 

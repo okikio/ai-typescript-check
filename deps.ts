@@ -9,10 +9,15 @@ export { oakCors as cors } from "https://deno.land/x/cors/mod.ts"
 
 export { parse } from "https://deno.land/std/yaml/parse.ts"
 
-export {unified} from 'https://esm.sh/unified'
-export { default as remarkParse } from 'https://esm.sh/remark-parse'
-export { default as remarkRehype } from 'https://esm.sh/remark-rehype'
-export { default as rehypeStringify } from 'https://esm.sh/rehype-stringify'
+export { unified } from "https://esm.sh/unified"
+export { default as fromMarkdown } from "https://esm.sh/remark-parse"
+export { default as withHtmlInMarkdown } from "https://esm.sh/rehype-raw"
+export { default as toHtml } from "https://esm.sh/rehype-stringify"
+export { default as toHast } from "https://esm.sh/remark-rehype"
+export { default as withShiki } from "https://esm.sh/@stefanprobst/remark-shiki"
+export * as shiki from "npm:shiki"
+
+export { default as GithubMarkdownFlavor } from "https://esm.sh/remark-gfm"
 
 export { default as html, h, Fragment } from "https://deno.land/x/htm/mod.ts"
 export { default as ColorScheme } from "https://deno.land/x/htm/plugins/color-scheme.ts"

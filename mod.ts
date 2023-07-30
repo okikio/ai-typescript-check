@@ -1,6 +1,6 @@
 // Import necessary modules from dependencies
 import { cors, oak, parse, path, } from "./deps.ts";
-import { toHTML } from "./docs.tsx";
+import { getDocs } from "./docs.tsx";
 import { twoslasher } from "./vendor/twoslash.ts";
 import type { TwoSlashOptions } from "./vendor/twoslash.ts";
 
@@ -27,10 +27,19 @@ const router = new Router();
 // Define routes
 router
   // Root route
-  .get("/", async (context) => {
+  .get("/", (context) => {
     // Respond with a JSON object
-    context.response.body = toHTML;
+    context.response.body = getDocs;
     context.response.headers.set("Content-Type", "text/html");
+  })
+  // Root static route
+  .get("/static/:fileName", async (context) => {
+    const { fileName } = context.params;
+    // Use the send function from oak to serve static files
+    // This is similar to express.static in Express.js
+    await send(context, fileName, {
+      root: join(__dirname, `./static`),
+    });
   })
   // Route for redirect serving favicon.* files
   .get("/favicon.:ext", (context) => {

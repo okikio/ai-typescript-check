@@ -1,0 +1,12 @@
+blockquote {
+  border-radius: 0.5rem;
+  border-left-style: dashed;
+}
+
+pre, code {
+  border-radius: 0.75rem;
+}
+
+blockquote :not(pre) code {
+  background-color: rgb(0 0 0 / 0.23);
+}
