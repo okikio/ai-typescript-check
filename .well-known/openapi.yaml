@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: Typescript Code Analyzer API
+  title: Typescript Analyzer API
   description: >-
     This API provides a REST interface for transforming and analyzing TypeScript
     and JavaScript code. It supports linting, autocompletion, error checking,
