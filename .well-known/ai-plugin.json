@@ -2,7 +2,7 @@
     "schema_version": "v1",
     "name_for_human": "TypeScript Analyzer",
     "name_for_model": "typescript_analyzer",
-    "description_for_human": "Analyzes TypeScript, JSX/TSX, and JavaScript files for linting, autocompletion, error checking, and type checking.",
+    "description_for_human": "Analyzes TypeScript, JSX/TSX, and JavaScript files for linting, autocompletion, error checking, and type checking. Created by Okiki Ojo.",
     "description_for_model": "Processes TypeScript code, offering linting, autocomplete, error/type checks, and tooltips. It does not execute/run the provided code, it only analyzes it. Also, it supports twoslash comments.",
     "auth": {
       "type": "none"
