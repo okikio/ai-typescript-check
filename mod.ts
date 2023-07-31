@@ -3,8 +3,6 @@ import { cors, oak, parse, path } from "./deps.ts";
 import { twoslasher } from "./vendor/twoslash.ts";
 import type { TwoSlashOptions } from "./vendor/twoslash.ts";
 
-import "./script/build.ts"
-
 // Destructure necessary components from oak (similar to Express.js in Node.js)
 const { Application, Router, send, isHttpError, Status } = oak;
 
@@ -31,7 +29,7 @@ router
   .get("/(index)?(.html)?", async (context) => {
     // Use the send function from oak to serve static files
     // This is similar to express.static in Express.js
-    await send(context, "/index.html", {
+    await send(context, "index.html", {
       root: join(__dirname, `./static`),
     });
     context.response.headers.set("Content-Type", "text/html");
