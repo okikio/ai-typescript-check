@@ -10,7 +10,7 @@ import {
   withHtmlInMarkdown,
   withShiki,
   GithubMarkdownFlavor,
-} from "./deps.ts";
+} from "../deps.ts";
 
 // Destructure necessary path utilities from path (similar to path in Node.js)
 const { dirname, fromFileUrl, join } = path;
@@ -35,7 +35,7 @@ export async function getDocs() {
     .use(toHtml)  // Serialize HTML syntax tree;
     .process(
       new TextDecoder().decode(
-        await Deno.readFile(join(__dirname, "./README.md")),
+        await Deno.readFile(join(__dirname, "../README.md")),
       ),
     );
 

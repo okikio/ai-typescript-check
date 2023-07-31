@@ -1,5 +1,5 @@
 // Import necessary modules from dependencies
-import { cors, oak, parse, path, } from "./deps.ts";
+import { cors, oak, parse, path } from "./deps.ts";
 import { twoslasher } from "./vendor/twoslash.ts";
 import type { TwoSlashOptions } from "./vendor/twoslash.ts";
 
@@ -28,7 +28,7 @@ const router = new Router();
 // Define routes
 router
   // Root route
-  .get("/", async (context) => {
+  .get("/(index)?(.html)?", async (context) => {
     // Use the send function from oak to serve static files
     // This is similar to express.static in Express.js
     await send(context, "/index.html", {

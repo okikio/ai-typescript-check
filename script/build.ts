@@ -1,4 +1,4 @@
-import { getDocs } from "../docs.tsx";
+import { getDocs } from "./docs.tsx";
 import { path } from "../deps.ts";
   
   // Destructure necessary path utilities from path (similar to path in Node.js)
