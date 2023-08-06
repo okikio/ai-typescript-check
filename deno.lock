@@ -178,6 +178,7 @@
     "https://deno.land/x/path_to_regexp@v6.2.1/index.ts": "894060567837bae8fc9c5cbd4d0a05e9024672083d5883b525c031eea940e556",
     "https://esm.sh/@amoutonbrady/lz-string@0.1.0": "fe80913334aa57bb64d5127a855f90f5527e7bbf64c5b627304a55fc6b5c3ee2",
     "https://esm.sh/@stefanprobst/remark-shiki@2.2.1": "2ce9cb0918b0e75cb456603169de2abe57cefc683d0fd47d3a1bb7baf6df2fe5",
+    "https://esm.sh/json5@2.2.3": "bdcb6c0ad7a0f432c8318a8bf67bd46d439d93d1e8c3325bf61f63a84cea2034",
     "https://esm.sh/rehype-raw@6.1.1": "52f14fa07dfb2498ef6d24b634bbfceb569fc398568c00d53dbc377ad963868b",
     "https://esm.sh/rehype-stringify@9.0.3": "ac99c749744048282d25689fd7d896958b4206456bc37b53bc85cfce1286c34e",
     "https://esm.sh/remark-gfm@3.0.1": "665786707831e17f9f14e6a029c3cd00491d76c0d9bfae7a53978de3e6e9ebfb",
@@ -285,5 +286,16 @@
     "https://esm.sh/v130/web-namespaces@2.0.1/denonext/web-namespaces.mjs": "bc6ee363bbe40abddca68678e849584981176d9bde3728b4c5d47a5241dac7bf",
     "https://esm.sh/v130/zwitch@2.0.4/denonext/zwitch.mjs": "c0e8c246a1f38b425335ea78cc366a7801d3ef89701229a35f85a51310e6e49f",
     "https://unpkg.com/shiki@0.14.3/dist/index.browser.mjs": "e701176f99cb93cfb15f0ebbdafcc996b89fc11ade576470b2f6a3feeef22b78"
+  },
+  "npm": {
+    "specifiers": {
+      "@types/node": "@types/node@18.16.19"
+    },
+    "packages": {
+      "@types/node@18.16.19": {
+        "integrity": "sha512-IXl7o+R9iti9eBW4Wg2hx1xQDig183jj7YLn8F7udNceyfkbn1ZxmzZXuak20gR40D7pIkIY1kYGx5VIGbaHKA==",
+        "dependencies": {}
+      }
+    }
   }
 }

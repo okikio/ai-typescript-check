@@ -1,7 +1,8 @@
 // Import necessary modules from dependencies
+import type { TwoSlashOptions } from "./vendor/twoslash.ts";
 import { cors, oak, parse, path } from "./deps.ts";
 import { twoslasher } from "./vendor/twoslash.ts";
-import type { TwoSlashOptions } from "./vendor/twoslash.ts";
+import JSON5 from "./vendor/json5.ts";
 
 // Destructure necessary components from oak (similar to Express.js in Node.js)
 const { Application, Router, send, isHttpError, Status } = oak;
@@ -152,7 +153,7 @@ router
     };
 
     try {
-      const optsObj = JSON.parse(optionsParam)
+      const optsObj = JSON5.parse(optionsParam)
       if (typeof optsObj !== "object" || Array.isArray(optsObj)) {
         throw new Error("Options Query Parameter must be an Object.")
       }
