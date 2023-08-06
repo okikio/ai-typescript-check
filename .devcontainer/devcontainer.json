@@ -4,5 +4,12 @@
 		"ghcr.io/devcontainers-contrib/features/deno:1": {
 			"version": "latest"
 		}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"denoland.vscode-deno"
+			]
+		}
 	}
 }

@@ -88,17 +88,27 @@ router
       );
     }
 
-    // Max file size to handle
-    const data: TwoslashRequestOptions = type === "form-data"
-      ? (await value.read({ maxSize: 10000000 })).fields
-      : await value;
-    const { code, extension, ...opts } = data;
+    let data: TwoslashRequestOptions | undefined;
+    try {
+      // Max file size to handle
+      data = type === "form-data"
+        ? (await value.read({ maxSize: 10000000 })).fields
+        : await value;
+    } catch (e) {
+      console.log(e)
+      context.throw(
+        Status.BadRequest,
+        "Error Unable to Read Request Body"
+      );
+    }
+
+    const { code, extension, ...opts } = data! ?? {};
 
     // let tsModule: typeof Typescript;
     // if (version) {
     //   tsModule = await import(`https://esm.sh/typescript@${versionNumber}`).default;
     // }
-
+    
     const twoslash = await twoslasher(code, extension, opts);
     context.response.body = twoslash;
   })
@@ -130,12 +140,30 @@ router
       params.get("option")! ||
       "{}";
 
-    const decodedQuery: TwoslashRequestOptions = Object.assign(
-      { code: codeParam, extension: extensionParam },
-      JSON.parse(optionsParam),
-    );
-    const { code, extension = "ts", ...opts } = decodedQuery;
+    let decodedQuery: TwoslashRequestOptions = { 
+      code: codeParam!, 
+      extension: extensionParam!,
+    };
 
+    try {
+      const optsObj = JSON.parse(optionsParam)
+      if (typeof optsObj !== "object" || Array.isArray(optsObj)) {
+        throw new Error("Options Query Parameter must be an Object.")
+      }
+
+      decodedQuery = Object.assign(
+        { code: codeParam, extension: extensionParam },
+        optsObj,
+      );
+    } catch (e) {
+      console.log(e)
+      context.throw(
+        Status.BadRequest,
+        `Invalid JSON Object for the Options parameter`,
+      );
+    }
+
+    const { code, extension = "ts", ...opts } = decodedQuery;
     const twoslash = await twoslasher(code, extension, opts);
     console.log("twoslash ", twoslash);
     context.response.body = twoslash;
