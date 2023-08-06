@@ -102,7 +102,13 @@ router
       );
     }
 
-    const { code, extension, ...opts } = data! ?? {};
+    const { code, extension = "ts", ...opts } = data! ?? {};
+    if (typeof code !== "string" || code?.length <= 0) {
+      context.throw(
+        Status.BadRequest,
+        "We Didn't Receive Any Code to Analyze. Please Try Again."
+      )
+    }
 
     // let tsModule: typeof Typescript;
     // if (version) {
@@ -163,7 +169,14 @@ router
       );
     }
 
-    const { code, extension = "ts", ...opts } = decodedQuery;
+    const { code, extension = "ts", ...opts } = decodedQuery ?? {};
+    if (typeof code !== "string" || code?.length <= 0) {
+      context.throw(
+        Status.BadRequest,
+        "We Didn't Receive Any Code to Analyze. Please Try Again."
+      )
+    }
+
     const twoslash = await twoslasher(code, extension, opts);
     console.log("twoslash ", twoslash);
     context.response.body = twoslash;
