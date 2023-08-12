@@ -66,7 +66,6 @@ paths:
       parameters:
         - name: options
           in: query
-          required: true
           schema:
             type: object
             $ref: '#/components/schemas/TwoSlashOptions'
