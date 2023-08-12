@@ -67,7 +67,7 @@ While primarily designed as a ChatGPT plugin for type checking TypeScript code, 
 > 
 > You can see the code in the TypeScript playground [here](https://www.typescriptlang.org/play/#code/JYWwDg9gTgLgBAbzgCwIYGcAqVUDt0BmApjgEYA2R6cAvnAVBCHAEQw77FmXotA).
 
-Here's this exmaple on ChatGPT: https://chat.openai.com/share/a94731fb-b599-4896-b754-e9771c2b1e99
+Here's this exmaple on ChatGPT: https://chat.openai.com/share/3b32d004-a1c3-4dfc-b862-5426518d31ef
 
 ### API
 
