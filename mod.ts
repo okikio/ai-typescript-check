@@ -1,7 +1,7 @@
 // Import necessary modules from dependencies
 import type { TwoSlashOptions } from "./vendor/twoslash.ts";
 import { cors, oak, parse, path } from "./deps.ts";
-import { twoslasher } from "./vendor/twoslash.ts";
+import { TwoslashError, twoslasher } from "./vendor/twoslash.ts";
 import JSON5 from "./vendor/json5.ts";
 
 // Destructure necessary components from oak (similar to Express.js in Node.js)
@@ -233,13 +233,28 @@ app.use(async (context, next) => {
         context.response.body = `${status} ${message}\n\n${stack ?? ""}`;
         context.response.type = "text/plain";
       }
+    } else if (err instanceof TwoslashError) {
+      // Set the response status to the error status
+      context.response.status = Status.BadRequest;
+      const { message, stack, code, title, description, recommendation  } = err;
+      // If the client accepts JSON, send the error details as a JSON object
+      if (context.request.accepts("json")) {
+        context.response.body = { message, code, description, recommendation, title, stack };
+        context.response.type = "json";
+      } else {
+        // Otherwise, send the error details as plain text
+        context.response.body = `${message}\n\n${stack ?? ""}`;
+        context.response.type = "text/plain";
+      }
     } else {
       // If the error is not an HTTP error, it's an unexpected error
       // In this case, set the response status to 500 and send a generic error message
       context.response.status = 500;
       context.response.body = "Internal server error";
       // Also log the error to the console for debugging
-      console.error(err);
+      console.log({
+        err
+      })
     }
   }
 });

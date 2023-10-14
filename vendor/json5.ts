@@ -41,7 +41,7 @@ export function require(path: string | URL): any {
  * @param path File path or url
  */
 export async function requireAsync(path: string | URL): Promise<any> {
-  const data = await Deno.readFileSync(path);
+  const data = await Deno.readFile(path);
   const decoder = new TextDecoder("utf8");
   const raw = decoder.decode(data);
 
