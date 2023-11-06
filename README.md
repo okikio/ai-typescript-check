@@ -4,7 +4,7 @@
 
 `ai-typescript-check` is a ChatGPT plugin and API that provides linting, auto-completion, error checking, and type checking for TypeScript, JSX/TSX, and JavaScript files. It uses a modified version of [`@typescript/twoslash`](https://shikijs.github.io/twoslash/). Meaning all the typescript twoslash tips and tricks all work out of the box.
 
-While primarily designed as a ChatGPT plugin for type checking TypeScript code, `ai-typescript-check` can also be used as a standalone API for type checking in any coding environment. We welcome your feedback and suggestions. You can check out the OpenAPI Spec to learn more about the API [.well-known/open-api.yaml](./.well-known/open-api.yaml) or using the website at [ts-check.okikio.dev/.well-known/openapi.yaml](https://ts-check.okikio.dev/.well-known/openapi.yaml)
+While primarily designed as a ChatGPT plugin for type checking TypeScript code, `ai-typescript-check` can also be used as a standalone API for type checking in any coding environment. We welcome your feedback and suggestions. You can check out the OpenAPI Spec to learn more about the API [.well-known/openapi.yaml](./.well-known/openapi.yaml) or using the website at [ts-check.okikio.dev/.well-known/openapi.yaml](https://ts-check.okikio.dev/.well-known/openapi.yaml)
 
 ## Install ChatGPT Plugin
 
