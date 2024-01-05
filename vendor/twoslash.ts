@@ -412,15 +412,15 @@ function setOption(name: string, value: string, opts: CompilerOptions, ts: typeo
   )
 }
 
-const booleanConfigRegexp = /^\/\/\s?@(\w+)$/
+const booleanConfigRegexp = /^\/\/\s?@(\w+)\s*$/
 
 // https://regex101.com/r/8B2Wwh/1
-const valuedConfigRegexp = /^\/\/\s?@(\w+):\s?(.+)$/
+const valuedConfigRegexp = /^\/\/\s?@(\w+):\s*(.+)$/
 
 function filterCompilerOptions(codeLines: string[], defaultCompilerOptions: CompilerOptions, ts: typeof Typescript) {
   const options = { ...defaultCompilerOptions }
   for (let i = 0; i < codeLines.length;) {
-    let match
+    let match;
     if ((match = booleanConfigRegexp.exec(codeLines[i]))) {
       options[match[1]] = true
       setOption(match[1], "true", options, ts)
