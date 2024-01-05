@@ -115,6 +115,13 @@ router
     // if (version) {
     //   tsModule = await import(`https://esm.sh/typescript@${versionNumber}`).default;
     // }
+
+    console.log({
+      "post": "/twoslash",
+      code,
+      extension,
+      opts
+    })
     
     const twoslash = await twoslasher(code, extension, opts);
     context.response.body = twoslash;
@@ -160,7 +167,7 @@ router
       }
 
       decodedQuery = Object.assign(
-        { code: codeParam, extension: extensionParam },
+        { code: codeParam, extension: extensionParam ?? "ts" },
         optsObj,
       );
     } catch (e) {
@@ -178,6 +185,15 @@ router
         "We Didn't Receive Any Code to Analyze. Please Try Again."
       )
     }
+
+    console.log({
+      "get": "/twoslash" + url.search,
+      code,
+      extension,
+      opts
+    })
+
+    console.log(code)
 
     const twoslash = await twoslasher(code, extension, opts);
     console.log("twoslash ", twoslash);

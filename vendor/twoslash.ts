@@ -236,7 +236,7 @@ export function getIdentifierTextSpans(ts: typeof Typescript, sourceFile: Typesc
   return textSpans
 
   function checkChildren(node: Typescript.Node) {
-    ts.forEachChild(node, child => {
+    ts.forEachChild(node, (child: { getStart: (arg0: Typescript.SourceFile,arg1: boolean) => any; end: number; getText: (arg0: Typescript.SourceFile) => any; }) => {
       if (ts.isIdentifier(child)) {
         const start = child.getStart(sourceFile, false)
         textSpans.push({ span: ts.createTextSpan(start, child.end - start), text: child.getText(sourceFile) })
@@ -672,7 +672,7 @@ export async function twoslasher(code: string, extension: string, options: TwoSl
 
   const defaultCompilerOptions = {
     strict: true,
-    target: ts.ScriptTarget.Latest,
+    target: ts.ScriptTarget.ES2022,
     allowJs: true,
     ...(options.defaultCompilerOptions ?? {}),
   }
@@ -787,8 +787,8 @@ export async function twoslasher(code: string, extension: string, options: TwoSl
           let docs: string | undefined
 
           if (quickInfo && quickInfo.displayParts) {
-            text = quickInfo.displayParts.map(dp => dp.text).join("")
-            docs = quickInfo.documentation ? quickInfo.documentation.map(d => d.text).join("<br/>") : undefined
+            text = quickInfo.displayParts.map((dp: { text: any; }) => dp.text).join("")
+            docs = quickInfo.documentation ? quickInfo.documentation.map((d: { text: any; }) => d.text).join("<br/>") : undefined
           } else {
             throw new TwoslashError(
               `Invalid QuickInfo query`,
@@ -809,7 +809,7 @@ export async function twoslasher(code: string, extension: string, options: TwoSl
         }
 
         case "completion": {
-          const completions = ls.getCompletionsAtPosition(filename, position, {})
+          const completions = ls.getCompletionsAtPosition(filename, position - 1, {})
           if (!completions && !handbookOptions.noErrorValidation) {
             throw new TwoslashError(
               `Invalid completion query`,
@@ -853,7 +853,7 @@ export async function twoslasher(code: string, extension: string, options: TwoSl
       if (!sourceFiles.includes(filetype)) return
 
       const output = ls.getEmitOutput(f)
-      output.outputFiles.forEach(output => {
+      output.outputFiles.forEach((output: { name: any; text: any; }) => {
         system.writeFile(output.name, output.text)
       })
     })
@@ -1079,11 +1079,11 @@ export async function twoslasher(code: string, extension: string, options: TwoSl
 
     const output = ls.getEmitOutput(emitSource!)
     const file = output.outputFiles.find(
-      o => o.name === fsRoot + handbookOptions.showEmittedFile || o.name === handbookOptions.showEmittedFile
+(      o: { name: string; }) => o.name === fsRoot + handbookOptions.showEmittedFile || o.name === handbookOptions.showEmittedFile
     )
 
     if (!file) {
-      const allFiles = output.outputFiles.map(o => o.name).join(", ")
+      const allFiles = output.outputFiles.map((o: { name: any; }) => o.name).join(", ")
       throw new TwoslashError(
         `Cannot find the output file in the Twoslash VFS`,
         `Looking for ${handbookOptions.showEmittedFile} in the Twoslash vfs after compiling`,
