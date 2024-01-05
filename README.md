@@ -6,6 +6,10 @@
 
 While primarily designed as a ChatGPT plugin for type checking TypeScript code, `ai-typescript-check` can also be used as a standalone API for type checking in any coding environment. We welcome your feedback and suggestions. You can check out the OpenAPI Spec to learn more about the API [static/.well-known/openapi.yaml](https://github.com/okikio/ai-typescript-check/blob/main/static/.well-known/openapi.yaml) or using the website at [ts-check.okikio.dev/.well-known/openapi.yaml](https://ts-check.okikio.dev/.well-known/openapi.yaml)
 
+## Try Typescript Analyzer GPT
+
+To try out the Typescript Analyzer go to this URL [chat.openai.com/g/g-bjAYgmITX-typescript-analyzer](https://chat.openai.com/g/g-bjAYgmITX-typescript-analyzer)
+
 ## Install ChatGPT Plugin
 
 ### From Store:
