@@ -134,6 +134,7 @@ router
           `POST: /twoslash --> FormData Body={"code":"import { hasTransferables } from \"transferables\"","extension":"ts"}`,
         ],
       };
+      context.response.type = "application/json";
 
       return;
     }
@@ -227,7 +228,7 @@ app.use(async (context, next) => {
       // If the client accepts JSON, send the error details as a JSON object
       if (context.request.accepts("json")) {
         context.response.body = { message, status, stack };
-        context.response.type = "json";
+        context.response.type = "application/json";
       } else {
         // Otherwise, send the error details as plain text
         context.response.body = `${status} ${message}\n\n${stack ?? ""}`;
@@ -240,7 +241,7 @@ app.use(async (context, next) => {
       // If the client accepts JSON, send the error details as a JSON object
       if (context.request.accepts("json")) {
         context.response.body = { message, code, description, recommendation, title, stack };
-        context.response.type = "json";
+        context.response.type = "application/json";
       } else {
         // Otherwise, send the error details as plain text
         context.response.body = `${message}\n\n${stack ?? ""}`;

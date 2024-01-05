@@ -672,7 +672,7 @@ export async function twoslasher(code: string, extension: string, options: TwoSl
 
   const defaultCompilerOptions = {
     strict: true,
-    target: ts.ScriptTarget.ES2022,
+    target: ts.ScriptTarget.Latest,
     allowJs: true,
     ...(options.defaultCompilerOptions ?? {}),
   }

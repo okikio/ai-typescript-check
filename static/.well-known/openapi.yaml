@@ -64,27 +64,22 @@ paths:
         less. Accepts TwoSlashOptions as query parameters and returns
         TwoSlashReturn JSON. 
       parameters:
-        - name: options
-          in: query
-          schema:
-            type: object
-            $ref: '#/components/schemas/TwoSlashOptions'
-        - name: option
-          in: query
-          schema:
-            type: object
-            $ref: '#/components/schemas/TwoSlashOptions'
         - name: code
           in: query
+          description: The TypeScript, JavaScript, TSX, or JSX code to analyze.
+          required: true
           schema:
             type: string
             $ref: '#/components/schemas/Code'
         - name: extension
+          description: The extension of the code file. Can be 'typescript', 'javascript', 'json', 'jsn', 'ts', 'js', 'tsx', or 'jsx'.
           in: query
+          required: true
           schema:
             type: string
             $ref: '#/components/schemas/Extension'
         - name: ext
+          description: The extension of the code file. Can be 'typescript', 'javascript', 'json', 'jsn', 'ts', 'js', 'tsx', or 'jsx'.
           in: query
           schema:
             type: string
