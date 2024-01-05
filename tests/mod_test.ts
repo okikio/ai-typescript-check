@@ -10,7 +10,7 @@ const __dirname = dirname(fromFileUrl(import.meta.url));
 const twoslash1 = await twoslasher(`\
 // @noErrors
 console.t
-//       ^|
+      // ^| Col 
 `, `ts`, {
 })
 

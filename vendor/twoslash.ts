@@ -318,7 +318,7 @@ function filterHighlightLines(codeLines: string[]): { highlights: HighlightPosit
       const queryMatch = /^\s*\/\/\s*\^\?\s*$/.exec(line)
       // https://regex101.com/r/2yDsRk/1
       const removePrettierIgnoreMatch = /^\s*\/\/ prettier-ignore$/.exec(line)
-      const completionsQuery = /^\s*\/\/\s*\^\|$/.exec(line)
+      const completionsQuery = /^\s*\/\/\s*\^\|+( .*)?$/.exec(line)
 
       if (queryMatch !== null) {
         const start = line.indexOf("^")
